@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const navItems = [
   ["Home", "/"],
@@ -17,241 +17,406 @@ const navItems = [
   ["Contact", "/contact"],
 ];
 
-const featured = [
+const knowledgeCards = [
   {
-    icon: "﷽",
-    title: "Quran",
-    text: "Read the Holy Quran with translations and a peaceful reading experience.",
-    href: "/quran",
-  },
-  {
-    icon: "ﷺ",
     title: "Al-Hadith",
-    text: "Explore Hadith collections and valuable Islamic knowledge.",
-    href: "/hadith",
-  },
-  {
-    icon: "☾",
-    title: "Naat & Manqabat",
-    text: "Beautiful collection of Naat, Manqabat and Islamic poetry.",
-    href: "/naat-manqabat",
-  },
-  {
-    icon: "✦",
-    title: "Islamic Books",
-    text: "Discover classical Islamic books and valuable writings.",
-    href: "/islamic-books",
-  },
-  {
+    arabic: "الحديث",
+    text: "Authentic Ahadith and Islamic teachings.",
     icon: "ﷺ",
-    title: "Seerat-un-Nabi ﷺ",
-    text: "Learn about the blessed life and teachings of the Prophet ﷺ.",
-    href: "/seerat-un-nabi",
   },
   {
-    icon: "✧",
+    title: "Naat & Manqabat",
+    arabic: "نعت و منقبت",
+    text: "Beautiful Naat, Manqabat and Islamic poetry.",
+    icon: "♡",
+  },
+  {
+    title: "Islamic Books",
+    arabic: "اسلامی کتب",
+    text: "Islamic books, literature and valuable works.",
+    icon: "▤",
+  },
+  {
+    title: "Seerat-un-Nabi ﷺ",
+    arabic: "سیرت النبی ﷺ",
+    text: "Life and teachings of the Beloved Prophet ﷺ.",
+    icon: "ﷴ",
+  },
+  {
     title: "Ala Hazrat",
-    text: "Explore the life, works and teachings of Ala Hazrat.",
-    href: "/ala-hazrat",
+    arabic: "اعلیٰ حضرت",
+    text: "Knowledge, writings and works of Ala Hazrat.",
+    icon: "✦",
   },
 ];
 
+function GlobeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.2 2.4 3.3 5.4 3.3 9S14.2 18.6 12 21M12 3C9.8 5.4 8.7 8.4 8.7 12s1.1 6.6 3.3 9" />
+    </svg>
+  );
+}
+
+function SunMoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("English");
-  const [theme, setTheme] = useState("Light");
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
 
-  const toggleTheme = (value: string) => {
-    setTheme(value);
+  const [language, setLanguage] = useState("auto");
+  const [theme, setTheme] = useState("auto");
 
-    if (value === "Dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+  const [date, setDate] = useState({
+    gregorian: "",
+    hijri: "",
+  });
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("site-language") || "auto";
+    const savedTheme = localStorage.getItem("site-theme") || "auto";
+
+    setLanguage(savedLanguage);
+    setTheme(savedTheme);
+
+    applyTheme(savedTheme);
+
+    const today = new Date();
+
+    const gregorian = new Intl.DateTimeFormat("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(today);
+
+    let hijri = "";
+
+    try {
+      hijri = new Intl.DateTimeFormat("ur-SA-u-ca-islamic-umalqura", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(today);
+    } catch {
+      hijri = new Intl.DateTimeFormat("en-u-ca-islamic", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(today);
     }
-  };
+
+    setDate({
+      gregorian,
+      hijri,
+    });
+  }, []);
+
+  function applyTheme(value: string) {
+    const root = document.documentElement;
+
+    if (value === "dark") {
+      root.classList.add("dark");
+    } else if (value === "light") {
+      root.classList.remove("dark");
+    } else {
+      const dark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      root.classList.toggle("dark", dark);
+    }
+  }
+
+  function changeTheme(value: string) {
+    setTheme(value);
+    localStorage.setItem("site-theme", value);
+    applyTheme(value);
+    setThemeOpen(false);
+  }
+
+  function changeLanguage(value: string) {
+    setLanguage(value);
+    localStorage.setItem("site-language", value);
+    setLanguageOpen(false);
+  }
 
   return (
-    <main>
+    <main className="site">
+
       {/* HEADER */}
       <header className="siteHeader">
         <div className="headerInner">
 
-          {/* STYLISH LOGO */}
-          <a href="/" className="logo">
-            <span className="logoMark">م</span>
-
-            <span className="logoText">
-              <strong>MASLAK-E-ALA-HAZRAT</strong>
-              <small>اسلامی علم و ادب</small>
-            </span>
+          <a href="/" className="brand">
+            <span className="brandMark">م</span>
+            <span>Maslak-e-Ala Hazrat</span>
           </a>
 
-          {/* HEADER CONTROLS */}
-          <div className="headerControls">
+          <div className="headerActions">
 
             {/* LANGUAGE */}
-            <div className="controlGroup">
-              <span className="controlIcon">文</span>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
+            <div className="control">
+              <button
+                className="iconButton"
                 aria-label="Language"
+                onClick={() => {
+                  setLanguageOpen(!languageOpen);
+                  setThemeOpen(false);
+                }}
               >
-                <option>English</option>
-                <option>हिन्दी</option>
-                <option>اردو</option>
-              </select>
+                <GlobeIcon />
+              </button>
+
+              {languageOpen && (
+                <div className="popup languagePopup">
+                  <div className="popupTitle">Language</div>
+
+                  {[
+                    ["auto", "Auto"],
+                    ["en", "English"],
+                    ["hi", "हिन्दी"],
+                    ["ur", "اردو"],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      className={language === value ? "activeOption" : ""}
+                      onClick={() => changeLanguage(value)}
+                    >
+                      <span>{label}</span>
+                      {language === value && <span>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* THEME */}
-            <div className="controlGroup">
-              <span className="controlIcon">
-                {theme === "Dark" ? "☾" : "☀"}
-              </span>
-
-              <select
-                value={theme}
-                onChange={(e) => toggleTheme(e.target.value)}
+            <div className="control">
+              <button
+                className="iconButton"
                 aria-label="Theme"
+                onClick={() => {
+                  setThemeOpen(!themeOpen);
+                  setLanguageOpen(false);
+                }}
               >
-                <option>Light</option>
-                <option>Dark</option>
-              </select>
+                <SunMoonIcon />
+              </button>
+
+              {themeOpen && (
+                <div className="popup themePopup">
+                  <div className="popupTitle">Theme</div>
+
+                  {[
+                    ["auto", "Auto"],
+                    ["light", "Light"],
+                    ["dark", "Dark"],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      className={theme === value ? "activeOption" : ""}
+                      onClick={() => changeTheme(value)}
+                    >
+                      <span>{label}</span>
+                      {theme === value && <span>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* MENU */}
             <button
               className="menuButton"
-              onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Open menu"
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              <span></span>
-              <span></span>
-              <span></span>
+              <span />
+              <span />
+              <span />
             </button>
-          </div>
 
-          {/* NAVIGATION */}
-          <nav className={menuOpen ? "mainNav open" : "mainNav"}>
-            {navItems.map(([label, href]) => (
-              <a
-                key={href}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
+          </div>
         </div>
+
+        {menuOpen && (
+          <div className="mobileMenu">
+            <div className="menuInner">
+              {navItems.map(([label, href]) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </header>
+
 
       {/* HERO */}
       <section className="hero">
-        <div className="heroContent">
+        <div className="heroInner">
 
           <div className="bismillah">
             بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
           </div>
 
-          <div className="heroLine"></div>
-
-          <h1>Welcome to MASLAK-E-ALA-HAZRAT</h1>
-
-          <p className="heroText">
-            A peaceful place for Quran, Hadith, Naat, Manqabat,
-            Islamic books and the teachings of Ahl-e-Sunnat.
-          </p>
-
-          {/* SEARCH DIRECTLY BELOW WELCOME */}
           <div className="searchBox">
-            <span>⌕</span>
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m16.5 16.5 4 4" />
+            </svg>
 
             <input
               type="search"
-              placeholder="Search Quran, Hadith, Naat, Books..."
+              placeholder="Search Islamic knowledge..."
             />
 
             <button>Search</button>
           </div>
+
         </div>
       </section>
 
+
+      {/* URDU CALENDAR */}
+      <section className="calendarSection">
+        <div className="calendarCard">
+
+          <div className="calendarIcon">☪</div>
+
+          <div className="calendarContent">
+            <span className="calendarLabel">آج کی تاریخ</span>
+
+            <strong className="hijriDate">
+              {date.hijri || "اسلامی تاریخ"}
+            </strong>
+
+            <span className="gregorianDate">
+              {date.gregorian || "Loading..."}
+            </span>
+          </div>
+
+          <div className="calendarArabic">
+            اسلامی کیلنڈر
+          </div>
+
+        </div>
+      </section>
+
+
       {/* ISLAMIC KNOWLEDGE */}
-      <section className="contentSection">
+      <section className="knowledgeSection">
 
         <div className="sectionHeading">
-          <p>EXPLORE</p>
-
+          <span>EXPLORE</span>
           <h2>Islamic Knowledge</h2>
-
-          <span>
-            Explore our growing collection of Islamic knowledge
-            and literature.
-          </span>
+          <p>
+            Explore authentic Islamic knowledge, literature,
+            Hadith, Naat and works of our scholars.
+          </p>
         </div>
 
-        <div className="cardGrid">
-          {featured.map((item) => (
-            <a
-              href={item.href}
-              className="knowledgeCard"
-              key={item.title}
-            >
-              <div className="cardIcon">{item.icon}</div>
 
-              <div className="cardContent">
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
+        {/* QURAN CARD — stays separate */}
+        <div className="quranWrap">
+          <a href="/quran" className="knowledgeCard quranCard">
+
+            <div className="cardIcon">﷽</div>
+
+            <div>
+              <span className="arabicTitle">القرآن الكريم</span>
+              <h3>Quran</h3>
+              <p>
+                Read and explore the Holy Quran with ease.
+              </p>
+            </div>
+
+            <span className="cardArrow">→</span>
+
+          </a>
+        </div>
+
+
+        {/* HORIZONTAL SCROLL */}
+        <div className="horizontalCards">
+          {knowledgeCards.map((card) => (
+            <a
+              href="#"
+              className="knowledgeCard smallCard"
+              key={card.title}
+            >
+              <div className="cardIcon">{card.icon}</div>
+
+              <div>
+                <span className="arabicTitle">
+                  {card.arabic}
+                </span>
+
+                <h3>{card.title}</h3>
+
+                <p>{card.text}</p>
               </div>
 
-              <span className="arrow">→</span>
+              <span className="cardArrow">→</span>
             </a>
           ))}
         </div>
+
       </section>
+
 
       {/* ABOUT */}
       <section className="aboutSection">
         <div className="aboutBox">
-          <p className="smallTitle">
-            MASLAK-E-ALA-HAZRAT
-          </p>
+          <span>ABOUT THE WEBSITE</span>
 
-          <h2>
-            Read. Learn.
-            <br />
-            <span>Reflect.</span>
-          </h2>
+          <h2>Knowledge • Adab • Tradition</h2>
 
           <p>
-            Our goal is to provide Islamic knowledge in a clean,
-            accessible and peaceful digital environment.
+            Maslak-e-Ala Hazrat is being developed as a
+            peaceful and organized platform for Islamic
+            knowledge, books, Hadith, Naat, Manqabat and
+            biographies of Islamic personalities.
           </p>
         </div>
       </section>
 
+
       {/* FOOTER */}
-      <footer>
+      <footer className="footer">
         <div className="footerInner">
 
-          <div className="footerArabic">
-            وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ
+          <div className="footerBrand">
+            Maslak-e-Ala Hazrat
           </div>
 
-          <p>Maslak-e-Ala-Hazrat</p>
-
-          <span>
+          <p>
             Islamic Knowledge • Naat • Books • Hadith
-          </span>
+          </p>
 
-          <div className="footerBottom">
-            © {new Date().getFullYear()} Maslak-e-Ala-Hazrat
-          </div>
+          <div className="footerLine" />
+
+          <small>
+            © {new Date().getFullYear()} Maslak-e-Ala Hazrat.
+            All rights reserved.
+          </small>
 
         </div>
       </footer>
+
     </main>
   );
 }
