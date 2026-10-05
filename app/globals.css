@@ -8,144 +8,215 @@ html {
   scroll-behavior: smooth;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   padding: 0;
   background: #faf9f5;
-  color: #25312b;
+  color: #26332c;
   font-family: "Inter", Arial, sans-serif;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
+  color: inherit;
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .siteHeader {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   background: rgba(250, 249, 245, 0.94);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid #e8e5dc;
 }
 
 .headerInner {
-  max-width: 1180px;
-  margin: auto;
-  padding: 15px 22px;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  position: relative;
 }
 
-.brand {
+/* LOGO */
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.logoMark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #b89b58;
+  border-radius: 50%;
+  color: #176044;
+  font-family: "Amiri", serif;
+  font-size: 25px;
+}
+
+.logoText {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2px;
+  align-items: flex-start;
 }
 
-.brandArabic {
+.logoText strong {
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  color: #26332c;
+}
+
+.logoText small {
+  margin-top: 2px;
   font-family: "Amiri", serif;
-  font-size: 22px;
+  font-size: 12px;
   color: #176044;
 }
 
-.brandEnglish {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #26342d;
+/* HEADER CONTROLS */
+
+.headerControls {
+  position: absolute;
+  right: 20px;
+  top: 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
-/* NAVIGATION */
+.controlGroup {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px;
+  border: 1px solid #e1e4dd;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.controlIcon {
+  font-size: 14px;
+  color: #176044;
+}
+
+.controlGroup select {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #536159;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* MENU — NO WHITE BOX */
+
+.menuButton {
+  width: 35px;
+  height: 35px;
+  padding: 7px 5px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transform: translateY(-3px);
+}
+
+.menuButton span {
+  width: 23px;
+  height: 2px;
+  background: #176044;
+  border-radius: 5px;
+}
+
+/* NAV */
 
 .mainNav {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 13px;
+  gap: 2px;
+  margin-top: 10px;
 }
 
 .mainNav a {
-  padding: 8px 11px;
-  border-radius: 8px;
-  color: #536159;
-  font-size: 13px;
+  padding: 7px 9px;
+  border-radius: 7px;
+  color: #647069;
+  font-size: 12px;
   transition: 0.2s ease;
 }
 
 .mainNav a:hover {
-  background: #edf3ee;
   color: #176044;
+  background: #edf3ee;
 }
 
-.menuButton {
-  display: none;
-}
-
-/* HERO */
+/* ================= HERO ================= */
 
 .hero {
-  padding: 78px 20px 80px;
+  padding: 58px 20px 65px;
   text-align: center;
   background:
-    radial-gradient(circle at top, #f0f5ef 0, transparent 45%),
+    radial-gradient(circle at top, #f0f5ef 0, transparent 48%),
     #faf9f5;
 }
 
 .heroContent {
-  max-width: 850px;
-  margin: auto;
+  max-width: 790px;
+  margin: 0 auto;
 }
 
 .bismillah {
   font-family: "Amiri", serif;
   font-size: 34px;
+  line-height: 1.7;
   color: #176044;
-  line-height: 1.8;
 }
 
 .heroLine {
-  width: 55px;
+  width: 48px;
   height: 1px;
-  margin: 15px auto 25px;
+  margin: 12px auto 22px;
   background: #b89b58;
-}
-
-.eyebrow {
-  margin: 0 0 15px;
-  color: #718078;
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(34px, 6vw, 58px);
-  line-height: 1.15;
-  letter-spacing: -1.5px;
-  font-weight: 700;
-  color: #1e2b25;
-}
-
-.hero h1 span {
-  color: #176044;
+  color: #26332c;
+  font-size: clamp(27px, 5vw, 43px);
+  line-height: 1.2;
+  letter-spacing: -0.7px;
 }
 
 .heroText {
-  max-width: 650px;
-  margin: 22px auto 32px;
-  color: #68736d;
+  max-width: 610px;
+  margin: 17px auto 24px;
+  color: #748078;
+  font-size: 14px;
   line-height: 1.8;
-  font-size: 16px;
 }
 
 /* SEARCH */
@@ -153,142 +224,147 @@ input {
 .searchBox {
   display: flex;
   align-items: center;
-  max-width: 650px;
-  margin: auto;
-  padding: 6px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 5px;
   background: white;
-  border: 1px solid #e1e2dc;
-  border-radius: 14px;
-  box-shadow: 0 8px 30px rgba(31, 49, 40, 0.07);
+  border: 1px solid #e1e3dc;
+  border-radius: 13px;
+  box-shadow: 0 7px 25px rgba(31, 49, 40, 0.06);
 }
 
 .searchBox span {
-  padding-left: 15px;
-  color: #829088;
-  font-size: 24px;
+  padding-left: 14px;
+  color: #87938c;
+  font-size: 22px;
 }
 
 .searchBox input {
   flex: 1;
   min-width: 0;
+  padding: 12px;
   border: 0;
   outline: 0;
-  padding: 14px;
   background: transparent;
-  color: #25312b;
+  color: #26332c;
 }
 
 .searchBox button {
+  padding: 10px 17px;
   border: 0;
-  padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: 9px;
   background: #176044;
   color: white;
   cursor: pointer;
 }
 
-/* CONTENT */
+/* ================= KNOWLEDGE ================= */
 
 .contentSection {
-  max-width: 1100px;
-  margin: auto;
-  padding: 70px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 58px 20px;
 }
 
 .sectionHeading {
   text-align: center;
-  margin-bottom: 35px;
+  margin: 0 auto 30px;
+  max-width: 650px;
 }
 
 .sectionHeading p,
 .smallTitle {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   color: #a27f3d;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 2px;
   font-weight: 700;
 }
 
 .sectionHeading h2 {
-  margin: 0 0 10px;
-  font-size: 34px;
-  color: #25312b;
+  margin: 0 0 8px;
+  color: #26332c;
+  font-size: 29px;
 }
 
 .sectionHeading span {
   color: #78827d;
-  font-size: 14px;
+  font-size: 13px;
 }
 
+/* CARDS — CENTERED + 10% SMALLER */
+
 .cardGrid {
+  max-width: 900px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 14px;
 }
 
 .knowledgeCard {
   position: relative;
-  min-height: 190px;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
+  min-height: 170px;
+  padding: 21px;
   background: white;
   border: 1px solid #e8e6df;
-  border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(36, 49, 42, 0.035);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(36, 49, 42, 0.035);
+  transition: 0.2s ease;
 }
 
 .knowledgeCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(36, 49, 42, 0.08);
+  box-shadow: 0 12px 28px rgba(36, 49, 42, 0.08);
 }
 
 .cardIcon {
-  font-family: "Amiri", serif;
-  font-size: 30px;
+  margin-bottom: 13px;
   color: #176044;
-  margin-bottom: 18px;
+  font-family: "Amiri", serif;
+  font-size: 27px;
 }
 
-.knowledgeCard h3 {
-  margin: 0 0 8px;
-  font-size: 19px;
-  color: #25312b;
+.cardContent h3 {
+  margin: 0 0 7px;
+  color: #26332c;
+  font-size: 17px;
 }
 
-.knowledgeCard p {
+.cardContent p {
   margin: 0;
-  color: #758079;
-  font-size: 13px;
-  line-height: 1.7;
+  max-width: 230px;
+  color: #78827d;
+  font-size: 12px;
+  line-height: 1.65;
 }
 
 .arrow {
   position: absolute;
-  right: 20px;
-  bottom: 18px;
+  right: 17px;
+  bottom: 14px;
   color: #a27f3d;
 }
 
-/* ABOUT */
+/* ================= ABOUT ================= */
 
 .aboutSection {
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 .aboutBox {
-  max-width: 900px;
-  margin: auto;
-  padding: 60px 30px;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 48px 25px;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 18px;
   background: #eef4ef;
 }
 
 .aboutBox h2 {
-  margin: 10px 0 18px;
-  font-size: 42px;
+  margin: 8px 0 15px;
+  color: #26332c;
+  font-size: 36px;
   line-height: 1.15;
 }
 
@@ -297,92 +373,165 @@ input {
 }
 
 .aboutBox > p:last-child {
-  max-width: 550px;
+  max-width: 530px;
   margin: auto;
   color: #68756e;
+  font-size: 13px;
   line-height: 1.8;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer {
-  margin-top: 70px;
-  padding: 55px 20px 25px;
-  text-align: center;
+  width: 100%;
+  margin-top: 60px;
+  padding: 50px 20px 22px;
   background: #182d23;
   color: #dce6df;
+  text-align: center;
+}
+
+.footerInner {
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
 }
 
 .footerArabic {
+  margin-bottom: 12px;
   font-family: "Amiri", serif;
-  font-size: 28px;
-  margin-bottom: 15px;
+  font-size: 27px;
 }
 
 footer p {
-  margin: 0 0 8px;
+  margin: 0 0 7px;
   font-weight: 600;
 }
 
-footer > span {
+footer > .footerInner > span {
   color: #aabbb1;
-  font-size: 13px;
-}
-
-.footerBottom {
-  max-width: 1000px;
-  margin: 35px auto 0;
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #91a49a;
   font-size: 12px;
 }
 
-/* MOBILE */
+.footerBottom {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  color: #91a49a;
+  font-size: 11px;
+}
+
+/* ================= DARK MODE ================= */
+
+html.dark body {
+  background: #101713;
+  color: #e6eee8;
+}
+
+html.dark .siteHeader {
+  background: rgba(16, 23, 19, 0.94);
+  border-color: #26362d;
+}
+
+html.dark .logoText strong,
+html.dark .hero h1,
+html.dark .sectionHeading h2,
+html.dark .cardContent h3,
+html.dark .aboutBox h2 {
+  color: #e6eee8;
+}
+
+html.dark .mainNav a,
+html.dark .sectionHeading span,
+html.dark .heroText,
+html.dark .cardContent p {
+  color: #aebbb3;
+}
+
+html.dark .hero {
+  background: #101713;
+}
+
+html.dark .searchBox,
+html.dark .knowledgeCard {
+  background: #17221c;
+  border-color: #2b3a31;
+}
+
+html.dark .searchBox input {
+  color: #e6eee8;
+}
+
+html.dark .aboutBox {
+  background: #17251d;
+}
+
+html.dark .controlGroup {
+  border-color: #33433a;
+}
+
+html.dark .controlGroup select {
+  color: #b9c5be;
+}
+
+/* ================= MOBILE ================= */
 
 @media (max-width: 760px) {
+
   .headerInner {
-    position: relative;
-    padding: 13px 18px;
+    padding: 10px 15px;
   }
 
-  .brandArabic {
-    font-size: 20px;
+  .logo {
+    margin-left: 0;
   }
 
-  .brandEnglish {
+  .logoMark {
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+  }
+
+  .logoText strong {
+    font-size: 9px;
+    letter-spacing: 1.3px;
+  }
+
+  .logoText small {
     font-size: 10px;
   }
 
-  .menuButton {
-    position: absolute;
-    display: flex;
-    right: 18px;
-    top: 18px;
-    width: 40px;
-    height: 38px;
-    padding: 8px;
-    border: 1px solid #dfe5df;
-    border-radius: 9px;
-    background: white;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
+  .headerControls {
+    right: 10px;
+    top: 9px;
+    gap: 2px;
   }
 
-  .menuButton span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: #176044;
-    border-radius: 2px;
+  .controlGroup {
+    height: 31px;
+    padding: 0 5px;
+  }
+
+  .controlGroup select {
+    max-width: 62px;
+    font-size: 10px;
+  }
+
+  .controlIcon {
+    font-size: 12px;
+  }
+
+  .menuButton {
+    width: 31px;
+    height: 31px;
+    transform: translateY(-4px);
   }
 
   .mainNav {
     display: none;
     flex-direction: column;
-    margin-top: 15px;
-    padding-top: 10px;
+    margin-top: 12px;
+    padding-top: 8px;
     border-top: 1px solid #e8e5dc;
   }
 
@@ -391,12 +540,12 @@ footer > span {
   }
 
   .mainNav a {
+    padding: 9px;
     text-align: center;
-    padding: 11px;
   }
 
   .hero {
-    padding: 55px 18px 60px;
+    padding: 48px 17px 55px;
   }
 
   .bismillah {
@@ -404,38 +553,48 @@ footer > span {
   }
 
   .hero h1 {
-    font-size: 38px;
+    font-size: 30px;
   }
 
   .heroText {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .searchBox {
-    border-radius: 12px;
+    max-width: 100%;
+  }
+
+  .searchBox input {
+    padding: 11px 8px;
   }
 
   .searchBox button {
-    padding: 11px 13px;
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+
+  .contentSection {
+    padding: 50px 16px;
+  }
+
+  .sectionHeading h2 {
+    font-size: 27px;
   }
 
   .cardGrid {
     grid-template-columns: 1fr;
+    max-width: 500px;
   }
 
-  .contentSection {
-    padding: 55px 18px;
-  }
-
-  .sectionHeading h2 {
-    font-size: 29px;
+  .knowledgeCard {
+    min-height: 150px;
   }
 
   .aboutBox {
-    padding: 45px 22px;
+    padding: 40px 20px;
   }
 
   .aboutBox h2 {
-    font-size: 35px;
+    font-size: 32px;
   }
 }
