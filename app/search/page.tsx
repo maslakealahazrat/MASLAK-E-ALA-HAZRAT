@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { quranAyahs } from "@/data/quran/ayahs";
 
@@ -29,7 +30,7 @@ function findExactAyah(query: string) {
   );
 }
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.trim() || "";
 
@@ -327,4 +328,12 @@ export default function SearchPage() {
 
     </main>
   );
-      }
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={null}>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
