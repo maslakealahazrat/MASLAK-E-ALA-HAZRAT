@@ -157,6 +157,69 @@ export default function FullQuranPage() {
     }
   };
 
+const handleAyahScroll = () => {
+  const ayahElements =
+    document.querySelectorAll<HTMLElement>(
+      ".fullQuranAyah"
+    );
+
+  if (!ayahElements.length) {
+    return;
+  }
+
+  const viewportCenter =
+    window.innerHeight / 2;
+
+  let closestAyah: HTMLElement | null = null;
+  let closestDistance = Infinity;
+
+  ayahElements.forEach((element) => {
+    const rect = element.getBoundingClientRect();
+
+    if (
+      rect.top <= viewportCenter &&
+      rect.bottom >= viewportCenter
+    ) {
+      const distance = Math.abs(
+        rect.top +
+          rect.height / 2 -
+          viewportCenter
+      );
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestAyah = element;
+      }
+    }
+  });
+
+  if (!closestAyah) {
+    return;
+  }
+
+  const id = closestAyah.id;
+  const parts = id.split("-");
+
+  if (parts.length !== 3) {
+    return;
+  }
+
+  const surahNumber = Number(parts[1]);
+  const ayahNumber = Number(parts[2]);
+
+  if (
+    !Number.isInteger(surahNumber) ||
+    !Number.isInteger(ayahNumber)
+  ) {
+    return;
+  }
+
+  saveProgress(
+    surahNumber,
+    ayahNumber
+  );
+};
+  
   const continueReading = () => {
     if (!progress) {
       return;
