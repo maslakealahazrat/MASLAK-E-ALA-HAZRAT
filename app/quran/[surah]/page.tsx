@@ -42,7 +42,7 @@ export default async function SurahPage({ params }: PageProps) {
           {firstAyah.surahNameArabic}
         </div>
 
-        <h1>{firstAyah.name}</h1>
+        <h1>{firstAyah.surahName}</h1>
 
         <p>
           Surah {surahNumber}
