@@ -16,11 +16,13 @@ export default function ContentPage({
   return (
     <main className="contentPage">
 
+      {/* PAGE HERO */}
       <section className="contentHero">
         <div className="contentHeroInner">
 
           <Link href="/" className="backHome">
-            ← Home
+            <span>←</span>
+            Home
           </Link>
 
           {arabic && (
@@ -29,6 +31,10 @@ export default function ContentPage({
             </div>
           )}
 
+          <div className="contentEyebrow">
+            MASLAK-E-ALA-HAZRAT
+          </div>
+
           <h1>{title}</h1>
 
           <p>{description}</p>
@@ -36,10 +42,17 @@ export default function ContentPage({
         </div>
       </section>
 
+      {/* PAGE CONTENT */}
       <section className="contentBody">
+
         {children || (
           <div className="comingBox">
-            <span>COMING SOON</span>
+
+            <div className="comingIcon">﷽</div>
+
+            <span className="comingLabel">
+              COMING SOON
+            </span>
 
             <h2>{title}</h2>
 
@@ -47,8 +60,10 @@ export default function ContentPage({
               Is section par Islamic content jald
               InshaAllah add kiya jayega.
             </p>
+
           </div>
         )}
+
       </section>
 
     </main>
