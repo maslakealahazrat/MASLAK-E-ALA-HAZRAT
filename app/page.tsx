@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
-  const navItems = [
   ["Home", "/"],
   ["Ala Hazrat", "/ala-hazrat"],
   ["Naat / Manqabat", "/naat-manqabat"],
