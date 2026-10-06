@@ -2,11 +2,25 @@ import Link from "next/link";
 import { quranAyahs } from "@/data/quran/ayahs";
 
 export default function QuranPage() {
+  const surahs = Array.from(
+    new Map(
+      quranAyahs.map((ayah) => [
+        ayah.surahNumber,
+        {
+          number: ayah.surahNumber,
+          name: ayah.surahName,
+          arabicName: ayah.surahNameArabic,
+        },
+      ])
+    ).values()
+  );
+
   return (
     <main className="quranPage">
 
-      {/* PAGE HEADER */}
+      {/* HEADER */}
       <section className="quranHero">
+
         <Link href="/" className="quranBack">
           ← Home
         </Link>
@@ -20,43 +34,79 @@ export default function QuranPage() {
         <p>
           The Noble Qur’an
         </p>
+
       </section>
 
-      {/* QURAN CONTENT */}
+
+      {/* SURAH LIST */}
       <section className="quranContent">
 
-        <div className="surahHeader">
-          <div>
-            <span>Surah {quranAyahs[0].surahNumber}</span>
-            <h2>{quranAyahs[0].surahName}</h2>
-          </div>
+        <div className="quranIntro">
+          <span>THE NOBLE QUR’AN</span>
 
-          <div className="surahArabic">
-            {quranAyahs[0].surahNameArabic}
-          </div>
+          <h2>
+            Qur’an Majeed
+          </h2>
+
+          <p>
+            Qur’an ki tamam Surahs aur Ayat Arabic text mein.
+          </p>
         </div>
 
-        <div className="ayahList">
 
-          {quranAyahs.map((ayah) => (
-            <article
-              key={ayah.id}
-              className="ayahCard"
-              id={`ayah-${ayah.id}`}
+        <div className="surahGrid">
+
+          {surahs.map((surah) => (
+
+            <Link
+              key={surah.number}
+              href={"/quran?surah=" + surah.number}
+              className="surahCard"
             >
 
-              <div className="ayahNumber">
-                {ayah.ayahNumber}
+              <div className="surahNumber">
+                {surah.number}
               </div>
 
-              <div className="ayahText">
-                {ayah.arabic}
+              <div className="surahInfo">
+
+                <strong>
+                  {surah.name}
+                </strong>
+
+                <span>
+                  Surah {surah.number}
+                </span>
+
               </div>
 
-            </article>
+              <div className="surahArabic">
+                {surah.arabicName}
+              </div>
+
+            </Link>
+
           ))}
 
         </div>
+
+      </section>
+
+
+      {/* SOURCE */}
+      <section className="quranSource">
+
+        <p>
+          Arabic Qur’an text sourced from the Tanzil Project.
+        </p>
+
+        <a
+          href="https://tanzil.net/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tanzil Project
+        </a>
 
       </section>
 
