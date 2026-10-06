@@ -284,7 +284,26 @@ const handleAyahScroll = () => {
 
       </section>
 
+{/* QURAN SEARCH */}
 
+<section className="fullQuranSearch">
+
+  <div className="fullQuranSearchBox">
+
+    <span className="fullQuranSearchIcon">
+      🔎
+    </span>
+
+    <input
+      type="search"
+      placeholder="Search Qur’an..."
+      aria-label="Search Qur’an"
+    />
+
+  </div>
+
+</section>
+      
       {/* CONTINUE READING */}
 
       {progress && (
