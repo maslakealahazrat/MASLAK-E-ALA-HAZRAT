@@ -33,8 +33,7 @@ for (const line of lines) {
 
   const parts = trimmed.split("|");
 
-  // Expected format:
-  // Surah|Ayah|Arabic text
+  // Expected format: Surah|Ayah|Arabic
   if (parts.length < 3) {
     continue;
   }
@@ -46,7 +45,7 @@ for (const line of lines) {
   if (
     !Number.isInteger(surahNumber) ||
     !Number.isInteger(ayahNumber) ||
-    !arabic
+    arabic.length === 0
   ) {
     continue;
   }
@@ -59,7 +58,7 @@ for (const line of lines) {
   });
 }
 
-const output = `// Qur'an Arabic text source: Tanzil Project
+const output = `// Quran Arabic text source: Tanzil Project
 // Source: https://tanzil.net/
 // IMPORTANT: Preserve the original Tanzil Arabic text unchanged.
 
@@ -72,134 +71,19 @@ export type QuranAyah = {
   surahNameArabic: string;
 };
 
-const surahNames = ${JSON.stringify(
-  [
-    "Al-Fatihah",
-    "Al-Baqarah",
-    "Aal-E-Imran",
-    "An-Nisa",
-    "Al-Ma'idah",
-    "Al-An'am",
-    "Al-A'raf",
-    "Al-Anfal",
-    "At-Tawbah",
-    "Yunus",
-    "Hud",
-    "Yusuf",
-    "Ar-Ra'd",
-    "Ibrahim",
-    "Al-Hijr",
-    "An-Nahl",
-    "Al-Isra",
-    "Al-Kahf",
-    "Maryam",
-    "Ta-Ha",
-    "Al-Anbiya",
-    "Al-Hajj",
-    "Al-Mu'minun",
-    "An-Nur",
-    "Al-Furqan",
-    "Ash-Shu'ara",
-    "An-Naml",
-    "Al-Qasas",
-    "Al-Ankabut",
-    "Ar-Rum",
-    "Luqman",
-    "As-Sajdah",
-    "Al-Ahzab",
-    "Saba",
-    "Fatir",
-    "Ya-Sin",
-    "As-Saffat",
-    "Sad",
-    "Az-Zumar",
-    "Ghafir",
-    "Fussilat",
-    "Ash-Shura",
-    "Az-Zukhruf",
-    "Ad-Dukhan",
-    "Al-Jathiyah",
-    "Al-Ahqaf",
-    "Muhammad",
-    "Al-Fath",
-    "Al-Hujurat",
-    "Qaf",
-    "Adh-Dhariyat",
-    "At-Tur",
-    "An-Najm",
-    "Al-Qamar",
-    "Ar-Rahman",
-    "Al-Waqi'ah",
-    "Al-Hadid",
-    "Al-Mujadilah",
-    "Al-Hashr",
-    "Al-Mumtahanah",
-    "As-Saff",
-    "Al-Jumu'ah",
-    "Al-Munafiqun",
-    "At-Taghabun",
-    "At-Talaq",
-    "At-Tahrim",
-    "Al-Mulk",
-    "Al-Qalam",
-    "Al-Haqqah",
-    "Al-Ma'arij",
-    "Nuh",
-    "Al-Jinn",
-    "Al-Muzzammil",
-    "Al-Muddaththir",
-    "Al-Qiyamah",
-    "Al-Insan",
-    "Al-Mursalat",
-    "An-Naba",
-    "An-Nazi'at",
-    "Abasa",
-    "At-Takwir",
-    "Al-Infitar",
-    "Al-Mutaffifin",
-    "Al-Inshiqaq",
-    "Al-Buruj",
-    "At-Tariq",
-    "Al-A'la",
-    "Al-Ghashiyah",
-    "Al-Fajr",
-    "Al-Balad",
-    "Ash-Shams",
-    "Al-Layl",
-    "Ad-Duha",
-    "Ash-Sharh",
-    "At-Tin",
-    "Al-Alaq",
-    "Al-Qadr",
-    "Al-Bayyinah",
-    "Az-Zalzalah",
-    "Al-Adiyat",
-    "Al-Qari'ah",
-    "At-Takathur",
-    "Al-Asr",
-    "Al-Humazah",
-    "Al-Fil",
-    "Quraysh",
-    "Al-Ma'un",
-    "Al-Kawthar",
-    "Al-Kafirun",
-    "An-Nasr",
-    "Al-Masad",
-    "Al-Ikhlas",
-    "Al-Falaq",
-    "An-Nas"
-  ],
+export const quranAyahs: QuranAyah[] = ${JSON.stringify(
+  ayahs,
   null,
   2
-)};
+)}.map((ayah) => ({
+  ...ayah,
+  surahName: \`Surah \${ayah.surahNumber}\`,
+  surahNameArabic: \`سورة \${ayah.surahNumber}\`,
+}));
+`;
 
-const surahArabicNames = ${JSON.stringify(
-  [
-    "الفاتحة",
-    "البقرة",
-    "آل عمران",
-    "النساء",
-    "المائدة",
-    "الأنعام",
-    "الأ
-    
+fs.writeFileSync(outputPath, output, "utf8");
+
+console.log(
+  \`Done! Generated \${ayahs.length} ayahs in data/quran/ayahs.ts\`
+);
