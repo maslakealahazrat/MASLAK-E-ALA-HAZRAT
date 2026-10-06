@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { quranAyahs } from "@/data/quran/ayahs";
 
 function findExactAyah(query: string) {
@@ -29,9 +28,14 @@ function findExactAyah(query: string) {
   );
 }
 
-export default function SearchPageContent() {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q")?.trim() || "";
+type SearchPageContentProps = {
+  query: string;
+};
+
+export default function SearchPageContent({
+  query,
+}: SearchPageContentProps) {
+  const trimmedQuery = query.trim();
 
   const exactAyah = query
     ? findExactAyah(query)
