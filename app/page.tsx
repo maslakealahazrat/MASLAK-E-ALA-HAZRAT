@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { quranAyahs } from "@/data/quran/ayahs";
 
 const navItems = [
   ["Home", "/"],
@@ -98,7 +99,27 @@ function handleSearch() {
   window.location.href =
     "/search?q=" + encodeURIComponent(query);
 }
-  
+const liveSearchResults = searchQuery.trim()
+  ? quranAyahs
+      .filter((ayah) => {
+        const query =
+          searchQuery.trim().toLowerCase();
+
+        return (
+          ayah.arabic
+            .toLowerCase()
+            .includes(query) ||
+          ayah.surahName
+            .toLowerCase()
+            .includes(query) ||
+          ayah.surahNameArabic
+            .toLowerCase()
+            .includes(query)
+        );
+      })
+      .slice(0, 6)
+  : [];
+
   useEffect(() => {
     const savedLanguage = localStorage.getItem("site-language") || "auto";
     const savedTheme = localStorage.getItem("site-theme") || "auto";
@@ -292,7 +313,100 @@ function handleSearch() {
             بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
           </div>
 
-          <div className="searchBox">
+          <div className="searchArea">
+
+  <div className="searchBox">
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="7"
+      />
+
+      <path d="m16.5 16.5 4 4" />
+    </svg>
+
+    <input
+      type="search"
+      value={searchQuery}
+      onChange={(event) =>
+        setSearchQuery(event.target.value)
+      }
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          handleSearch();
+        }
+      }}
+      placeholder="Search Islamic knowledge..."
+      aria-label="Search Islamic knowledge"
+    />
+
+    <button
+      type="button"
+      onClick={handleSearch}
+    >
+      Search
+    </button>
+  </div>
+
+  {searchQuery.trim() && (
+    <div className="liveSearchResults">
+
+      {liveSearchResults.length > 0 ? (
+        liveSearchResults.map((ayah) => (
+          <a
+            key={ayah.id}
+            href={
+              "/quran/" +
+              ayah.surahNumber +
+              "#ayah-" +
+              ayah.ayahNumber
+            }
+            className="liveSearchItem"
+          >
+
+            <div className="liveSearchInfo">
+
+              <strong>
+                {ayah.surahName}
+              </strong>
+
+              <span>
+                Ayat {ayah.ayahNumber}
+              </span>
+
+            </div>
+
+            <div className="liveSearchArabic">
+              {ayah.arabic}
+            </div>
+
+          </a>
+        ))
+      ) : (
+        <div className="liveSearchEmpty">
+          No Qur’an result found
+        </div>
+      )}
+
+      {liveSearchResults.length > 0 && (
+        <button
+          type="button"
+          className="viewAllSearch"
+          onClick={handleSearch}
+        >
+          View all results →
+        </button>
+      )}
+
+    </div>
+  )}
+
+</div>
+          
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="11" cy="11" r="7" />
     <path d="m16.5 16.5 4 4" />
