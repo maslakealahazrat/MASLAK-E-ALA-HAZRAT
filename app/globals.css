@@ -1524,3 +1524,110 @@ input {
   }
 
 }
+
+/* =================================
+   QURAN AYAH ACTIONS
+================================= */
+
+.fullQuranAyahTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.fullQuranAyahActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fullQuranAyahActions button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  padding: 7px 10px;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.fullQuranAyahActions button:hover {
+  color: var(--primary-dark);
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.fullQuranAyahActions button:active {
+  transform: scale(0.96);
+}
+
+
+/* CONTINUE BUTTON */
+
+.continueReadingInfo {
+  flex: 1;
+}
+
+.continueReadingButton {
+  margin-top: 8px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--primary-dark);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.continueReadingButton:active {
+  transform: scale(0.97);
+}
+
+
+/* TOAST */
+
+.quranToast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 1000;
+  transform: translateX(-50%);
+  padding: 10px 15px;
+  border-radius: 12px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .fullQuranAyahTop {
+    align-items: flex-start;
+  }
+
+  .fullQuranAyahActions {
+    gap: 4px;
+  }
+
+  .fullQuranAyahActions button {
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+
+  .continueReadingButton {
+    font-size: 10px;
+  }
+
+}
