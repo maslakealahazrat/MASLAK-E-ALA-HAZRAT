@@ -259,6 +259,62 @@ const quranResults =
             </div>
           )}
 
+{query &&
+  !exactAyah &&
+  siteResults.length > 0 && (
+    <div className="searchSection">
+
+      <div className="searchSectionTitle">
+
+        <span>ISLAMIC KNOWLEDGE</span>
+
+        <h2>
+          Website Results
+        </h2>
+
+      </div>
+
+      <div className="searchResultList">
+
+        {siteResults.map((item) => (
+
+          <Link
+            key={item.id}
+            href={item.href}
+            className="searchResultCard"
+          >
+
+            <div className="searchResultTop">
+
+              <span className="searchResultNumber">
+                •
+              </span>
+
+              <span className="searchResultSurah">
+                {item.title}
+              </span>
+
+              <span className="searchResultArrow">
+                →
+              </span>
+
+            </div>
+
+            {item.description && (
+              <div className="searchResultArabic">
+                {item.description}
+              </div>
+            )}
+
+          </Link>
+
+        ))}
+
+      </div>
+
+    </div>
+  )}
+       
         {query &&
           !exactAyah &&
           quranResults.length === 0 && (
