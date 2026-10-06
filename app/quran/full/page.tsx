@@ -12,8 +12,14 @@ type Progress = {
 };
 
 export default function FullQuranPage() {
-  const [progress, setProgress] = useState<Progress | null>(null);
-    const [quranSearch, setQuranSearch] = useState("");
+  const [progress, setProgress] =
+    useState<Progress | null>(null);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [quranSearch, setQuranSearch] =
+    useState("");
 
   const normalizedQuranSearch =
     quranSearch
@@ -33,6 +39,11 @@ export default function FullQuranPage() {
             const ayahNumber =
               String(ayah.ayahNumber);
 
+            const reference =
+              ayah.surahNumber +
+              ":" +
+              ayah.ayahNumber;
+
             return (
               arabic.includes(
                 normalizedQuranSearch
@@ -41,13 +52,13 @@ export default function FullQuranPage() {
                 normalizedQuranSearch
               ) ||
               ayahNumber ===
+                normalizedQuranSearch ||
+              reference ===
                 normalizedQuranSearch
             );
           })
           .slice(0, 10)
       : [];
-  
-  const [message, setMessage] = useState("");
 
   const surahs = Array.from(
     new Map(
@@ -56,7 +67,8 @@ export default function FullQuranPage() {
         {
           number: ayah.surahNumber,
           name: ayah.surahName,
-          arabicName: ayah.surahNameArabic,
+          arabicName:
+            ayah.surahNameArabic,
         },
       ])
     ).values()
@@ -64,30 +76,21 @@ export default function FullQuranPage() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(PROGRESS_KEY);
+      const saved =
+        localStorage.getItem(
+          PROGRESS_KEY
+        );
 
       if (saved) {
-        setProgress(JSON.parse(saved));
+        setProgress(
+          JSON.parse(saved)
+        );
       }
     } catch {
       setProgress(null);
     }
   }, []);
 
-useEffect(() => {
-  const onScroll = () => {
-    handleAyahScroll();
-  };
-
-  window.addEventListener("scroll", onScroll, {
-    passive: true,
-  });
-
-  return () => {
-    window.removeEventListener("scroll", onScroll);
-  };
-}, []);
-  
   const saveProgress = (
     surahNumber: number,
     ayahNumber: number
@@ -102,7 +105,9 @@ useEffect(() => {
     try {
       localStorage.setItem(
         PROGRESS_KEY,
-        JSON.stringify(newProgress)
+        JSON.stringify(
+          newProgress
+        )
       );
     } catch {
       // Ignore localStorage errors.
@@ -113,15 +118,18 @@ useEffect(() => {
     surahNumber: number,
     ayahNumber: number
   ) => {
-    if (typeof window === "undefined") {
+    if (
+      typeof window ===
+      "undefined"
+    ) {
       return "";
     }
 
     return (
       window.location.origin +
-      "/quran/" +
+      "/quran/full#ayah-" +
       surahNumber +
-      "#ayah-" +
+      "-" +
       ayahNumber
     );
   };
@@ -143,15 +151,21 @@ useEffect(() => {
       "Maslak-e-Ala Hazrat";
 
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(
+        text
+      );
 
-      setMessage("Ayat copied");
+      setMessage(
+        "Ayat copied"
+      );
 
       setTimeout(() => {
         setMessage("");
       }, 1800);
     } catch {
-      setMessage("Copy failed");
+      setMessage(
+        "Copy failed"
+      );
 
       setTimeout(() => {
         setMessage("");
@@ -165,10 +179,11 @@ useEffect(() => {
     ayahNumber: number,
     arabic: string
   ) => {
-    const url = getAyahUrl(
-      surahNumber,
-      ayahNumber
-    );
+    const url =
+      getAyahUrl(
+        surahNumber,
+        ayahNumber
+      );
 
     const text =
       "Surah " +
@@ -194,7 +209,9 @@ useEffect(() => {
           url
         );
 
-        setMessage("Ayat link copied");
+        setMessage(
+          "Ayat link copied"
+        );
 
         setTimeout(() => {
           setMessage("");
@@ -205,93 +222,176 @@ useEffect(() => {
     }
   };
 
-const handleAyahScroll = () => {
-  const ayahElements =
-    document.querySelectorAll<HTMLElement>(
-      ".fullQuranAyah"
-    );
+  const shareSurah = async (
+    surahName: string,
+    surahNumber: number
+  ) => {
+    const url =
+      typeof window !==
+      "undefined"
+        ? window.location.origin +
+          "/quran/full#surah-" +
+          surahNumber
+        : "";
 
-  if (!ayahElements.length) {
-    return;
-  }
+    const text =
+      "Read Surah " +
+      surahName +
+      " on Maslak-e-Ala Hazrat";
 
-  const viewportCenter =
-    window.innerHeight / 2;
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title:
+            "Surah " +
+            surahName,
+          text,
+          url,
+        });
+      } else {
+        await navigator.clipboard.writeText(
+          url
+        );
 
-  let closestAyah: HTMLElement | null = null;
-  let closestDistance = Infinity;
+        setMessage(
+          "Surah link copied"
+        );
 
-  ayahElements.forEach((element) => {
-    const rect = element.getBoundingClientRect();
+        setTimeout(() => {
+          setMessage("");
+        }, 1800);
+      }
+    } catch {
+      // User cancelled sharing.
+    }
+  };
 
-    if (
-      rect.top <= viewportCenter &&
-      rect.bottom >= viewportCenter
-    ) {
-      const distance = Math.abs(
-        rect.top +
-          rect.height / 2 -
-          viewportCenter
+  const handleAyahScroll = () => {
+    const ayahElements =
+      document.querySelectorAll<HTMLElement>(
+        ".fullQuranAyah"
       );
 
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestAyah = element;
-      }
-    }
-  });
-
-  if (!closestAyah) {
-    return;
-  }
-
-  const id = closestAyah.id;
-  const parts = id.split("-");
-
-  if (parts.length !== 3) {
-    return;
-  }
-
-  const surahNumber = Number(parts[1]);
-  const ayahNumber = Number(parts[2]);
-
-  if (
-    !Number.isInteger(surahNumber) ||
-    !Number.isInteger(ayahNumber)
-  ) {
-    return;
-  }
-
-  saveProgress(
-    surahNumber,
-    ayahNumber
-  );
-};
-  
-  const continueReading = () => {
-    if (!progress) {
+    if (!ayahElements.length) {
       return;
     }
 
-    const element = document.getElementById(
-      "ayah-" +
-        progress.surahNumber +
-        "-" +
-        progress.ayahNumber
+    const viewportCenter =
+      window.innerHeight / 2;
+
+    let closestAyah:
+      HTMLElement | null = null;
+
+    let closestDistance =
+      Infinity;
+
+    ayahElements.forEach(
+      (element) => {
+        const rect =
+          element.getBoundingClientRect();
+
+        const elementCenter =
+          rect.top +
+          rect.height / 2;
+
+        const distance =
+          Math.abs(
+            elementCenter -
+              viewportCenter
+          );
+
+        if (
+          distance <
+          closestDistance
+        ) {
+          closestDistance =
+            distance;
+
+          closestAyah =
+            element;
+        }
+      }
     );
 
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+    if (!closestAyah) {
+      return;
     }
+
+    const id =
+      closestAyah.id;
+
+    const parts =
+      id.split("-");
+
+    if (parts.length !== 3) {
+      return;
+    }
+
+    const surahNumber =
+      Number(parts[1]);
+
+    const ayahNumber =
+      Number(parts[2]);
+
+    if (
+      !Number.isInteger(
+        surahNumber
+      ) ||
+      !Number.isInteger(
+        ayahNumber
+      )
+    ) {
+      return;
+    }
+
+    saveProgress(
+      surahNumber,
+      ayahNumber
+    );
   };
+
+  useEffect(() => {
+    let timeout:
+      ReturnType<
+        typeof setTimeout
+      > | null = null;
+
+    const onScroll = () => {
+      if (timeout) {
+        return;
+      }
+
+      timeout =
+        setTimeout(() => {
+          handleAyahScroll();
+          timeout = null;
+        }, 250);
+    };
+
+    window.addEventListener(
+      "scroll",
+      onScroll,
+      {
+        passive: true,
+      }
+    );
+
+    return () => {
+      window.removeEventListener(
+        "scroll",
+        onScroll
+      );
+
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, []);
 
   return (
     <main className="fullQuranPage">
 
-      {/* HEADER */}
+      {/* HERO */}
 
       <section className="fullQuranHero">
 
@@ -310,83 +410,117 @@ const handleAyahScroll = () => {
           THE NOBLE QUR’AN
         </div>
 
-        <h1>Read Full Qur’an</h1>
+        <h1>
+          Read Full Qur’an
+        </h1>
 
         <p>
-          Poora Qur’an ek hi jagah par padhiye.
+          Poora Qur’an ek hi jagah
+          par padhiye.
         </p>
 
       </section>
 
-{/* QURAN SEARCH */}
 
-<section className="fullQuranSearch">
+      {/* QURAN SEARCH */}
 
-  <div className="fullQuranSearchBox">
+      <section className="fullQuranSearch">
 
-    <span className="fullQuranSearchIcon">
-      🔎
-    </span>
+        <div className="fullQuranSearchBox">
 
-    <input
-  type="search"
-  value={quranSearch}
-  onChange={(event) =>
-    setQuranSearch(event.target.value)
-  }
-  placeholder="Search Qur’an..."
-  aria-label="Search Qur’an"
-/>
+          <span className="fullQuranSearchIcon">
+            🔎
+          </span>
 
-  </div>
-{quranSearchResults.length > 0 && (
-  <div className="fullQuranSearchResults">
+          <input
+            type="search"
+            value={quranSearch}
+            onChange={(event) =>
+              setQuranSearch(
+                event.target.value
+              )
+            }
+            placeholder="Search Qur’an..."
+            aria-label="Search Qur’an"
+          />
 
-    {quranSearchResults.map((ayah) => (
-      <button
-        key={ayah.id}
-        type="button"
-        className="fullQuranSearchResult"
-        onClick={() => {
-          const element =
-            document.getElementById(
-              "ayah-" +
-                ayah.surahNumber +
-                "-" +
-                ayah.ayahNumber
-            );
+        </div>
 
-          if (element) {
-            element.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-          }
-        }}
-      >
-        <strong>
-          Surah {ayah.surahName}
-        </strong>
+        {quranSearchResults.length >
+          0 && (
 
-        <span>
-          Ayat {ayah.ayahNumber}
-        </span>
+          <div className="fullQuranSearchResults">
 
-        <p>
-          {ayah.arabic}
-        </p>
-      </button>
-    ))}
+            {quranSearchResults.map(
+              (ayah) => (
 
-  </div>
-)}
+                <button
+                  key={ayah.id}
+                  type="button"
+                  className="fullQuranSearchResult"
+                  onClick={() => {
 
-  
-</section>
-      
-      
+                    const element =
+                      document.getElementById(
+                        "ayah-" +
+                          ayah.surahNumber +
+                          "-" +
+                          ayah.ayahNumber
+                      );
 
-      {/* COPY / SHARE MESSAGE */}
+                    if (element) {
+                      element.scrollIntoView(
+                        {
+                          behavior:
+                            "smooth",
+                          block:
+                            "center",
+                        }
+                      );
+
+                      saveProgress(
+                        ayah.surahNumber,
+                        ayah.ayahNumber
+                      );
+                    }
+
+                    setQuranSearch("");
+                  }}
+                >
+
+                  <div className="fullQuranSearchResultTop">
+
+                    <strong>
+                      Surah{" "}
+                      {
+                        ayah.surahName
+                      }
+                    </strong>
+
+                    <span>
+                      {ayah.surahNumber}:
+                      {ayah.ayahNumber}
+                    </span>
+
+                  </div>
+
+                  <p>
+                    {ayah.arabic}
+                  </p>
+
+                </button>
+
+              )
+            )}
+
+          </div>
+
+        )}
+
+      </section>
+
+
+      {/* TOAST */}
 
       {message && (
         <div className="quranToast">
@@ -399,133 +533,222 @@ const handleAyahScroll = () => {
 
       <section className="fullQuranContent">
 
-        {surahs.map((surah) => {
+        {surahs.map(
+          (surah) => {
 
-          const ayahs =
-            quranAyahs.filter(
-              (ayah) =>
-                ayah.surahNumber ===
-                surah.number
-            );
+            const ayahs =
+              quranAyahs.filter(
+                (ayah) =>
+                  ayah.surahNumber ===
+                  surah.number
+              );
 
-          return (
-            <section
-              key={surah.number}
-              className="fullQuranSurah"
-            >
+            return (
+              <section
+                key={
+                  surah.number
+                }
+                id={
+                  "surah-" +
+                  surah.number
+                }
+                className="fullQuranSurah"
+              >
 
-              {/* SURAH HEADER */}
+                {/* SURAH HEADER */}
 
-              <header className="fullQuranSurahHeader">
+                <header className="fullQuranSurahHeader">
 
-                <div className="fullQuranSurahArabic">
-                  {surah.arabicName}
-                </div>
+                  <div className="fullQuranSurahHeading">
 
-                <h2>
-                  {surah.name}
-                </h2>
+                    <div className="fullQuranSurahArabic">
+                      {
+                        surah.arabicName
+                      }
+                    </div>
 
-                <span>
-                  Surah {surah.number}
-                </span>
+                    <h2>
+                      {
+                        surah.name
+                      }
+                    </h2>
 
-              </header>
+                    <span>
+                      Surah{" "}
+                      {
+                        surah.number
+                      }
+                    </span>
 
+                  </div>
 
-              {/* AYAT */}
-
-              <div className="fullQuranAyahs">
-
-                {ayahs.map((ayah) => (
-
-                  <article
-                    key={ayah.id}
-                    id={
-                      "ayah-" +
-                      ayah.surahNumber +
-                      "-" +
-                      ayah.ayahNumber
+                  <button
+                    type="button"
+                    className="fullQuranSurahShare"
+                    aria-label={
+                      "Share Surah " +
+                      surah.name
                     }
-                    className="fullQuranAyah"
+                    title={
+                      "Share Surah " +
+                      surah.name
+                    }
                     onClick={() =>
-                      saveProgress(
-                        ayah.surahNumber,
-                        ayah.ayahNumber
+                      shareSurah(
+                        surah.name,
+                        surah.number
                       )
                     }
                   >
+                    ↗
+                  </button>
 
-                    <div className="fullQuranAyahTop">
-
-                      <div className="fullQuranAyahNumber">
-                        {ayah.ayahNumber}
-                      </div>
-
-                      <div className="fullQuranAyahActions">
-
-                        <button
-                          type="button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-
-                            copyAyah(
-                              ayah.surahName,
-                              ayah.surahNumber,
-                              ayah.ayahNumber,
-                              ayah.arabic
-                            );
-                          }}
-                        >
-                          📋 Copy
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-
-                            shareAyah(
-                              ayah.surahName,
-                              ayah.surahNumber,
-                              ayah.ayahNumber,
-                              ayah.arabic
-                            );
-                          }}
-                        >
-                          ↗ Share
-                        </button>
-
-                      </div>
-
-                    </div>
+                </header>
 
 
-                    <div className="fullQuranAyahArabic">
-                      {ayah.arabic}
-                    </div>
+                {/* SOURCE */}
 
-                  </article>
+                <div className="fullQuranSurahSource">
 
-                ))}
+                  <div>
 
-              </div>
+                    <span>
+                      Qur’an Text Source
+                    </span>
 
-            </section>
-          );
+                    <a
+                      href="https://tanzil.net/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Tanzil Project
+                    </a>
 
-        })}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="fullQuranSourceShare"
+                    aria-label={
+                      "Share Surah " +
+                      surah.name
+                    }
+                    title="Share"
+                    onClick={() =>
+                      shareSurah(
+                        surah.name,
+                        surah.number
+                      )
+                    }
+                  >
+                    ↗
+                  </button>
+
+                </div>
+
+
+                {/* CONTINUOUS AYAH TEXT */}
+
+                <div className="fullQuranAyahs">
+
+                  {ayahs.map(
+                    (ayah) => (
+
+                      <span
+                        key={
+                          ayah.id
+                        }
+                        id={
+                          "ayah-" +
+                          ayah.surahNumber +
+                          "-" +
+                          ayah.ayahNumber
+                        }
+                        className="fullQuranAyah"
+                        onClick={() =>
+                          saveProgress(
+                            ayah.surahNumber,
+                            ayah.ayahNumber
+                          )
+                        }
+                      >
+
+                        <span className="fullQuranAyahNumber">
+                          {
+                            ayah.ayahNumber
+                          }
+                        </span>
+
+                        <span className="fullQuranAyahText">
+                          {
+                            ayah.arabic
+                          }
+                        </span>
+
+                      </span>
+
+                    )
+                  )}
+
+                </div>
+
+
+                {/* SURAH ACTIONS */}
+
+                <div className="fullQuranSurahActions">
+
+                  <button
+                    type="button"
+                    onClick={() => {
+
+                      const firstAyah =
+                        ayahs[0];
+
+                      if (
+                        firstAyah
+                      ) {
+                        copyAyah(
+                          firstAyah.surahName,
+                          firstAyah.surahNumber,
+                          firstAyah.ayahNumber,
+                          firstAyah.arabic
+                        );
+                      }
+
+                    }}
+                  >
+                    📋 Copy
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      shareSurah(
+                        surah.name,
+                        surah.number
+                      )
+                    }
+                  >
+                    ↗ Share Surah
+                  </button>
+
+                </div>
+
+              </section>
+            );
+          }
+        )}
 
       </section>
 
 
-      {/* SOURCE */}
+      {/* FINAL SOURCE */}
 
       <section className="quranSource">
 
         <p>
-          Arabic Qur’an text sourced from
-          the Tanzil Project.
+          Arabic Qur’an text sourced
+          from the Tanzil Project.
         </p>
 
         <a
