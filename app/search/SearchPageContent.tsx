@@ -316,55 +316,60 @@ const quranResults =
   )}
        
         {query &&
-          !exactAyah &&
-          quranResults.length === 0 && (
-          siteResults.length === 0 && (
+  !exactAyah &&
+  quranResults.length === 0 &&
+  siteResults.length === 0 && (
 
-           
-            <div className="searchEmpty noResults">
+    <div className="searchEmpty noResults">
 
-              <div className="searchEmptyIcon">
-                🔎
-              </div>
+      <div className="searchEmptyIcon">
+        🔎
+      </div>
 
-              <div className="searchEmptyLabel">
-                SEARCH
-              </div>
+      <div className="searchEmptyLabel">
+        SEARCH
+      </div>
 
-              <h2>
-                No Results Found
-              </h2>
+      <h2>
+        No Results Found
+      </h2>
 
-              <p>
-                “{query}” ke liye abhi koi
-                Qur’an result nahi mila.
-              </p>
+      <p>
+        “{query}” ke liye abhi koi
+        Qur’an ya Islamic knowledge
+        result nahi mila.
+      </p>
 
-              <div className="noResultsHint">
-                <span>Try searching for</span>
+      <div className="noResultsHint">
 
-                <strong>
-                  Fatiha
-                </strong>
+        <span>
+          Try searching for
+        </span>
 
-                <strong>
-                  Al-Baqarah
-                </strong>
+        <strong>
+          Fatiha
+        </strong>
 
-                <strong>
-                  1:2
-                </strong>
-              </div>
+        <strong>
+          Al-Baqarah
+        </strong>
 
-              <Link
-                href="/"
-                className="searchEmptyButton"
-              >
-                ← Search Again
-              </Link>
+        <strong>
+          1:2
+        </strong>
 
-            </div>
-          )}
+      </div>
+
+      <Link
+        href="/"
+        className="searchEmptyButton"
+      >
+        ← Search Again
+      </Link>
+
+    </div>
+
+)}
 
       </section>
 
