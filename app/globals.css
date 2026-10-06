@@ -1629,5 +1629,324 @@ input {
   .continueReadingButton {
     font-size: 10px;
   }
+}
 
+/* =========================
+   SEARCH PAGE
+   ========================= */
+
+.searchPage {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+}
+
+.searchHero {
+  position: relative;
+  text-align: center;
+  padding: 42px 20px 50px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(121, 167, 165, 0.16),
+      transparent 55%
+    );
+  border-bottom: 1px solid var(--border);
+}
+
+.searchHero .quranBack {
+  display: inline-block;
+  margin-bottom: 28px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.searchHero .quranBack:hover {
+  color: var(--text);
+}
+
+.searchHeroArabic {
+  font-size: 34px;
+  line-height: 1.6;
+  direction: rtl;
+  margin-bottom: 12px;
+}
+
+.searchHeroEyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.searchHero h1 {
+  margin: 0;
+  font-size: clamp(32px, 7vw, 52px);
+  line-height: 1.1;
+}
+
+.searchHero p {
+  margin: 14px auto 0;
+  max-width: 520px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.searchResults {
+  width: min(900px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 42px 0 70px;
+}
+
+.searchResultHeading {
+  margin-bottom: 30px;
+}
+
+.searchResultHeading > span,
+.searchSectionTitle > span,
+.searchEmptyLabel {
+  display: block;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.searchResultHeading h2 {
+  margin: 8px 0 0;
+  font-size: clamp(22px, 5vw, 30px);
+}
+
+.searchSection {
+  margin-bottom: 42px;
+}
+
+.searchSectionTitle {
+  margin-bottom: 16px;
+}
+
+.searchSectionTitle h2 {
+  margin: 6px 0 0;
+  font-size: 24px;
+}
+
+.searchResultList {
+  display: grid;
+  gap: 14px;
+}
+
+.searchResultCard {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+
+  padding: 20px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.searchResultCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+}
+
+.searchResultCard.exactResult {
+  border-color: var(--primary);
+}
+
+.searchResultTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.searchResultNumber {
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.searchResultSurah {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.searchResultArrow {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.searchResultArabic {
+  direction: rtl;
+  text-align: right;
+
+  font-family: "Noto Naskh Arabic", "Amiri", serif;
+
+  font-size: clamp(23px, 5vw, 30px);
+  line-height: 2.1;
+
+  word-break: normal;
+}
+
+.searchEmpty {
+  text-align: center;
+
+  padding: 55px 22px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 22px;
+
+  box-shadow: var(--shadow);
+}
+
+.searchEmptyIcon {
+  font-size: 38px;
+  margin-bottom: 18px;
+}
+
+.searchEmpty h2 {
+  margin: 9px 0 10px;
+  font-size: 24px;
+}
+
+.searchEmpty p {
+  max-width: 520px;
+  margin: 0 auto;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.searchEmptyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 24px;
+
+  min-height: 42px;
+  padding: 0 20px;
+
+  border-radius: 22px;
+
+  background: var(--primary);
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.noResultsHint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 22px;
+}
+
+.noResultsHint span {
+  width: 100%;
+  margin-bottom: 4px;
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.noResultsHint strong {
+  padding: 7px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 20px;
+
+  color: var(--text);
+  background: var(--background);
+
+  font-size: 12px;
+}
+
+.quranSource {
+  width: min(900px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 45px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+  border-top: 1px solid var(--border);
+}
+
+.quranSource p {
+  margin: 0 0 6px;
+  font-size: 12px;
+}
+
+.quranSource a {
+  color: var(--primary);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .searchHero {
+    padding: 30px 16px 38px;
+  }
+
+  .searchHeroArabic {
+    font-size: 30px;
+  }
+
+  .searchResults {
+    width: min(100% - 22px, 900px);
+    padding-top: 28px;
+  }
+
+  .searchResultCard {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .searchResultArabic {
+    font-size: 22px;
+    line-height: 2;
+  }
+
+  .searchEmpty {
+    padding: 42px 16px;
+  }
 }
