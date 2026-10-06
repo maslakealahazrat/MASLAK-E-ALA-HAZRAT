@@ -37,14 +37,16 @@ export default function SearchPageContent({
 }: SearchPageContentProps) {
   const trimmedQuery = query.trim();
 
-  const exactAyah = query
-    ? findExactAyah(query)
-    : null;
+  const exactAyah = trimmedQuery
+  ? findExactAyah(trimmedQuery)
+  : null;
 
-  const normalizedQuery = query.toLowerCase();
+const normalizedQuery =
+  trimmedQuery.toLowerCase();
 
-  const quranResults =
-    query && !exactAyah
+const quranResults =
+  trimmedQuery && !exactAyah
+  
       ? quranAyahs
           .filter((ayah) => {
             const arabic =
