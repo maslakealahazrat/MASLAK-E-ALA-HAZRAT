@@ -1,5 +1,5 @@
 "use client";
- 
+
 import Link from "next/link";
 import { quranAyahs } from "@/data/quran/ayahs";
 import { searchSiteContent } from "@/data/site/search-utils";
@@ -12,7 +12,9 @@ function findExactAyah(query: string) {
     .replace(/^surah\s+/i, "")
     .replace(/\s+/g, "");
 
-  const match = cleaned.match(/^(\d{1,3})[:/](\d{1,3})$/);
+  const match = cleaned.match(
+    /^(\d{1,3})[:/](\d{1,3})$/
+  );
 
   if (!match) {
     return null;
@@ -40,23 +42,21 @@ export default function SearchPageContent({
   const trimmedQuery = query.trim();
 
   const exactAyah = trimmedQuery
-  ? findExactAyah(trimmedQuery)
-  : null;
+    ? findExactAyah(trimmedQuery)
+    : null;
 
-const siteResults =
-  trimmedQuery
+  const siteResults = trimmedQuery
     ? searchSiteContent(
         siteSearchIndex,
         trimmedQuery
       )
     : [];
- 
-const normalizedQuery =
-  trimmedQuery.toLowerCase();
 
-const quranResults =
-  trimmedQuery && !exactAyah
-  
+  const normalizedQuery =
+    trimmedQuery.toLowerCase();
+
+  const quranResults =
+    trimmedQuery && !exactAyah
       ? quranAyahs
           .filter((ayah) => {
             const arabic =
@@ -69,13 +69,21 @@ const quranResults =
               ayah.surahNameArabic.toLowerCase();
 
             return (
-              arabic.includes(normalizedQuery) ||
-              surahName.includes(normalizedQuery) ||
-              surahArabic.includes(normalizedQuery) ||
-              String(ayah.surahNumber) ===
-                normalizedQuery ||
-              String(ayah.ayahNumber) ===
+              arabic.includes(
                 normalizedQuery
+              ) ||
+              surahName.includes(
+                normalizedQuery
+              ) ||
+              surahArabic.includes(
+                normalizedQuery
+              ) ||
+              String(
+                ayah.surahNumber
+              ) === normalizedQuery ||
+              String(
+                ayah.ayahNumber
+              ) === normalizedQuery
             );
           })
           .slice(0, 50)
@@ -84,9 +92,14 @@ const quranResults =
   return (
     <main className="searchPage">
 
+      {/* SEARCH HERO */}
+
       <section className="searchHero">
 
-        <Link href="/" className="quranBack">
+        <Link
+          href="/"
+          className="quranBack"
+        >
           ← Home
         </Link>
 
@@ -98,7 +111,9 @@ const quranResults =
           ISLAMIC KNOWLEDGE SEARCH
         </div>
 
-        <h1>Search</h1>
+        <h1>
+          Search
+        </h1>
 
         <p>
           Qur’an aur Islamic knowledge mein
@@ -107,12 +122,19 @@ const quranResults =
 
       </section>
 
+
+      {/* SEARCH RESULTS */}
+
       <section className="searchResults">
+
+        {/* RESULT HEADING */}
 
         {query && (
           <div className="searchResultHeading">
 
-            <span>SEARCH RESULTS</span>
+            <span>
+              SEARCH RESULTS
+            </span>
 
             <h2>
               Results for “{query}”
@@ -120,6 +142,9 @@ const quranResults =
 
           </div>
         )}
+
+
+        {/* EMPTY SEARCH */}
 
         {!query && (
           <div className="searchEmpty">
@@ -152,12 +177,17 @@ const quranResults =
           </div>
         )}
 
+
+        {/* EXACT QURAN AYAH */}
+
         {query && exactAyah && (
           <div className="searchSection">
 
             <div className="searchSectionTitle">
 
-              <span>QUR’AN</span>
+              <span>
+                QUR’AN
+              </span>
 
               <h2>
                 Exact Ayah
@@ -200,14 +230,20 @@ const quranResults =
           </div>
         )}
 
+
+        {/* QURAN RESULTS */}
+
         {query &&
           !exactAyah &&
           quranResults.length > 0 && (
+
             <div className="searchSection">
 
               <div className="searchSectionTitle">
 
-                <span>QUR’AN</span>
+                <span>
+                  QUR’AN
+                </span>
 
                 <h2>
                   Qur’an Results
@@ -217,161 +253,176 @@ const quranResults =
 
               <div className="searchResultList">
 
-                {quranResults.map((ayah) => (
+                {quranResults.map(
+                  (ayah) => (
 
-                  <Link
-                    key={ayah.id}
-                    href={
-                      "/quran/" +
-                      ayah.surahNumber +
-                      "#ayah-" +
-                      ayah.ayahNumber
-                    }
-                    className="searchResultCard"
-                  >
+                    <Link
+                      key={ayah.id}
+                      href={
+                        "/quran/" +
+                        ayah.surahNumber +
+                        "#ayah-" +
+                        ayah.ayahNumber
+                      }
+                      className="searchResultCard"
+                    >
 
-                    <div className="searchResultTop">
+                      <div className="searchResultTop">
 
-                      <span className="searchResultNumber">
-                        {ayah.ayahNumber}
-                      </span>
+                        <span className="searchResultNumber">
+                          {ayah.ayahNumber}
+                        </span>
 
-                      <span className="searchResultSurah">
-                        {ayah.surahName}
-                      </span>
+                        <span className="searchResultSurah">
+                          {ayah.surahName}
+                        </span>
 
-                      <span className="searchResultArrow">
-                        →
-                      </span>
+                        <span className="searchResultArrow">
+                          →
+                        </span>
 
-                    </div>
+                      </div>
 
-                    <div className="searchResultArabic">
-                      {ayah.arabic}
-                    </div>
+                      <div className="searchResultArabic">
+                        {ayah.arabic}
+                      </div>
 
-                  </Link>
+                    </Link>
 
-                ))}
+                  )
+                )}
 
               </div>
 
             </div>
           )}
 
-{query &&
-  !exactAyah &&
-  siteResults.length > 0 && (
-    <div className="searchSection">
 
-      <div className="searchSectionTitle">
+        {/* WEBSITE RESULTS */}
 
-        <span>ISLAMIC KNOWLEDGE</span>
+        {query &&
+          !exactAyah &&
+          siteResults.length > 0 && (
 
-        <h2>
-          Website Results
-        </h2>
+            <div className="searchSection">
 
-      </div>
+              <div className="searchSectionTitle">
 
-      <div className="searchResultList">
+                <span>
+                  ISLAMIC KNOWLEDGE
+                </span>
 
-        {siteResults.map((item) => (
+                <h2>
+                  Website Results
+                </h2>
 
-          <Link
-            key={item.id}
-            href={item.href}
-            className="searchResultCard"
-          >
+              </div>
 
-            <div className="searchResultTop">
+              <div className="searchResultList">
 
-              <span className="searchResultNumber">
-                •
-              </span>
+                {siteResults.map(
+                  (item) => (
 
-              <span className="searchResultSurah">
-                {item.title}
-              </span>
+                    <Link
+                      key={item.id}
+                      href={item.href}
+                      className="searchResultCard"
+                    >
 
-              <span className="searchResultArrow">
-                →
-              </span>
+                      <div className="searchResultTop">
+
+                        <span className="searchResultNumber">
+                          •
+                        </span>
+
+                        <span className="searchResultSurah">
+                          {item.title}
+                        </span>
+
+                        <span className="searchResultArrow">
+                          →
+                        </span>
+
+                      </div>
+
+                      {item.description && (
+                        <div className="searchResultArabic">
+                          {item.description}
+                        </div>
+                      )}
+
+                    </Link>
+
+                  )
+                )}
+
+              </div>
 
             </div>
+          )}
 
-            {item.description && (
-              <div className="searchResultArabic">
-                {item.description}
-              </div>
-            )}
 
-          </Link>
+        {/* NO RESULTS */}
 
-        ))}
-
-      </div>
-
-    </div>
-  )}
-       
         {query &&
-  !exactAyah &&
-  quranResults.length === 0 &&
-  siteResults.length === 0 && (
+          !exactAyah &&
+          quranResults.length === 0 &&
+          siteResults.length === 0 && (
 
-    <div className="searchEmpty noResults">
+            <div className="searchEmpty noResults">
 
-      <div className="searchEmptyIcon">
-        🔎
-      </div>
+              <div className="searchEmptyIcon">
+                🔎
+              </div>
 
-      <div className="searchEmptyLabel">
-        SEARCH
-      </div>
+              <div className="searchEmptyLabel">
+                SEARCH
+              </div>
 
-      <h2>
-        No Results Found
-      </h2>
+              <h2>
+                No Results Found
+              </h2>
 
-      <p>
-        “{query}” ke liye abhi koi
-        Qur’an ya Islamic knowledge
-        result nahi mila.
-      </p>
+              <p>
+                “{query}” ke liye abhi koi
+                Qur’an ya Islamic knowledge
+                result nahi mila.
+              </p>
 
-      <div className="noResultsHint">
+              <div className="noResultsHint">
 
-        <span>
-          Try searching for
-        </span>
+                <span>
+                  Try searching for
+                </span>
 
-        <strong>
-          Fatiha
-        </strong>
+                <strong>
+                  Fatiha
+                </strong>
 
-        <strong>
-          Al-Baqarah
-        </strong>
+                <strong>
+                  Al-Baqarah
+                </strong>
 
-        <strong>
-          1:2
-        </strong>
+                <strong>
+                  1:2
+                </strong>
 
-      </div>
+              </div>
 
-      <Link
-        href="/"
-        className="searchEmptyButton"
-      >
-        ← Search Again
-      </Link>
+              <Link
+                href="/"
+                className="searchEmptyButton"
+              >
+                ← Search Again
+              </Link>
 
-    </div>
-
-)}
+            </div>
+          )}
 
       </section>
+
+
+      {/* QURAN SOURCE */}
 
       <section className="quranSource">
 
