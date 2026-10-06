@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
+  const navItems = [
   ["Home", "/"],
   ["Ala Hazrat", "/ala-hazrat"],
   ["Naat / Manqabat", "/naat-manqabat"],
@@ -11,10 +12,16 @@ const navItems = [
   ["Kanz-ul-Iman", "/kanz-ul-iman"],
   ["Seerat-un-Nabi ﷺ", "/seerat-un-nabi"],
   ["Hadith", "/hadith"],
+
+  ["Ilm Ka Safar", "/ilm-ka-safar"],
   ["Islamic Books", "/islamic-books"],
-  ["Artists", "/artists"],
+  ["Gulzar-e-Millat", "/gulzar-e-millat"],
+  ["Qur’an Samajhne Ka Safar", "/quran-samajhne-ka-safar"],
+  ["Artist Biography", "/artist-biography"],
+
   ["About", "/about"],
   ["Contact", "/contact"],
+  ["Disclaimer", "/disclaimer"],
 ];
 
 const knowledgeCards = [
