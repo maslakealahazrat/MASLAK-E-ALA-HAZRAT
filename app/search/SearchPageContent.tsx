@@ -2,6 +2,8 @@
  
 import Link from "next/link";
 import { quranAyahs } from "@/data/quran/ayahs";
+import { searchSiteContent } from "@/data/site/search-utils";
+import { siteSearchIndex } from "@/data/site/search-index";
 
 function findExactAyah(query: string) {
   const cleaned = query
@@ -41,6 +43,14 @@ export default function SearchPageContent({
   ? findExactAyah(trimmedQuery)
   : null;
 
+const siteResults =
+  trimmedQuery
+    ? searchSiteContent(
+        siteSearchIndex,
+        trimmedQuery
+      )
+    : [];
+ 
 const normalizedQuery =
   trimmedQuery.toLowerCase();
 
