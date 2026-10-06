@@ -226,3 +226,4 @@ console.log(
 console.log(
   "Verified 114 Surah names from quran-data.xml."
 );
+
