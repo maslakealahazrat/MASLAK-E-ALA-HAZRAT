@@ -1,0 +1,178 @@
+"use client";
+
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { quranAyahs } from "@/data/quran/ayahs";
+
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q")?.trim() || "";
+
+  const normalizedQuery = query.toLowerCase();
+
+  const quranResults = query
+    ? quranAyahs
+        .filter((ayah) => {
+          const arabic = ayah.arabic.toLowerCase();
+          const surahName =
+            ayah.surahName.toLowerCase();
+          const surahArabic =
+            ayah.surahNameArabic.toLowerCase();
+
+          return (
+            arabic.includes(normalizedQuery) ||
+            surahName.includes(normalizedQuery) ||
+            surahArabic.includes(normalizedQuery) ||
+            String(ayah.surahNumber) === normalizedQuery ||
+            String(ayah.ayahNumber) === normalizedQuery
+          );
+        })
+        .slice(0, 50)
+    : [];
+
+  return (
+    <main className="searchPage">
+
+      <section className="searchHero">
+
+        <Link href="/" className="quranBack">
+          ← Home
+        </Link>
+
+        <div className="searchHeroArabic">
+          البحث
+        </div>
+
+        <div className="searchHeroEyebrow">
+          ISLAMIC KNOWLEDGE SEARCH
+        </div>
+
+        <h1>Search</h1>
+
+        <p>
+          Qur’an aur Islamic knowledge mein search karein.
+        </p>
+
+      </section>
+
+      <section className="searchResults">
+
+        {query && (
+          <div className="searchResultHeading">
+            <span>SEARCH RESULTS</span>
+
+            <h2>
+              Results for “{query}”
+            </h2>
+          </div>
+        )}
+
+        {!query && (
+          <div className="searchEmpty">
+            <div className="searchEmptyIcon">
+              🔎
+            </div>
+
+            <h2>
+              Search Islamic Knowledge
+            </h2>
+
+            <p>
+              Home page par search box mein apna
+              query likh kar search karein.
+            </p>
+          </div>
+        )}
+
+        {query && quranResults.length === 0 && (
+          <div className="searchEmpty">
+            <div className="searchEmptyIcon">
+              🔎
+            </div>
+
+            <h2>
+              No results found
+            </h2>
+
+            <p>
+              “{query}” ke liye abhi koi result nahi mila.
+            </p>
+          </div>
+        )}
+
+        {quranResults.length > 0 && (
+          <div className="searchSection">
+
+            <div className="searchSectionTitle">
+              <span>QUR’AN</span>
+              <h2>
+                Qur’an Results
+              </h2>
+            </div>
+
+            <div className="searchResultList">
+
+              {quranResults.map((ayah) => (
+
+                <Link
+                  key={ayah.id}
+                  href={
+                    "/quran/" +
+                    ayah.surahNumber +
+                    "#ayah-" +
+                    ayah.ayahNumber
+                  }
+                  className="searchResultCard"
+                >
+
+                  <div className="searchResultTop">
+
+                    <span className="searchResultNumber">
+                      {ayah.ayahNumber}
+                    </span>
+
+                    <span className="searchResultSurah">
+                      {ayah.surahName}
+                    </span>
+
+                    <span className="searchResultArrow">
+                      →
+                    </span>
+
+                  </div>
+
+                  <div className="searchResultArabic">
+                    {ayah.arabic}
+                  </div>
+
+                </Link>
+
+              ))}
+
+            </div>
+
+          </div>
+        )}
+
+      </section>
+
+      <section className="quranSource">
+
+        <p>
+          Arabic Qur’an text sourced from
+          the Tanzil Project.
+        </p>
+
+        <a
+          href="https://tanzil.net/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tanzil Project
+        </a>
+
+      </section>
+
+    </main>
+  );
+}
