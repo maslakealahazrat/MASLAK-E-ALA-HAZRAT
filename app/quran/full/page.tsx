@@ -5,6 +5,39 @@ import { useEffect, useState } from "react";
 import { quranAyahs } from "@/data/quran/ayahs";
 
 const PROGRESS_KEY = "maslak-quran-progress";
+const [quranSearch, setQuranSearch] = useState("");
+
+const normalizedQuranSearch =
+  quranSearch
+    .trim()
+    .toLowerCase();
+
+const quranSearchResults =
+  normalizedQuranSearch
+    ? quranAyahs
+        .filter((ayah) => {
+          const arabic =
+            ayah.arabic.toLowerCase();
+
+          const surahName =
+            ayah.surahName.toLowerCase();
+
+          const ayahNumber =
+            String(ayah.ayahNumber);
+
+          return (
+            arabic.includes(
+              normalizedQuranSearch
+            ) ||
+            surahName.includes(
+              normalizedQuranSearch
+            ) ||
+            ayahNumber ===
+              normalizedQuranSearch
+          );
+        })
+        .slice(0, 10)
+    : [];
 
 type Progress = {
   surahNumber: number;
@@ -295,13 +328,59 @@ const handleAyahScroll = () => {
     </span>
 
     <input
-      type="search"
-      placeholder="Search Qur’an..."
-      aria-label="Search Qur’an"
-    />
+  type="search"
+  value={quranSearch}
+  onChange={(event) =>
+    setQuranSearch(event.target.value)
+  }
+  placeholder="Search Qur’an..."
+  aria-label="Search Qur’an"
+/>
 
   </div>
+{quranSearchResults.length > 0 && (
+  <div className="fullQuranSearchResults">
 
+    {quranSearchResults.map((ayah) => (
+      <button
+        key={ayah.id}
+        type="button"
+        className="fullQuranSearchResult"
+        onClick={() => {
+          const element =
+            document.getElementById(
+              "ayah-" +
+                ayah.surahNumber +
+                "-" +
+                ayah.ayahNumber
+            );
+
+          if (element) {
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }
+        }}
+      >
+        <strong>
+          Surah {ayah.surahName}
+        </strong>
+
+        <span>
+          Ayat {ayah.ayahNumber}
+        </span>
+
+        <p>
+          {ayah.arabic}
+        </p>
+      </button>
+    ))}
+
+  </div>
+)}
+
+  
 </section>
       
       {/* CONTINUE READING */}
