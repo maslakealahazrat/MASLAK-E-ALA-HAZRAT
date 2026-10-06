@@ -60,7 +60,7 @@ export default function QuranPage() {
 
             <Link
               key={surah.number}
-              href={"/quran?surah=" + surah.number}
+              href={"/quran/" + surah.number}
               className="surahCard"
             >
 
