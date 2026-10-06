@@ -406,36 +406,7 @@ const liveSearchResults = searchQuery.trim()
   )}
 
 </div>
-          
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="11" cy="11" r="7" />
-    <path d="m16.5 16.5 4 4" />
-  </svg>
-
-  <input
-    type="search"
-    value={searchQuery}
-    onChange={(event) =>
-      setSearchQuery(event.target.value)
-    }
-    onKeyDown={(event) => {
-      if (event.key === "Enter") {
-        handleSearch();
-      }
-    }}
-    placeholder="Search Islamic knowledge..."
-    aria-label="Search Islamic knowledge"
-  />
-
-  <button
-    type="button"
-    onClick={handleSearch}
-  >
-    Search
-  </button>
-</div>
-            
-
+        
         </div>
       </section>
 
