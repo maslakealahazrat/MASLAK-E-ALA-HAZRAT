@@ -86,6 +86,19 @@ export default function Home() {
     hijri: "",
   });
 
+const [searchQuery, setSearchQuery] = useState("");
+
+function handleSearch() {
+  const query = searchQuery.trim();
+
+  if (!query) {
+    return;
+  }
+
+  window.location.href =
+    "/search?q=" + encodeURIComponent(query);
+}
+  
   useEffect(() => {
     const savedLanguage = localStorage.getItem("site-language") || "auto";
     const savedTheme = localStorage.getItem("site-theme") || "auto";
@@ -280,18 +293,34 @@ export default function Home() {
           </div>
 
           <div className="searchBox">
-            <svg viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="7" />
-              <path d="m16.5 16.5 4 4" />
-            </svg>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="11" cy="11" r="7" />
+    <path d="m16.5 16.5 4 4" />
+  </svg>
 
-            <input
-              type="search"
-              placeholder="Search Islamic knowledge..."
-            />
+  <input
+    type="search"
+    value={searchQuery}
+    onChange={(event) =>
+      setSearchQuery(event.target.value)
+    }
+    onKeyDown={(event) => {
+      if (event.key === "Enter") {
+        handleSearch();
+      }
+    }}
+    placeholder="Search Islamic knowledge..."
+    aria-label="Search Islamic knowledge"
+  />
 
-            <button>Search</button>
-          </div>
+  <button
+    type="button"
+    onClick={handleSearch}
+  >
+    Search
+  </button>
+</div>
+            
 
         </div>
       </section>
