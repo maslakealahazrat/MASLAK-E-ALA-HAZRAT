@@ -40,6 +40,20 @@ export default function FullQuranPage() {
     }
   }, []);
 
+useEffect(() => {
+  const onScroll = () => {
+    handleAyahScroll();
+  };
+
+  window.addEventListener("scroll", onScroll, {
+    passive: true,
+  });
+
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+  };
+}, []);
+  
   const saveProgress = (
     surahNumber: number,
     ayahNumber: number
