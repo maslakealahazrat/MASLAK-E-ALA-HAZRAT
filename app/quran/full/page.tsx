@@ -5,39 +5,6 @@ import { useEffect, useState } from "react";
 import { quranAyahs } from "@/data/quran/ayahs";
 
 const PROGRESS_KEY = "maslak-quran-progress";
-const [quranSearch, setQuranSearch] = useState("");
-
-const normalizedQuranSearch =
-  quranSearch
-    .trim()
-    .toLowerCase();
-
-const quranSearchResults =
-  normalizedQuranSearch
-    ? quranAyahs
-        .filter((ayah) => {
-          const arabic =
-            ayah.arabic.toLowerCase();
-
-          const surahName =
-            ayah.surahName.toLowerCase();
-
-          const ayahNumber =
-            String(ayah.ayahNumber);
-
-          return (
-            arabic.includes(
-              normalizedQuranSearch
-            ) ||
-            surahName.includes(
-              normalizedQuranSearch
-            ) ||
-            ayahNumber ===
-              normalizedQuranSearch
-          );
-        })
-        .slice(0, 10)
-    : [];
 
 type Progress = {
   surahNumber: number;
@@ -46,6 +13,40 @@ type Progress = {
 
 export default function FullQuranPage() {
   const [progress, setProgress] = useState<Progress | null>(null);
+    const [quranSearch, setQuranSearch] = useState("");
+
+  const normalizedQuranSearch =
+    quranSearch
+      .trim()
+      .toLowerCase();
+
+  const quranSearchResults =
+    normalizedQuranSearch
+      ? quranAyahs
+          .filter((ayah) => {
+            const arabic =
+              ayah.arabic.toLowerCase();
+
+            const surahName =
+              ayah.surahName.toLowerCase();
+
+            const ayahNumber =
+              String(ayah.ayahNumber);
+
+            return (
+              arabic.includes(
+                normalizedQuranSearch
+              ) ||
+              surahName.includes(
+                normalizedQuranSearch
+              ) ||
+              ayahNumber ===
+                normalizedQuranSearch
+            );
+          })
+          .slice(0, 10)
+      : [];
+  
   const [message, setMessage] = useState("");
 
   const surahs = Array.from(
@@ -383,49 +384,7 @@ const handleAyahScroll = () => {
   
 </section>
       
-      {/* CONTINUE READING */}
-
-      {progress && (
-        <section className="continueReadingBox">
-
-          <div className="continueReadingIcon">
-            📖
-          </div>
-
-          <div className="continueReadingInfo">
-
-            <span>
-              CONTINUE READING
-            </span>
-
-            <h2>
-              Surah{" "}
-              {
-                quranAyahs.find(
-                  (ayah) =>
-                    ayah.surahNumber ===
-                    progress.surahNumber
-                )?.surahName
-              }
-            </h2>
-
-            <p>
-              Ayat {progress.ayahNumber}
-            </p>
-
-            <button
-              type="button"
-              className="continueReadingButton"
-              onClick={continueReading}
-            >
-              Continue Reading →
-            </button>
-
-          </div>
-
-        </section>
-      )}
-
+      
 
       {/* COPY / SHARE MESSAGE */}
 
