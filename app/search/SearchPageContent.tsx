@@ -318,7 +318,9 @@ const quranResults =
         {query &&
           !exactAyah &&
           quranResults.length === 0 && (
+          siteResults.length === 0 && (
 
+           
             <div className="searchEmpty noResults">
 
               <div className="searchEmptyIcon">
