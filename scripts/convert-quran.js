@@ -18,7 +18,6 @@ const outputPath = path.join(
 );
 
 const text = fs.readFileSync(inputPath, "utf8");
-
 const lines = text.split(/\r?\n/);
 
 const ayahs = [];
@@ -26,14 +25,16 @@ const ayahs = [];
 for (const line of lines) {
   const trimmed = line.trim();
 
-  // Ignore empty lines and page-number lines
-  if (!trimmed || /^Page number\s+\d+$/i.test(trimmed)) {
+  if (!trimmed) {
+    continue;
+  }
+
+  if (/^Page number\s+\d+$/i.test(trimmed)) {
     continue;
   }
 
   const parts = trimmed.split("|");
 
-  // Expected format: Surah|Ayah|Arabic
   if (parts.length < 3) {
     continue;
   }
@@ -51,39 +52,39 @@ for (const line of lines) {
   }
 
   ayahs.push({
-    id: `${surahNumber}-${ayahNumber}`,
-    surahNumber,
-    ayahNumber,
-    arabic,
+    id: String(surahNumber) + "-" + String(ayahNumber),
+    surahNumber: surahNumber,
+    ayahNumber: ayahNumber,
+    arabic: arabic
   });
 }
 
-const output = `// Quran Arabic text source: Tanzil Project
-// Source: https://tanzil.net/
-// IMPORTANT: Preserve the original Tanzil Arabic text unchanged.
+const header =
+  "// Quran Arabic text source: Tanzil Project\n" +
+  "// Source: https://tanzil.net/\n" +
+  "// IMPORTANT: Preserve the original Tanzil Arabic text unchanged.\n\n" +
+  "export type QuranAyah = {\n" +
+  "  id: string;\n" +
+  "  surahNumber: number;\n" +
+  "  ayahNumber: number;\n" +
+  "  arabic: string;\n" +
+  "  surahName: string;\n" +
+  "  surahNameArabic: string;\n" +
+  "};\n\n";
 
-export type QuranAyah = {
-  id: string;
-  surahNumber: number;
-  ayahNumber: number;
-  arabic: string;
-  surahName: string;
-  surahNameArabic: string;
-};
+const data =
+  "export const quranAyahs: QuranAyah[] = " +
+  JSON.stringify(ayahs, null, 2) +
+  ".map((ayah) => ({\n" +
+  "  ...ayah,\n" +
+  "  surahName: \"Surah \" + ayah.surahNumber,\n" +
+  "  surahNameArabic: \"سورة \" + ayah.surahNumber\n" +
+  "}));\n";
 
-export const quranAyahs: QuranAyah[] = ${JSON.stringify(
-  ayahs,
-  null,
-  2
-)}.map((ayah) => ({
-  ...ayah,
-  surahName: \`Surah \${ayah.surahNumber}\`,
-  surahNameArabic: \`سورة \${ayah.surahNumber}\`,
-}));
-`;
-
-fs.writeFileSync(outputPath, output, "utf8");
+fs.writeFileSync(outputPath, header + data, "utf8");
 
 console.log(
-  \`Done! Generated \${ayahs.length} ayahs in data/quran/ayahs.ts\`
+  "Done! Generated " +
+  ayahs.length +
+  " ayahs in data/quran/ayahs.ts"
 );
