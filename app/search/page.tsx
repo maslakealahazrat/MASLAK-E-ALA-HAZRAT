@@ -1,10 +1,16 @@
-import { Suspense } from "react";
 import SearchPageContent from "./SearchPageContent";
 
-export default function SearchPage() {
-  return (
-    <Suspense fallback={null}>
-      <SearchPageContent />
-    </Suspense>
-  );
+type SearchPageProps = {
+  searchParams: Promise<{
+    q?: string;
+  }>;
+};
+
+export default async function SearchPage({
+  searchParams,
+}: SearchPageProps) {
+  const params = await searchParams;
+  const query = params.q || "";
+
+  return <SearchPageContent query={query} />;
 }
