@@ -1,19 +1,13 @@
 "use client";
 
 import Link from "next/link";
-
-const lessons = [
-  {
-    day: 1,
-    title: "Allah Ta'ala ki Wahdaniyyat",
-    subtitle: "Allah Ta'ala ki Pehchaan",
-  },
-];
+import { ilmKaSafarLessons } from "@/data/ilm-ka-safar";
 
 export default function IlmKaSafarPage() {
+  const lessons = Object.values(ilmKaSafarLessons);
+
   return (
     <main className="ilmIndexPage">
-
       <div className="ilmIndexContainer">
 
         <Link
@@ -44,6 +38,7 @@ export default function IlmKaSafarPage() {
         <section className="ilmLessonList">
 
           {lessons.map((lesson) => (
+
             <Link
               key={lesson.day}
               href={`/ilm-ka-safar/day/${lesson.day}`}
@@ -61,11 +56,11 @@ export default function IlmKaSafarPage() {
                 </span>
 
                 <h2>
-                  {lesson.title}
+                  {lesson.title.en}
                 </h2>
 
                 <p>
-                  {lesson.subtitle}
+                  {lesson.subtitle.en}
                 </p>
 
               </div>
@@ -75,12 +70,12 @@ export default function IlmKaSafarPage() {
               </div>
 
             </Link>
+
           ))}
 
         </section>
 
       </div>
-
     </main>
   );
 }
