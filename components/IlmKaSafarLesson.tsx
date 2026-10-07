@@ -58,9 +58,9 @@ const languageOrder: Lang[] = ["en", "ur", "hi"];
 export default function IlmKaSafarLesson({ lesson }: Props) {
   const [language, setLanguage] = useState<Lang>("en");
   const [autoMode, setAutoMode] = useState(true);
-  const [clickedLanguages, setClickedLanguages] = useState<
-    Record<string, Lang>
-  >({});
+
+  const [clickedLanguages, setClickedLanguages] =
+    useState<Record<string, Lang>>({});
 
   useEffect(() => {
     const savedLanguage =
@@ -74,8 +74,8 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
       setLanguage(savedLanguage);
       setAutoMode(false);
     } else {
-      setAutoMode(true);
       setLanguage("en");
+      setAutoMode(true);
     }
 
     const handleStorage = () => {
@@ -90,32 +90,18 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
         setLanguage(current);
         setAutoMode(false);
       } else {
-        setAutoMode(true);
         setLanguage("en");
+        setAutoMode(true);
       }
     };
 
     window.addEventListener("storage", handleStorage);
 
-  const splitBismillah = (arabic: string) => {
-    const bismillah =
-      "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
-
-    if (arabic.startsWith(bismillah)) {
-      return {
-        bismillah,
-        ayahText: arabic.slice(bismillah.length).trim(),
-      };
-    }
-
-    return {
-      bismillah: "",
-      ayahText: arabic,
-    };
-  };
-    
     return () => {
-      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(
+        "storage",
+        handleStorage
+      );
     };
   }, []);
 
@@ -143,18 +129,25 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
       return text[language];
     }
 
-    return text[clickedLanguages[key] || "en"];
+    return text[
+      clickedLanguages[key] || "en"
+    ];
   };
 
   const cycleText = (key: string) => {
     if (!autoMode) return;
 
     setClickedLanguages((previous) => {
-      const current = previous[key] || "en";
-      const index = languageOrder.indexOf(current);
+      const current =
+        previous[key] || "en";
+
+      const currentIndex =
+        languageOrder.indexOf(current);
+
       const next =
         languageOrder[
-          (index + 1) % languageOrder.length
+          (currentIndex + 1) %
+            languageOrder.length
         ];
 
       return {
@@ -165,7 +158,10 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
   };
 
   const quranMap = useMemo(() => {
-    const map = new Map<string, (typeof quranAyahs)[number]>();
+    const map = new Map<
+      string,
+      (typeof quranAyahs)[number]
+    >();
 
     for (const ayah of quranAyahs) {
       map.set(
@@ -185,36 +181,33 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
     );
   };
 
-const getQuranAyah = (
-  reference: QuranReference
-) => {
-  return quranMap.get(
-    `${reference.surah}:${reference.ayah}`
-  );
-};
+  /*
+   * Tanzil ke original Arabic data ko change nahi karte.
+   * Sirf display ke waqt Bismillah ko alag dikhate hain.
+   */
+  const splitBismillah = (
+    arabic: string
+  ) => {
+    const bismillah =
+      "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
 
-const splitBismillah = (arabic: string) => {
-  const bismillah =
-    "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
+    if (arabic.startsWith(bismillah)) {
+      return {
+        bismillah,
+        ayahText: arabic
+          .slice(bismillah.length)
+          .trim(),
+      };
+    }
 
-  if (arabic.startsWith(bismillah)) {
     return {
-      bismillah,
-      ayahText: arabic.slice(bismillah.length).trim(),
+      bismillah: "",
+      ayahText: arabic,
     };
-  }
-
-  return {
-    bismillah: "",
-    ayahText: arabic,
   };
-};
 
-return (
-  
   return (
     <main className="ilmLessonPage">
-
       <div className="ilmLessonContainer">
 
         <Link
@@ -283,8 +276,13 @@ return (
           {lesson.sections.map(
             (section, index) => {
 
-              if (section.type === "heading") {
-                const key = `heading-${index}`;
+              /* HEADING */
+
+              if (
+                section.type === "heading"
+              ) {
+                const key =
+                  `heading-${index}`;
 
                 return (
                   <h3
@@ -302,8 +300,13 @@ return (
                 );
               }
 
-              if (section.type === "text") {
-                const key = `text-${index}`;
+              /* NORMAL TEXT */
+
+              if (
+                section.type === "text"
+              ) {
+                const key =
+                  `text-${index}`;
 
                 return (
                   <p
@@ -321,12 +324,18 @@ return (
                 );
               }
 
-              if (section.type === "bismillah") {
+              /* BISMILLAH */
+
+              if (
+                section.type === "bismillah"
+              ) {
                 const bismillah =
                   quranAyahs.find(
                     (ayah) =>
-                      ayah.surahNumber === 1 &&
-                      ayah.ayahNumber === 1
+                      ayah.surahNumber ===
+                        1 &&
+                      ayah.ayahNumber ===
+                        1
                   );
 
                 return (
@@ -340,13 +349,29 @@ return (
                 );
               }
 
-              if (section.type === "quran") {
+              /* QURAN AYAH */
+
+              if (
+                section.type === "quran"
+              ) {
                 const key =
                   `quran-${section.reference.surah}-${section.reference.ayah}-${index}`;
 
-                const ayah = getQuranAyah(
-                  section.reference
-                );
+                const ayah =
+                  getQuranAyah(
+                    section.reference
+                  );
+
+                const arabicParts =
+                  ayah
+                    ? splitBismillah(
+                        ayah.arabic
+                      )
+                    : {
+                        bismillah: "",
+                        ayahText:
+                          "Qur’an Ayah",
+                      };
 
                 return (
                   <article
@@ -354,17 +379,26 @@ return (
                     className="ilmQuranCard"
                   >
 
+                    {/* BISMILLAH */}
+
+                    {arabicParts.bismillah && (
+                      <div className="ilmQuranBismillah">
+                        {arabicParts.bismillah}
+                      </div>
+                    )}
+
+                    {/* AYAH */}
+
                     <Link
                       href={`/quran/full#ayah-${section.reference.surah}-${section.reference.ayah}`}
                       className="ilmQuranArabic"
                     >
-                      {ayah?.arabic ||
-                        "Qur’an Ayah"}
+                      {arabicParts.ayahText}
                     </Link>
 
-                    <div
-                      className="ilmAyahReference"
-                    >
+                    {/* REFERENCE */}
+
+                    <div className="ilmAyahReference">
                       Surah{" "}
                       {section.reference.surah}
                       :
@@ -372,123 +406,9 @@ return (
                       {section.reference.ayah}
                     </div>
 
-<div className="ilmQuranNumberNote">
-  <p>
-    <strong>English:</strong> Bismillah is shown before the first
-    Ayah for display. It does not receive a separate Ayah number,
-    so the standard Qur’an numbering remains unchanged.
-  </p>
+                    {/* NUMBERING EXPLANATION */}
 
-  <p>
-    <strong>हिन्दी:</strong> बिस्मिल्लाह पहली आयत से पहले दिखाई जाती है।
-    इसे अलग आयत नंबर नहीं दिया जाता, इसलिए क़ुरआन की सामान्य आयत
-    नंबरिंग में कोई बदलाव नहीं होता।
-  </p>
+                    <div className="ilmQuranNumberNote">
 
-  <p dir="rtl">
-    <strong>اردو:</strong> بسم اللہ پہلی آیت سے پہلے دکھائی جاتی ہے۔
-    اسے الگ آیت نمبر نہیں دیا جاتا، اس لیے قرآن کی عام آیت نمبرنگ
-    میں کوئی تبدیلی نہیں ہوتی۔
-  </p>
-</div>
-                    
-                    <p
-                      className="ilmTranslation ilmTapText"
-                      onClick={() =>
-                        cycleText(key)
-                      }
-                    >
-                      {getText(
-                        section.translation,
-                        key
-                      )}
-                    </p>
-
-                    {section.difficultWords &&
-                      section.difficultWords
-                        .length > 0 && (
-                        <div className="ilmWords">
-
-                          <h4>
-                            Difficult Words
-                          </h4>
-
-                          {section.difficultWords.map(
-                            (
-                              word,
-                              wordIndex
-                            ) => {
-                              const wordKey =
-                                `${key}-word-${wordIndex}`;
-
-                              return (
-                                <div
-                                  key={wordKey}
-                                  className="ilmWordRow"
-                                >
-
-                                  <strong>
-                                    {word.arabic}
-                                  </strong>
-
-                                  <span
-                                    className="ilmTapText"
-                                    onClick={() =>
-                                      cycleText(
-                                        wordKey
-                                      )
-                                    }
-                                  >
-                                    {getText(
-                                      word.meaning,
-                                      wordKey
-                                    )}
-                                  </span>
-
-                                </div>
-                              );
-                            }
-                          )}
-
-                        </div>
-                      )}
-
-                  </article>
-                );
-              }
-
-              return null;
-            }
-          )}
-
-        </section>
-
-        <nav className="ilmDayNavigation">
-
-          {lesson.day > 1 ? (
-            <Link
-              href={`/ilm-ka-safar/day/${lesson.day - 1}`}
-            >
-              ← Previous
-            </Link>
-          ) : (
-            <span />
-          )}
-
-          <Link href="/ilm-ka-safar">
-            All Days
-          </Link>
-
-          <Link
-            href={`/ilm-ka-safar/day/${lesson.day + 1}`}
-          >
-            Next →
-          </Link>
-
-        </nav>
-
-      </div>
-
-    </main>
-  );
-            }
+                      <p>
+                        <
