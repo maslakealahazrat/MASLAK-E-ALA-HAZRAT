@@ -8,17 +8,24 @@ type PageProps = {
   }>;
 };
 
-export default async function SurahPage({ params }: PageProps) {
+export default async function SurahPage({
+  params,
+}: PageProps) {
   const { surah } = await params;
 
   const surahNumber = Number(surah);
 
-  if (!Number.isInteger(surahNumber) || surahNumber < 1 || surahNumber > 114) {
+  if (
+    !Number.isInteger(surahNumber) ||
+    surahNumber < 1 ||
+    surahNumber > 114
+  ) {
     notFound();
   }
 
   const ayahs = quranAyahs.filter(
-    (ayah) => ayah.surahNumber === surahNumber
+    (ayah) =>
+      ayah.surahNumber === surahNumber
   );
 
   if (ayahs.length === 0) {
@@ -27,14 +34,27 @@ export default async function SurahPage({ params }: PageProps) {
 
   const firstAyah = ayahs[0];
 
+  const previousSurah =
+    surahNumber > 1
+      ? surahNumber - 1
+      : null;
+
+  const nextSurah =
+    surahNumber < 114
+      ? surahNumber + 1
+      : null;
+
   return (
     <main className="quranSurahPage">
 
-      {/* HEADER */}
+      {/* HERO */}
 
       <section className="quranSurahHero">
 
-        <Link href="/quran" className="quranBack">
+        <Link
+          href="/quran"
+          className="quranBack"
+        >
           ← All Surahs
         </Link>
 
@@ -42,7 +62,9 @@ export default async function SurahPage({ params }: PageProps) {
           {firstAyah.surahNameArabic}
         </div>
 
-        <h1>{firstAyah.surahName}</h1>
+        <h1>
+          {firstAyah.surahName}
+        </h1>
 
         <p>
           Surah {surahNumber}
@@ -51,44 +73,202 @@ export default async function SurahPage({ params }: PageProps) {
       </section>
 
 
-      {/* AYAT */}
+      {/* SURAH NAVIGATION */}
 
-      <section className="ayahPageContent">
+      <nav
+        className="quranSurahNavigation"
+        aria-label="Surah navigation"
+      >
 
-        {ayahs.map((ayah) => (
+        <div className="quranSurahNavSide">
 
-          <article
-            key={ayah.id}
-            id={"ayah-" + ayah.ayahNumber}
-            className="quranAyah"
+          {previousSurah ? (
+            <Link
+              href={
+                "/quran/" +
+                previousSurah
+              }
+              className="quranSurahNavButton"
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <span
+              className="quranSurahNavButton disabled"
+            >
+              ← Previous
+            </span>
+          )}
+
+        </div>
+
+
+        <div className="quranSurahNavCenter">
+
+          <Link
+            href="/quran"
+            className="quranSurahListButton"
           >
+            Surah List
+          </Link>
 
-            <div className="quranAyahTop">
+        </div>
 
-              <span className="quranAyahNumber">
-                {ayah.ayahNumber}
+
+        <div className="quranSurahNavSide quranSurahNavRight">
+
+          {nextSurah ? (
+            <Link
+              href={
+                "/quran/" +
+                nextSurah
+              }
+              className="quranSurahNavButton"
+            >
+              Next →
+            </Link>
+          ) : (
+            <span
+              className="quranSurahNavButton disabled"
+            >
+              Next →
+            </span>
+          )}
+
+        </div>
+
+      </nav>
+
+
+      {/* TANZIL SOURCE */}
+
+      <div className="quranSurahSource">
+
+        <span>
+          Qur’an text:
+        </span>
+
+        <a
+          href="https://tanzil.net/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tanzil Project
+        </a>
+
+      </div>
+
+
+      {/* CONTINUOUS AYAT */}
+
+      <section
+        className="ayahPageContent"
+        dir="rtl"
+      >
+
+        <div className="quranContinuousText">
+
+          {ayahs.map((ayah) => (
+
+            <span
+              key={ayah.id}
+              id={
+                "ayah-" +
+                ayah.ayahNumber
+              }
+              className="quranInlineAyah"
+            >
+
+              <span className="quranInlineArabic">
+                {ayah.arabic}
               </span>
 
-              <a
-                href={"#ayah-" + ayah.ayahNumber}
-                className="quranAyahLink"
-                aria-label={"Ayah " + ayah.ayahNumber + " link"}
+              <span
+                className="quranInlineNumber"
+                aria-label={
+                  "Ayah " +
+                  ayah.ayahNumber
+                }
               >
-                #
-              </a>
+                ‎﴿
+                {ayah.ayahNumber}
+                ﴾‏
+              </span>
 
-            </div>
+            </span>
 
+          ))}
 
-            <div className="quranAyahArabic">
-              {ayah.arabic}
-            </div>
-
-          </article>
-
-        ))}
+        </div>
 
       </section>
+
+
+      {/* BOTTOM NAVIGATION */}
+
+      <nav
+        className="quranSurahNavigation quranSurahNavigationBottom"
+        aria-label="Surah navigation"
+      >
+
+        <div className="quranSurahNavSide">
+
+          {previousSurah ? (
+            <Link
+              href={
+                "/quran/" +
+                previousSurah
+              }
+              className="quranSurahNavButton"
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <span
+              className="quranSurahNavButton disabled"
+            >
+              ← Previous
+            </span>
+          )}
+
+        </div>
+
+
+        <div className="quranSurahNavCenter">
+
+          <Link
+            href="/quran"
+            className="quranSurahListButton"
+          >
+            Surah List
+          </Link>
+
+        </div>
+
+
+        <div className="quranSurahNavSide quranSurahNavRight">
+
+          {nextSurah ? (
+            <Link
+              href={
+                "/quran/" +
+                nextSurah
+              }
+              className="quranSurahNavButton"
+            >
+              Next →
+            </Link>
+          ) : (
+            <span
+              className="quranSurahNavButton disabled"
+            >
+              Next →
+            </span>
+          )}
+
+        </div>
+
+      </nav>
 
 
       {/* SOURCE */}
@@ -96,7 +276,8 @@ export default async function SurahPage({ params }: PageProps) {
       <section className="quranSource">
 
         <p>
-          Arabic Qur’an text sourced from the Tanzil Project.
+          Arabic Qur’an text sourced
+          from the Tanzil Project.
         </p>
 
         <a
