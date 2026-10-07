@@ -128,6 +128,9 @@ const liveSearchResults = searchQuery.trim()
   : [];
 
   useEffect(() => {
+    
+    const savedLanguage = localStorage.getItem("site-language") || "auto";
+
     const savedReadingProgress =
   localStorage.getItem("maslak-reading-progress");
 
