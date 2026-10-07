@@ -97,6 +97,23 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
 
     window.addEventListener("storage", handleStorage);
 
+  const splitBismillah = (arabic: string) => {
+    const bismillah =
+      "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
+
+    if (arabic.startsWith(bismillah)) {
+      return {
+        bismillah,
+        ayahText: arabic.slice(bismillah.length).trim(),
+      };
+    }
+
+    return {
+      bismillah: "",
+      ayahText: arabic,
+    };
+  };
+    
     return () => {
       window.removeEventListener("storage", handleStorage);
     };
