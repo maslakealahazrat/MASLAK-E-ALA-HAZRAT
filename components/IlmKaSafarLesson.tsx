@@ -411,4 +411,146 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
                     <div className="ilmQuranNumberNote">
 
                       <p>
-                        <
+                        <strong>
+                          English:
+                        </strong>{" "}
+                        Bismillah is shown before
+                        the first Ayah for display.
+                        It does not receive a
+                        separate Ayah number, so
+                        the standard Qur’an
+                        numbering remains
+                        unchanged.
+                      </p>
+
+                      <p>
+                        <strong>
+                          हिन्दी:
+                        </strong>{" "}
+                        बिस्मिल्लाह पहली आयत से पहले
+                        दिखाई जाती है। इसे अलग आयत
+                        नंबर नहीं दिया जाता, इसलिए
+                        क़ुरआन की सामान्य आयत
+                        नंबरिंग में कोई बदलाव नहीं
+                        होता।
+                      </p>
+
+                      <p dir="rtl">
+                        <strong>
+                          اردو:
+                        </strong>{" "}
+                        بسم اللہ پہلی آیت سے پہلے
+                        دکھائی جاتی ہے۔ اسے الگ آیت
+                        نمبر نہیں دیا جاتا، اس لیے
+                        قرآن کی عام آیت نمبرنگ میں
+                        کوئی تبدیلی نہیں ہوتی۔
+                      </p>
+
+                    </div>
+
+                    {/* TRANSLATION */}
+
+                    <p
+                      className="ilmTranslation ilmTapText"
+                      onClick={() =>
+                        cycleText(key)
+                      }
+                    >
+                      {getText(
+                        section.translation,
+                        key
+                      )}
+                    </p>
+
+                    {/* DIFFICULT WORDS */}
+
+                    {section.difficultWords &&
+                      section.difficultWords
+                        .length > 0 && (
+                        <div className="ilmWords">
+
+                          <h4>
+                            Difficult Words
+                          </h4>
+
+                          {section.difficultWords.map(
+                            (
+                              word,
+                              wordIndex
+                            ) => {
+
+                              const wordKey =
+                                `${key}-word-${wordIndex}`;
+
+                              return (
+                                <div
+                                  key={wordKey}
+                                  className="ilmWordRow"
+                                >
+
+                                  <strong>
+                                    {word.arabic}
+                                  </strong>
+
+                                  <span
+                                    className="ilmTapText"
+                                    onClick={() =>
+                                      cycleText(
+                                        wordKey
+                                      )
+                                    }
+                                  >
+                                    {getText(
+                                      word.meaning,
+                                      wordKey
+                                    )}
+                                  </span>
+
+                                </div>
+                              );
+                            }
+                          )}
+
+                        </div>
+                      )}
+
+                  </article>
+                );
+              }
+
+              return null;
+            }
+          )}
+
+        </section>
+
+        {/* DAY NAVIGATION */}
+
+        <nav className="ilmDayNavigation">
+
+          {lesson.day > 1 ? (
+            <Link
+              href={`/ilm-ka-safar/day/${lesson.day - 1}`}
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <span />
+          )}
+
+          <Link href="/ilm-ka-safar">
+            All Days
+          </Link>
+
+          <Link
+            href={`/ilm-ka-safar/day/${lesson.day + 1}`}
+          >
+            Next →
+          </Link>
+
+        </nav>
+
+      </div>
+    </main>
+  );
+}
