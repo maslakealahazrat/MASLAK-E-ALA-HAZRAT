@@ -22,9 +22,7 @@ export default function FullQuranPage() {
     useState("");
 
   const normalizedQuranSearch =
-    quranSearch
-      .trim()
-      .toLowerCase();
+    quranSearch.trim().toLowerCase();
 
   const quranSearchResults =
     normalizedQuranSearch
@@ -35,9 +33,6 @@ export default function FullQuranPage() {
 
             const surahName =
               ayah.surahName.toLowerCase();
-
-            const ayahNumber =
-              String(ayah.ayahNumber);
 
             const reference =
               ayah.surahNumber +
@@ -51,8 +46,6 @@ export default function FullQuranPage() {
               surahName.includes(
                 normalizedQuranSearch
               ) ||
-              ayahNumber ===
-                normalizedQuranSearch ||
               reference ===
                 normalizedQuranSearch
             );
@@ -132,94 +125,6 @@ export default function FullQuranPage() {
       "-" +
       ayahNumber
     );
-  };
-
-  const copyAyah = async (
-    surahName: string,
-    surahNumber: number,
-    ayahNumber: number,
-    arabic: string
-  ) => {
-    const text =
-      "Surah " +
-      surahName +
-      " — Ayat " +
-      ayahNumber +
-      "\n\n" +
-      arabic +
-      "\n\n" +
-      "Maslak-e-Ala Hazrat";
-
-    try {
-      await navigator.clipboard.writeText(
-        text
-      );
-
-      setMessage(
-        "Ayat copied"
-      );
-
-      setTimeout(() => {
-        setMessage("");
-      }, 1800);
-    } catch {
-      setMessage(
-        "Copy failed"
-      );
-
-      setTimeout(() => {
-        setMessage("");
-      }, 1800);
-    }
-  };
-
-  const shareAyah = async (
-    surahName: string,
-    surahNumber: number,
-    ayahNumber: number,
-    arabic: string
-  ) => {
-    const url =
-      getAyahUrl(
-        surahNumber,
-        ayahNumber
-      );
-
-    const text =
-      "Surah " +
-      surahName +
-      " — Ayat " +
-      ayahNumber +
-      "\n\n" +
-      arabic;
-
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title:
-            "Surah " +
-            surahName +
-            " — Ayat " +
-            ayahNumber,
-          text,
-          url,
-        });
-      } else {
-        await navigator.clipboard.writeText(
-          url
-        );
-
-        setMessage(
-          "Ayat link copied"
-        );
-
-        setTimeout(() => {
-          setMessage("");
-        }, 1800);
-      }
-    } catch {
-      // User cancelled sharing.
-    }
   };
 
   const shareSurah = async (
@@ -318,7 +223,7 @@ export default function FullQuranPage() {
     }
 
     const id =
-  (closestAyah as HTMLElement).id;
+      (closestAyah as HTMLElement).id;
 
     const parts =
       id.split("-");
@@ -422,9 +327,9 @@ export default function FullQuranPage() {
       </section>
 
 
-      {/* QURAN SEARCH */}
+      {/* FIXED QURAN SEARCH */}
 
-      <section className="fullQuranSearch">
+      <div className="fullQuranFixedSearch">
 
         <div className="fullQuranSearchBox">
 
@@ -443,6 +348,19 @@ export default function FullQuranPage() {
             placeholder="Search Qur’an..."
             aria-label="Search Qur’an"
           />
+
+          {quranSearch && (
+            <button
+              type="button"
+              className="fullQuranSearchClear"
+              onClick={() =>
+                setQuranSearch("")
+              }
+              aria-label="Clear search"
+            >
+              ×
+            </button>
+          )}
 
         </div>
 
@@ -491,10 +409,7 @@ export default function FullQuranPage() {
                   <div className="fullQuranSearchResultTop">
 
                     <strong>
-                      Surah{" "}
-                      {
-                        ayah.surahName
-                      }
+                      {ayah.surahName}
                     </strong>
 
                     <span>
@@ -517,7 +432,7 @@ export default function FullQuranPage() {
 
         )}
 
-      </section>
+      </div>
 
 
       {/* TOAST */}
@@ -555,7 +470,7 @@ export default function FullQuranPage() {
                 className="fullQuranSurah"
               >
 
-                {/* SURAH HEADER */}
+                {/* SURAH HEADING */}
 
                 <header className="fullQuranSurahHeader">
 
@@ -589,10 +504,7 @@ export default function FullQuranPage() {
                       "Share Surah " +
                       surah.name
                     }
-                    title={
-                      "Share Surah " +
-                      surah.name
-                    }
+                    title="Share"
                     onClick={() =>
                       shareSurah(
                         surah.name,
@@ -606,50 +518,31 @@ export default function FullQuranPage() {
                 </header>
 
 
-                {/* SOURCE */}
+                {/* TANZIL SOURCE */}
 
-                <div className="fullQuranSurahSource">
+                <div className="fullQuranSourceLine">
 
-                  <div>
+                  <span>
+                    Qur’an text:
+                  </span>
 
-                    <span>
-                      Qur’an Text Source
-                    </span>
-
-                    <a
-                      href="https://tanzil.net/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Tanzil Project
-                    </a>
-
-                  </div>
-
-                  <button
-                    type="button"
-                    className="fullQuranSourceShare"
-                    aria-label={
-                      "Share Surah " +
-                      surah.name
-                    }
-                    title="Share"
-                    onClick={() =>
-                      shareSurah(
-                        surah.name,
-                        surah.number
-                      )
-                    }
+                  <a
+                    href="https://tanzil.net/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    ↗
-                  </button>
+                    Tanzil Project
+                  </a>
 
                 </div>
 
 
-                {/* CONTINUOUS AYAH TEXT */}
+                {/* CONTINUOUS MUSHAF TEXT */}
 
-                <div className="fullQuranAyahs">
+                <div
+                  className="fullQuranAyahs"
+                  dir="rtl"
+                >
 
                   {ayahs.map(
                     (ayah) => (
@@ -664,7 +557,17 @@ export default function FullQuranPage() {
                           "-" +
                           ayah.ayahNumber
                         }
-                        className="fullQuranAyah"
+                        className={
+                          "fullQuranAyah" +
+                          (
+                            progress?.surahNumber ===
+                              ayah.surahNumber &&
+                            progress?.ayahNumber ===
+                              ayah.ayahNumber
+                              ? " currentReadingAyah"
+                              : ""
+                          )
+                        }
                         onClick={() =>
                           saveProgress(
                             ayah.surahNumber,
@@ -673,15 +576,22 @@ export default function FullQuranPage() {
                         }
                       >
 
-                        <span className="fullQuranAyahNumber">
-                          {
-                            ayah.ayahNumber
-                          }
-                        </span>
-
                         <span className="fullQuranAyahText">
                           {
                             ayah.arabic
+                          }
+                        </span>
+
+                        <span
+                          className="fullQuranAyahMarker"
+                          aria-label={
+                            "Ayah " +
+                            ayah.ayahNumber
+                          }
+                        >
+                          ۝
+                          {
+                            ayah.ayahNumber
                           }
                         </span>
 
@@ -693,32 +603,21 @@ export default function FullQuranPage() {
                 </div>
 
 
-                {/* SURAH ACTIONS */}
+                {/* SMALL SURAH FOOTER */}
 
-                <div className="fullQuranSurahActions">
+                <div className="fullQuranSurahFooter">
 
-                  <button
-                    type="button"
-                    onClick={() => {
-
-                      const firstAyah =
-                        ayahs[0];
-
-                      if (
-                        firstAyah
-                      ) {
-                        copyAyah(
-                          firstAyah.surahName,
-                          firstAyah.surahNumber,
-                          firstAyah.ayahNumber,
-                          firstAyah.arabic
-                        );
-                      }
-
-                    }}
-                  >
-                    📋 Copy
-                  </button>
+                  <span>
+                    Surah{" "}
+                    {
+                      surah.number
+                    }
+                    {" · "}
+                    {
+                      ayahs.length
+                    }{" "}
+                    Ayahs
+                  </span>
 
                   <button
                     type="button"
@@ -728,8 +627,13 @@ export default function FullQuranPage() {
                         surah.number
                       )
                     }
+                    aria-label={
+                      "Share Surah " +
+                      surah.name
+                    }
+                    title="Share"
                   >
-                    ↗ Share Surah
+                    ↗
                   </button>
 
                 </div>
@@ -742,7 +646,7 @@ export default function FullQuranPage() {
       </section>
 
 
-      {/* FINAL SOURCE */}
+      {/* SOURCE */}
 
       <section className="quranSource">
 
