@@ -1950,3 +1950,321 @@ input {
     padding: 42px 16px;
   }
 }
+
+/* =========================================================
+   FULL QURAN — MUSHAF STYLE READER
+   ========================================================= */
+
+.fullQuranPage {
+  position: relative;
+}
+
+.fullQuranFixedSearch {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 24px));
+  z-index: 1000;
+}
+
+.fullQuranSearchBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgba(121, 167, 165, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+  backdrop-filter: blur(14px);
+}
+
+.fullQuranSearchIcon {
+  flex: 0 0 auto;
+  font-size: 16px;
+}
+
+.fullQuranSearchBox input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 15px;
+}
+
+.fullQuranSearchClear {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  opacity: 0.65;
+}
+
+.fullQuranSearchResults {
+  margin-top: 8px;
+  max-height: 55vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(121, 167, 165, 0.25);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.fullQuranSearchResult {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  border: 0;
+  border-bottom: 1px solid rgba(121, 167, 165, 0.16);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fullQuranSearchResult:last-child {
+  border-bottom: 0;
+}
+
+.fullQuranSearchResultTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+  font-size: 13px;
+}
+
+.fullQuranSearchResultTop span {
+  opacity: 0.65;
+}
+
+.fullQuranSearchResult p {
+  margin: 0;
+  font-family: serif;
+  font-size: 18px;
+  line-height: 1.9;
+  text-align: right;
+  direction: rtl;
+}
+
+.fullQuranContent {
+  padding-top: 32px;
+}
+
+.fullQuranSurah {
+  width: min(900px, calc(100% - 24px));
+  margin: 0 auto 48px;
+  padding: 0 8px 30px;
+  border-bottom: 1px solid rgba(121, 167, 165, 0.25);
+  scroll-margin-top: 150px;
+}
+
+.fullQuranSurahHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 10px;
+  padding: 12px 4px 16px;
+}
+
+.fullQuranSurahHeading {
+  flex: 1;
+  text-align: center;
+}
+
+.fullQuranSurahArabic {
+  margin-bottom: 4px;
+  font-family: serif;
+  font-size: 30px;
+  line-height: 1.7;
+}
+
+.fullQuranSurahHeading h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.fullQuranSurahHeading span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.fullQuranSurahShare {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(121, 167, 165, 0.25);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.fullQuranSourceLine {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 22px;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.fullQuranSourceLine a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.fullQuranAyahs {
+  direction: rtl;
+  text-align: center;
+  font-family: "Noto Naskh Arabic", "Amiri", serif;
+  font-size: clamp(25px, 6vw, 38px);
+  font-weight: 400;
+  line-height: 2.15;
+  letter-spacing: 0;
+}
+
+.fullQuranAyah {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.fullQuranAyahText {
+  display: inline;
+}
+
+.fullQuranAyahMarker {
+  display: inline;
+  margin: 0 5px 0 3px;
+  font-family: serif;
+  font-size: 0.58em;
+  white-space: nowrap;
+  opacity: 0.78;
+  vertical-align: middle;
+}
+
+.fullQuranAyah:hover {
+  background: rgba(121, 167, 165, 0.10);
+  border-radius: 8px;
+}
+
+.fullQuranAyah.currentReadingAyah {
+  background: rgba(121, 167, 165, 0.14);
+  border-radius: 8px;
+}
+
+.fullQuranSurahFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 25px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(121, 167, 165, 0.12);
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.fullQuranSurahFooter button {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.quranSource {
+  width: min(900px, calc(100% - 24px));
+  margin: 0 auto;
+  padding: 30px 0 50px;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.quranSource p {
+  margin: 0 0 5px;
+}
+
+.quranSource a {
+  color: inherit;
+}
+
+.quranToast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 1100;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.82);
+  color: white;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .fullQuranFixedSearch {
+    top: 64px;
+    width: calc(100% - 18px);
+  }
+
+  .fullQuranContent {
+    padding-top: 25px;
+  }
+
+  .fullQuranSurah {
+    width: calc(100% - 18px);
+    margin-bottom: 38px;
+    padding-bottom: 25px;
+  }
+
+  .fullQuranSurahArabic {
+    font-size: 27px;
+  }
+
+  .fullQuranSurahHeading h2 {
+    font-size: 19px;
+  }
+
+  .fullQuranAyahs {
+    font-size: 27px;
+    line-height: 2.2;
+  }
+
+  .fullQuranAyahMarker {
+    margin-left: 2px;
+    margin-right: 4px;
+  }
+}
+
+/* Dark mode */
+
+[data-theme="dark"] .fullQuranSearchBox,
+[data-theme="dark"] .fullQuranSearchResults {
+  background: rgba(25, 25, 25, 0.96);
+}
+
+[data-theme="dark"] .fullQuranSearchBox input {
+  color: inherit;
+}
+
+[data-theme="dark"] .fullQuranSearchResult {
+  color: inherit;
+}
