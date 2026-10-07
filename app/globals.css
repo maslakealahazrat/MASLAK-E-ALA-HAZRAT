@@ -2428,3 +2428,98 @@ input {
   }
 
 }
+/* =========================================================
+   QURAN SURAH LIST
+   ========================================================= */
+
+.quranEyebrow {
+  margin-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+}
+
+.quranHeroActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.quranFullButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 1px solid rgba(121, 167, 165, 0.35);
+  border-radius: 999px;
+  background: #79a7a5;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.quranFullButton:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.quranIntroTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+
+.surahCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px 1fr auto 24px;
+  align-items: center;
+  gap: 12px;
+}
+
+.surahOpen {
+  font-size: 18px;
+  opacity: 0.45;
+  transition: transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.surahCard:hover .surahOpen {
+  transform: translateX(3px);
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .quranHeroActions {
+    margin-top: 16px;
+  }
+
+  .quranFullButton {
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .quranIntroTop {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .surahCard {
+    grid-template-columns: 42px 1fr auto 18px;
+    gap: 9px;
+  }
+
+  .surahArabic {
+    font-size: 18px;
+  }
+}
