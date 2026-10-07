@@ -18,10 +18,13 @@ export default function QuranPage() {
   return (
     <main className="quranPage">
 
-      {/* HEADER */}
+      {/* HERO */}
       <section className="quranHero">
 
-        <Link href="/" className="quranBack">
+        <Link
+          href="/"
+          className="quranBack"
+        >
           ← Home
         </Link>
 
@@ -29,11 +32,29 @@ export default function QuranPage() {
           القرآن الكريم
         </div>
 
-        <h1>Qur’an</h1>
+        <div className="quranEyebrow">
+          THE NOBLE QUR’AN
+        </div>
+
+        <h1>
+          Qur’an Majeed
+        </h1>
 
         <p>
-          The Noble Qur’an
+          Qur’an ki tamam Surahs aur Ayat
+          Arabic text mein padhiye.
         </p>
+
+        <div className="quranHeroActions">
+
+          <Link
+            href="/quran/full"
+            className="quranFullButton"
+          >
+            Read Full Qur’an
+          </Link>
+
+        </div>
 
       </section>
 
@@ -42,15 +63,26 @@ export default function QuranPage() {
       <section className="quranContent">
 
         <div className="quranIntro">
-          <span>THE NOBLE QUR’AN</span>
+
+          <div className="quranIntroTop">
+            <span>
+              114 SURahs
+            </span>
+
+            <span>
+              Tanzil Arabic Text
+            </span>
+          </div>
 
           <h2>
-            Qur’an Majeed
+            All Surahs
           </h2>
 
           <p>
-            Qur’an ki tamam Surahs aur Ayat Arabic text mein.
+            Qur’an Majeed ki tamam 114
+            Surahs yahan se padhiye.
           </p>
+
         </div>
 
 
@@ -68,6 +100,7 @@ export default function QuranPage() {
                 {surah.number}
               </div>
 
+
               <div className="surahInfo">
 
                 <strong>
@@ -80,8 +113,14 @@ export default function QuranPage() {
 
               </div>
 
+
               <div className="surahArabic">
                 {surah.arabicName}
+              </div>
+
+
+              <div className="surahOpen">
+                →
               </div>
 
             </Link>
@@ -97,7 +136,8 @@ export default function QuranPage() {
       <section className="quranSource">
 
         <p>
-          Arabic Qur’an text sourced from the Tanzil Project.
+          Arabic Qur’an text sourced from
+          the Tanzil Project.
         </p>
 
         <a
