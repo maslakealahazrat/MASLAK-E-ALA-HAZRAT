@@ -144,7 +144,8 @@ export const day1 = {
     },
   },
 ],
-
+},
+      
     {
       type: "quran",
 
