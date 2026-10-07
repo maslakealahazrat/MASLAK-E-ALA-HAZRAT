@@ -185,6 +185,33 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
     );
   };
 
+const getQuranAyah = (
+  reference: QuranReference
+) => {
+  return quranMap.get(
+    `${reference.surah}:${reference.ayah}`
+  );
+};
+
+const splitBismillah = (arabic: string) => {
+  const bismillah =
+    "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
+
+  if (arabic.startsWith(bismillah)) {
+    return {
+      bismillah,
+      ayahText: arabic.slice(bismillah.length).trim(),
+    };
+  }
+
+  return {
+    bismillah: "",
+    ayahText: arabic,
+  };
+};
+
+return (
+  
   return (
     <main className="ilmLessonPage">
 
@@ -345,6 +372,26 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
                       {section.reference.ayah}
                     </div>
 
+<div className="ilmQuranNumberNote">
+  <p>
+    <strong>English:</strong> Bismillah is shown before the first
+    Ayah for display. It does not receive a separate Ayah number,
+    so the standard Qur’an numbering remains unchanged.
+  </p>
+
+  <p>
+    <strong>हिन्दी:</strong> बिस्मिल्लाह पहली आयत से पहले दिखाई जाती है।
+    इसे अलग आयत नंबर नहीं दिया जाता, इसलिए क़ुरआन की सामान्य आयत
+    नंबरिंग में कोई बदलाव नहीं होता।
+  </p>
+
+  <p dir="rtl">
+    <strong>اردو:</strong> بسم اللہ پہلی آیت سے پہلے دکھائی جاتی ہے۔
+    اسے الگ آیت نمبر نہیں دیا جاتا، اس لیے قرآن کی عام آیت نمبرنگ
+    میں کوئی تبدیلی نہیں ہوتی۔
+  </p>
+</div>
+                    
                     <p
                       className="ilmTranslation ilmTapText"
                       onClick={() =>
