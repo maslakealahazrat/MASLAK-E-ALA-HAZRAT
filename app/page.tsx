@@ -475,31 +475,139 @@ if (savedQuranProgress) {
   </section>
 )}
 
-      
-      {/* URDU CALENDAR */}
-      <section className="calendarSection">
-        <div className="calendarCard">
+      {/* ISLAMIC CALENDAR */}
 
-          <div className="calendarIcon">☪</div>
+<section className="calendarSection">
 
-          <div className="calendarContent">
-            <span className="calendarLabel">آج کی تاریخ</span>
+  <div className="calendarCard">
 
-            <strong className="hijriDate">
-              {date.hijri || "اسلامی تاریخ"}
-            </strong>
+    <div className="calendarTop">
 
-            <span className="gregorianDate">
-              {date.gregorian || "Loading..."}
-            </span>
+      <div>
+        <span className="calendarLabel">
+          اسلامی کیلنڈر
+        </span>
+
+        <h2>
+          Islamic Calendar
+        </h2>
+
+        <span className="gregorianDate">
+          {date.gregorian || "Loading..."}
+        </span>
+      </div>
+
+      <div className="calendarMoon">
+        ☪
+      </div>
+
+    </div>
+
+    <div className="calendarToday">
+
+      <span className="calendarTodayLabel">
+        آج کی تاریخ
+      </span>
+
+      <div className="calendarTodayCircle">
+        <strong>
+          {date.hijri
+            ? date.hijri.match(/\d+/)?.[0] || "—"
+            : "—"}
+        </strong>
+      </div>
+
+      <span className="calendarHijriDate">
+        {date.hijri || "اسلامی تاریخ"}
+      </span>
+
+    </div>
+
+    <div className="calendarWeek">
+
+      <span>Sun</span>
+      <span>Mon</span>
+      <span>Tue</span>
+      <span>Wed</span>
+      <span>Thu</span>
+      <span>Fri</span>
+      <span>Sat</span>
+
+    </div>
+
+    <div className="calendarDates">
+
+      {Array.from(
+        { length: 30 },
+        (_, index) => {
+
+          const day = index + 1;
+
+          return (
+            <div
+              key={day}
+              className={
+                "calendarDateBox" +
+                (
+                  day ===
+                  Number(
+                    date.hijri
+                      ?.match(/\d+/)?.[0]
+                  )
+                    ? " calendarDateToday"
+                    : ""
+                )
+              }
+            >
+              {day}
+            </div>
+          );
+
+        }
+      )}
+
+    </div>
+
+    <div className="calendarUpcoming">
+
+      <div className="calendarUpcomingTitle">
+        Upcoming Islamic Days
+      </div>
+
+      <div className="calendarEventCards">
+
+        <div className="calendarEventCard">
+          <span>🌙</span>
+          <div>
+            <strong>Ramadan</strong>
+            <small>Islamic month</small>
           </div>
-
-          <div className="calendarArabic">
-            اسلامی کیلنڈر
-          </div>
-
         </div>
-      </section>
+
+        <div className="calendarEventCard">
+          <span>✨</span>
+          <div>
+            <strong>Eid-ul-Fitr</strong>
+            <small>1 Shawwal</small>
+          </div>
+        </div>
+
+        <div className="calendarEventCard">
+          <span>🕋</span>
+          <div>
+            <strong>Eid-ul-Adha</strong>
+            <small>10 Dhul Hijjah</small>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+      
 
 
       {/* ISLAMIC KNOWLEDGE */}
