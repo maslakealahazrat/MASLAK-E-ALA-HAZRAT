@@ -318,7 +318,7 @@ export default function FullQuranPage() {
     }
 
     const id =
-      closestAyah.id;
+  (closestAyah as HTMLElement).id;
 
     const parts =
       id.split("-");
