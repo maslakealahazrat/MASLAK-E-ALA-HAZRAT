@@ -2619,3 +2619,93 @@ input {
     font-size: 15px;
   }
 }
+
+/* =========================================================
+   CONTINUE READING — CIRCULAR
+   ========================================================= */
+
+.continueReadingSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 24px auto 8px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.continueReadingCircle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(121, 167, 165, 0.45);
+  background: rgba(152, 197, 195, 0.16);
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 8px rgba(121, 167, 165, 0.06);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.continueReadingCircle:hover {
+  transform: translateY(-3px);
+  background: rgba(152, 197, 195, 0.23);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.09),
+    inset 0 0 0 8px rgba(121, 167, 165, 0.09);
+}
+
+.continueReadingCircleInner {
+  width: 116px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.continueReadingLabel {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+}
+
+.continueReadingCircleInner strong {
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.continueReadingCircleInner span:last-child {
+  max-width: 105px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  opacity: 0.62;
+}
+
+@media (max-width: 600px) {
+  .continueReadingSection {
+    margin-top: 20px;
+    margin-bottom: 6px;
+  }
+
+  .continueReadingCircle {
+    width: 138px;
+    height: 138px;
+  }
+
+  .continueReadingCircleInner {
+    width: 108px;
+  }
+
+  .continueReadingCircleInner strong {
+    font-size: 14px;
+  }
+}
