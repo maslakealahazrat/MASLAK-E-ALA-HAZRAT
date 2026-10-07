@@ -373,6 +373,18 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
                           "Qur’an Ayah",
                       };
 
+                const numberingNoteKey =
+                  `quran-number-note-${index}`;
+
+                const numberingNote: LanguageText =
+                  {
+                    en: "Bismillah is shown before the first Ayah for display. It does not receive a separate Ayah number, so the standard Qur’an numbering remains unchanged.",
+
+                    ur: "بسم اللہ پہلی آیت سے پہلے دکھائی جاتی ہے۔ اسے الگ آیت نمبر نہیں دیا جاتا، اس لیے قرآن کی عام آیت نمبرنگ میں کوئی تبدیلی نہیں ہوتی۔",
+
+                    hi: "बिस्मिल्लाह पहली आयत से पहले दिखाई जाती है। इसे अलग आयत नंबर नहीं दिया जाता, इसलिए क़ुरआन की सामान्य आयत नंबरिंग में कोई बदलाव नहीं होता।",
+                  };
+
                 return (
                   <article
                     key={key}
@@ -408,44 +420,18 @@ export default function IlmKaSafarLesson({ lesson }: Props) {
 
                     {/* NUMBERING EXPLANATION */}
 
-                    <div className="ilmQuranNumberNote">
-
-                      <p>
-                        <strong>
-                          English:
-                        </strong>{" "}
-                        Bismillah is shown before
-                        the first Ayah for display.
-                        It does not receive a
-                        separate Ayah number, so
-                        the standard Qur’an
-                        numbering remains
-                        unchanged.
-                      </p>
-
-                      <p>
-                        <strong>
-                          हिन्दी:
-                        </strong>{" "}
-                        बिस्मिल्लाह पहली आयत से पहले
-                        दिखाई जाती है। इसे अलग आयत
-                        नंबर नहीं दिया जाता, इसलिए
-                        क़ुरआन की सामान्य आयत
-                        नंबरिंग में कोई बदलाव नहीं
-                        होता।
-                      </p>
-
-                      <p dir="rtl">
-                        <strong>
-                          اردو:
-                        </strong>{" "}
-                        بسم اللہ پہلی آیت سے پہلے
-                        دکھائی جاتی ہے۔ اسے الگ آیت
-                        نمبر نہیں دیا جاتا، اس لیے
-                        قرآن کی عام آیت نمبرنگ میں
-                        کوئی تبدیلی نہیں ہوتی۔
-                      </p>
-
+                    <div
+                      className="ilmQuranNumberNote ilmTapText"
+                      onClick={() =>
+                        cycleText(
+                          numberingNoteKey
+                        )
+                      }
+                    >
+                      {getText(
+                        numberingNote,
+                        numberingNoteKey
+                      )}
                     </div>
 
                     {/* TRANSLATION */}
