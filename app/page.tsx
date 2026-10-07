@@ -89,9 +89,11 @@ export default function Home() {
   });
 
 const [searchQuery, setSearchQuery] = useState("");
-  const [quranProgress, setQuranProgress] = useState<{
-  surahNumber: number;
-  ayahNumber: number;
+const [readingProgress, setReadingProgress] = useState<{
+  type: string;
+  title: string;
+  subtitle: string;
+  url: string;
 } | null>(null);
   
 function handleSearch() {
@@ -126,19 +128,19 @@ const liveSearchResults = searchQuery.trim()
   : [];
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("site-language") || "auto";
-    const savedQuranProgress =
-  localStorage.getItem("maslak-quran-progress");
+    const savedReadingProgress =
+  localStorage.getItem("maslak-reading-progress");
 
-if (savedQuranProgress) {
+if (savedReadingProgress) {
   try {
-    setQuranProgress(
-      JSON.parse(savedQuranProgress)
+    setReadingProgress(
+      JSON.parse(savedReadingProgress)
     );
   } catch {
-    setQuranProgress(null);
+    setReadingProgress(null);
   }
 }
+    
     const savedTheme = localStorage.getItem("site-theme") || "auto";
 
     setLanguage(savedLanguage);
@@ -429,186 +431,68 @@ if (savedQuranProgress) {
 
 {/* CONTINUE READING */}
 
-{quranProgress && (
+{readingProgress && (
   <section className="continueReadingSection">
 
     <Link
-      href={
-        "/quran/full#ayah-" +
-        quranProgress.surahNumber +
-        "-" +
-        quranProgress.ayahNumber
-      }
-      className="continueReadingCard"
+      href={readingProgress.url}
+      className="continueReadingCircle"
+      aria-label={`Continue reading ${readingProgress.title}`}
     >
 
-      <div className="continueReadingIcon">
-        📖
-      </div>
-
-      <div className="continueReadingContent">
+      <div className="continueReadingCircleInner">
 
         <span className="continueReadingLabel">
-          CONTINUE READING
+          CONTINUE
         </span>
 
         <strong>
-          Qur’an Majeed
+          {readingProgress.title}
         </strong>
 
         <span>
-          Surah{" "}
-          {quranProgress.surahNumber}
-          {" · "}
-          Ayah{" "}
-          {quranProgress.ayahNumber}
+          {readingProgress.subtitle}
         </span>
 
       </div>
-
-      <span className="continueReadingArrow">
-        →
-      </span>
 
     </Link>
 
   </section>
 )}
 
-      {/* ISLAMIC CALENDAR */}
+{/* ISLAMIC CALENDAR */}
 
 <section className="calendarSection">
+  <Link href="/islamic-calendar" className="calendarCard">
 
-  <div className="calendarCard">
-
-    <div className="calendarTop">
-
-      <div>
-        <span className="calendarLabel">
-          اسلامی کیلنڈر
-        </span>
-
-        <h2>
-          Islamic Calendar
-        </h2>
-
-        <span className="gregorianDate">
-          {date.gregorian || "Loading..."}
-        </span>
-      </div>
-
-      <div className="calendarMoon">
-        ☪
-      </div>
-
+    <div className="calendarIcon">
+      ☪
     </div>
 
-    <div className="calendarToday">
+    <div className="calendarContent">
 
-      <span className="calendarTodayLabel">
+      <span className="calendarLabel">
         آج کی تاریخ
       </span>
 
-      <div className="calendarTodayCircle">
-        <strong>
-          {date.hijri
-            ? date.hijri.match(/\d+/)?.[0] || "—"
-            : "—"}
-        </strong>
-      </div>
-
-      <span className="calendarHijriDate">
+      <strong className="hijriDate">
         {date.hijri || "اسلامی تاریخ"}
+      </strong>
+
+      <span className="gregorianDate">
+        {date.gregorian || "Loading..."}
       </span>
 
     </div>
 
-    <div className="calendarWeek">
-
-      <span>Sun</span>
-      <span>Mon</span>
-      <span>Tue</span>
-      <span>Wed</span>
-      <span>Thu</span>
-      <span>Fri</span>
-      <span>Sat</span>
-
+    <div className="calendarArabic">
+      اسلامی کیلنڈر
     </div>
 
-    <div className="calendarDates">
-
-      {Array.from(
-        { length: 30 },
-        (_, index) => {
-
-          const day = index + 1;
-
-          return (
-            <div
-              key={day}
-              className={
-                "calendarDateBox" +
-                (
-                  day ===
-                  Number(
-                    date.hijri
-                      ?.match(/\d+/)?.[0]
-                  )
-                    ? " calendarDateToday"
-                    : ""
-                )
-              }
-            >
-              {day}
-            </div>
-          );
-
-        }
-      )}
-
-    </div>
-
-    <div className="calendarUpcoming">
-
-      <div className="calendarUpcomingTitle">
-        Upcoming Islamic Days
-      </div>
-
-      <div className="calendarEventCards">
-
-        <div className="calendarEventCard">
-          <span>🌙</span>
-          <div>
-            <strong>Ramadan</strong>
-            <small>Islamic month</small>
-          </div>
-        </div>
-
-        <div className="calendarEventCard">
-          <span>✨</span>
-          <div>
-            <strong>Eid-ul-Fitr</strong>
-            <small>1 Shawwal</small>
-          </div>
-        </div>
-
-        <div className="calendarEventCard">
-          <span>🕋</span>
-          <div>
-            <strong>Eid-ul-Adha</strong>
-            <small>10 Dhul Hijjah</small>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
+  </Link>
 </section>
       
-
 
       {/* ISLAMIC KNOWLEDGE */}
       <section className="knowledgeSection">
