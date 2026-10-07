@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { quranAyahs } from "@/data/quran/ayahs";
 
 const navItems = [
@@ -88,7 +89,11 @@ export default function Home() {
   });
 
 const [searchQuery, setSearchQuery] = useState("");
-
+  const [quranProgress, setQuranProgress] = useState<{
+  surahNumber: number;
+  ayahNumber: number;
+} | null>(null);
+  
 function handleSearch() {
   const query = searchQuery.trim();
 
@@ -122,6 +127,18 @@ const liveSearchResults = searchQuery.trim()
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("site-language") || "auto";
+    const savedQuranProgress =
+  localStorage.getItem("maslak-quran-progress");
+
+if (savedQuranProgress) {
+  try {
+    setQuranProgress(
+      JSON.parse(savedQuranProgress)
+    );
+  } catch {
+    setQuranProgress(null);
+  }
+}
     const savedTheme = localStorage.getItem("site-theme") || "auto";
 
     setLanguage(savedLanguage);
@@ -410,7 +427,55 @@ const liveSearchResults = searchQuery.trim()
         </div>
       </section>
 
+{/* CONTINUE READING */}
 
+{quranProgress && (
+  <section className="continueReadingSection">
+
+    <Link
+      href={
+        "/quran/full#ayah-" +
+        quranProgress.surahNumber +
+        "-" +
+        quranProgress.ayahNumber
+      }
+      className="continueReadingCard"
+    >
+
+      <div className="continueReadingIcon">
+        📖
+      </div>
+
+      <div className="continueReadingContent">
+
+        <span className="continueReadingLabel">
+          CONTINUE READING
+        </span>
+
+        <strong>
+          Qur’an Majeed
+        </strong>
+
+        <span>
+          Surah{" "}
+          {quranProgress.surahNumber}
+          {" · "}
+          Ayah{" "}
+          {quranProgress.ayahNumber}
+        </span>
+
+      </div>
+
+      <span className="continueReadingArrow">
+        →
+      </span>
+
+    </Link>
+
+  </section>
+)}
+
+      
       {/* URDU CALENDAR */}
       <section className="calendarSection">
         <div className="calendarCard">
