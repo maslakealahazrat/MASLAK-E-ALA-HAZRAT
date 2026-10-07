@@ -2268,3 +2268,163 @@ input {
 [data-theme="dark"] .fullQuranSearchResult {
   color: inherit;
 }
+/* =========================================================
+   INDIVIDUAL SURAH — TANZIL STYLE
+   ========================================================= */
+
+.quranSurahNavigation {
+  width: min(900px, calc(100% - 24px));
+  margin: 18px auto 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.quranSurahNavSide {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.quranSurahNavRight {
+  justify-content: flex-end;
+}
+
+.quranSurahNavCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.quranSurahNavButton,
+.quranSurahListButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(121, 167, 165, 0.28);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.quranSurahNavButton:hover,
+.quranSurahListButton:hover {
+  background: rgba(121, 167, 165, 0.10);
+  transform: translateY(-1px);
+}
+
+.quranSurahNavButton.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.quranSurahListButton {
+  min-width: 110px;
+}
+
+.quranSurahSource {
+  width: min(900px, calc(100% - 24px));
+  margin: 18px auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.quranSurahSource a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.ayahPageContent {
+  width: min(920px, calc(100% - 24px));
+  margin: 30px auto 0;
+}
+
+.quranContinuousText {
+  direction: rtl;
+  text-align: center;
+  font-family:
+    "Noto Naskh Arabic",
+    "Amiri",
+    serif;
+  font-size: clamp(26px, 5.8vw, 40px);
+  font-weight: 400;
+  line-height: 2.25;
+  letter-spacing: 0;
+  word-spacing: 2px;
+}
+
+.quranInlineAyah {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.quranInlineArabic {
+  display: inline;
+}
+
+.quranInlineNumber {
+  display: inline;
+  margin: 0 5px;
+  font-family: serif;
+  font-size: 0.60em;
+  white-space: nowrap;
+  opacity: 0.78;
+  vertical-align: middle;
+}
+
+.quranSurahNavigationBottom {
+  margin-top: 36px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+
+  .quranSurahNavigation {
+    width: calc(100% - 18px);
+    gap: 6px;
+  }
+
+  .quranSurahNavButton,
+  .quranSurahListButton {
+    min-height: 36px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+
+  .quranSurahListButton {
+    min-width: 88px;
+  }
+
+  .quranSurahSource {
+    width: calc(100% - 18px);
+    margin-top: 15px;
+  }
+
+  .ayahPageContent {
+    width: calc(100% - 18px);
+    margin-top: 24px;
+  }
+
+  .quranContinuousText {
+    font-size: 28px;
+    line-height: 2.25;
+  }
+
+  .quranInlineNumber {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+
+}
