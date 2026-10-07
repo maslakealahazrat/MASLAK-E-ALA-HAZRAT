@@ -108,16 +108,42 @@ export const day1 = {
       },
 
       difficultWords: [
-        {
-          arabic: "أَحَدٌ",
-          meaning: {
-            en: "One, absolutely unique",
-            hi: "एक, बिल्कुल अद्वितीय",
-            ur: "ایک، بالکل یکتا",
-          },
-        },
-      ],
+  {
+    arabic: "قُلْ",
+    meaning: {
+      en: "Qul — Farmaiye / Keh dijiye",
+      hi: "क़ुल — फ़रमाइए / कह दीजिए",
+      ur: "قُلْ — فرمائیے / کہہ دیجیے",
     },
+  },
+
+  {
+    arabic: "هُوَ",
+    meaning: {
+      en: "Huwa — Woh",
+      hi: "हुवा — वह",
+      ur: "ہُوَ — وہ",
+    },
+  },
+
+  {
+    arabic: "اللّٰهُ",
+    meaning: {
+      en: "Allahu — Allah",
+      hi: "अल्लाहु — अल्लाह",
+      ur: "اللّٰهُ — اللہ",
+    },
+  },
+
+  {
+    arabic: "أَحَدٌ",
+    meaning: {
+      en: "Ahad — Ek / Yekta",
+      hi: "अहद — एक / यकता",
+      ur: "اَحَدٌ — ایک / یکتا",
+    },
+  },
+],
 
     {
       type: "quran",
