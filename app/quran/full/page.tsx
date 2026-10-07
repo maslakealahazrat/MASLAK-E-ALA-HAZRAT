@@ -85,27 +85,47 @@ export default function FullQuranPage() {
   }, []);
 
   const saveProgress = (
-    surahNumber: number,
-    ayahNumber: number
-  ) => {
-    const newProgress = {
-      surahNumber,
-      ayahNumber,
-    };
-
-    setProgress(newProgress);
-
-    try {
-      localStorage.setItem(
-        PROGRESS_KEY,
-        JSON.stringify(
-          newProgress
-        )
-      );
-    } catch {
-      // Ignore localStorage errors.
-    }
+  surahNumber: number,
+  ayahNumber: number
+) => {
+  const newProgress = {
+    surahNumber,
+    ayahNumber,
   };
+
+  setProgress(newProgress);
+
+  try {
+    // Existing Qur'an progress
+    localStorage.setItem(
+      PROGRESS_KEY,
+      JSON.stringify(
+        newProgress
+      )
+    );
+
+    // Generic Continue Reading
+    localStorage.setItem(
+      "maslak-reading-progress",
+      JSON.stringify({
+        type: "quran",
+        title: "Qur’an Majeed",
+        subtitle:
+          "Surah " +
+          surahNumber +
+          " · Ayah " +
+          ayahNumber,
+        url:
+          "/quran/full#ayah-" +
+          surahNumber +
+          "-" +
+          ayahNumber,
+      })
+    );
+  } catch {
+    // Ignore localStorage errors.
+  }
+};
 
   const getAyahUrl = (
     surahNumber: number,
