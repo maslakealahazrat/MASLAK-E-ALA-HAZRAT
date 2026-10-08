@@ -66,6 +66,26 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
       "Detailed information about his individual teachers, subjects studied and scholarly authorisations will be presented separately in the Teachers and Shaykhs and Ijazahs sections, so that the biography does not repeat or mix different stages of his education.",
     ],
   },
+
+  {
+    id: "teachers",
+    title: "Teachers and Shaykhs",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's scholarly formation took place through a number of teachers and scholars, with his father, Mawlana Naqi Ali Khan, playing a central role in his education.",
+      
+      "His grandfather, Rida Ali Khan, is recorded as his first teacher. During his early years in Bareilly, he also received instruction from other teachers before continuing his studies with senior scholars.",
+      
+      "Among the scholars associated with his early education were Mawlana Ghulam Qadir Beyg and Mawlana Abd al-Ali Rampuri. Their names are recorded in the biographical accounts of his education.",
+      
+      "Mawlana Naqi Ali Khan taught him a substantial portion of the traditional curriculum and remained one of the most important scholarly influences in his life.",
+      
+      "His later scholarly development also brought him into contact with scholars outside Bareilly, including scholars associated with the Haramain. The documented record of his scholarly authorisations will be presented separately in the Ijazahs section.",
+      
+      "The website will maintain a distinction between teachers of academic and religious sciences, spiritual guides, and scholars who granted ijazah. This distinction is important because these relationships do not necessarily represent the same type of scholarly connection.",
+      
+      "Where different biographical sources provide different lists or descriptions of teachers, the website will preserve the source attribution and will not present an uncertain list as an established fact.",
+    ],
+  },
   
   {
     id: "scholarly-identity",
