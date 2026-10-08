@@ -452,6 +452,70 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
       "The Wisal section will remain historically focused, while later devotional remembrance and literary tributes will be organised separately so that historical biography and later commemorative material are not mixed.",
     ],
   },
+
+  {
+    id: "legacy",
+    title: "Legacy",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's legacy is preserved through his religious writings, Hanafi legal scholarship, Qur'anic translation, Hadith-related scholarship, Arabic, Persian and Urdu writings, and devotional poetry.",
+      
+      "His works have been preserved and documented through printed editions, manuscripts and later bibliographical catalogues. These records provide an important foundation for studying the breadth of his scholarly output.",
+      
+      "His influence also continued through students, scholars, spiritual associates and later writers who documented his life and works. The website will keep these different forms of legacy clearly distinguished.",
+      
+      "Ala Hazrat's literary legacy includes both scholarly prose and devotional poetry. Kanz-ul-Iman and Hadaiq-e-Bakhshish represent two different areas of this legacy and will remain separate sections on the website.",
+      
+      "His legal legacy is particularly associated with Fatawa Razawiyya and his wider contribution to Hanafi jurisprudence. The work will be treated independently from his poetry collections and other books.",
+      
+      "The bibliographical legacy is also significant. Modern catalogues record hundreds of titles associated with him, while academic bibliographical research has independently documented a substantial published oeuvre.",
+      
+      "This website aims to bring verified information about his life, scholarship, writings, poetry, family, teachers, students and spiritual connections together in one organised knowledge system.",
+      
+      "The long-term goal is not simply to provide a short biography, but to build a carefully sourced digital reference where each major claim, work and biographical relationship can be traced to reliable evidence.",
+    ],
+  },
+
+  {
+    id: "seerat-books",
+    title: "Books About Ala Hazrat",
+    paragraphs: [
+      "Imam Ahmad Raza Khan ki apni books aur unki zindagi par baad ke scholars ki likhi hui books do alag categories hain. Website par dono ko clearly separate rakha jayega.",
+      
+      "Ala Hazrat ki Seerat aur biography par kai works likhe gaye hain. Inmein detailed biographies, biographical studies, scholarly research, eulogies aur other studies shamil hain.",
+      
+      "Ridawi ke bibliographical record mein Ala Hazrat par likhi gayi books ke liye separate categories di gayi hain, including biographies, critical studies, works on poetry and other studies.",
+      
+      "Mawlana Zafaruddin Bihari ki Hayat-e-Ala Hazrat documented biographical works mein prominently listed hai. Is tarah ke works Seerat research ke important source material ke roop mein use kiye jayenge.",
+      
+      "Website par books about Ala Hazrat ko unki apni authored works ke saath mix nahi kiya jayega. Har book ke liye author, title, language, publication information aur source verification alag record ki jayegi.",
+      
+      "Jahan kisi biography mein historical claims ke saath different dates, relationships ya narratives milenge, un claims ko automatically final fact nahi maana jayega. Relevant source aur edition ko check karke information present ki jayegi.",
+      
+      "A dedicated Seerat Books catalogue future mein readers ko biography, research studies, critical works aur other documented publications ko category-wise explore karne ki facility dega.",
+    ],
+  },
+
+  {
+    id: "references",
+    title: "References and Further Reading",
+    paragraphs: [
+      "Ala Hazrat ki Seerat aur scholarly legacy ko accurately present karne ke liye website multiple reliable sources ko compare karegi.",
+      
+      "Primary and bibliographical material mein published works, manuscript records, bibliographies and relevant editions ko importance di jayegi. Sirf ek secondary website par depend karke historical claims ko final nahi kiya jayega.",
+      
+      "Ridawi ke biographical and bibliographical records Ala Hazrat ke life, works, bibliographies and books about him ke liye an important research source hain.",
+      
+      "Independent academic research bhi use ki jayegi. Academic bibliographies aur scholarly publications ko relevant claims aur works ki verification ke liye compare kiya jayega.",
+      
+      "Jahan kisi claim ke liye exact volume, page, edition, manuscript or publication detail important hogi, website par source information ko clearly record kiya jayega.",
+      
+      "Different sources mein dates, spellings, titles, relationships ya bibliographical classifications ka difference ho sakta hai. Aise cases mein website source difference ko clearly identify karegi instead of silently choosing one version.",
+      
+      "Popular websites, social-media posts or unsourced quotations ko independent verification ke bina authoritative source nahi maana jayega.",
+      
+      "Is section ka purpose readers ko original sources, biographies, bibliographies and further scholarly reading tak pahunch dena hai, taaki Seerat aur Ala Hazrat ke works ko deeper study ke liye bhi explore kiya ja sake.",
+    ],
+  },
   
   {
     id: "students",
