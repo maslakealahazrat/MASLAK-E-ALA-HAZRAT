@@ -5782,3 +5782,82 @@ html.dark .alaHazratReferenceCard {
     line-height: 1.75;
   }
   }
+/* =========================================
+   ALA HAZRAT — RESEARCH FACT SOURCES
+   ========================================= */
+
+.alaHazratResearchFactSources {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(121, 167, 165, 0.2);
+}
+
+.alaHazratResearchFactSourcesTitle {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.68;
+}
+
+.alaHazratResearchFactSourceList {
+  display: grid;
+  gap: 10px;
+}
+
+.alaHazratResearchFactSource {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(121, 167, 165, 0.18);
+  border-radius: 12px;
+  background: rgba(121, 167, 165, 0.05);
+}
+
+.alaHazratResearchFactSourceTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.alaHazratResearchFactSourceOrganization {
+  margin: 3px 0 0;
+  font-size: 11px;
+  opacity: 0.62;
+}
+
+.alaHazratResearchFactSourceLink {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.alaHazratResearchFactSourceLink span {
+  transition: transform 0.2s ease;
+}
+
+.alaHazratResearchFactSourceLink:hover span {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .alaHazratResearchFactSource {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .alaHazratResearchFactSourceLink {
+    font-size: 12px;
+  }
+}
