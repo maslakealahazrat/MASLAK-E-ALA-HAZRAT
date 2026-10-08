@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { quranAyahs } from "@/data/quran/ayahs";
@@ -7,6 +8,59 @@ type PageProps = {
     surah: string;
   }>;
 };
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { surah } = await params;
+
+  const surahNumber = Number(surah);
+
+  const ayahs = quranAyahs.filter(
+    (ayah) =>
+      ayah.surahNumber === surahNumber
+  );
+
+  if (
+    !Number.isInteger(surahNumber) ||
+    surahNumber < 1 ||
+    surahNumber > 114 ||
+    ayahs.length === 0
+  ) {
+    return {
+      title: "Surah Not Found",
+      description:
+        "The requested Qur’an Surah could not be found.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const firstAyah = ayahs[0];
+
+  return {
+    title: `Surah ${firstAyah.surahName}`,
+
+    description:
+      `Read Surah ${firstAyah.surahName} (${surahNumber}) in original Arabic Qur’an text sourced from the Tanzil Project.`,
+
+    alternates: {
+      canonical: `/quran/${surahNumber}`,
+    },
+
+    openGraph: {
+      type: "website",
+      title:
+        `Surah ${firstAyah.surahName} | Qur’an Majeed`,
+      description:
+        `Read Surah ${firstAyah.surahName} (${surahNumber}) in original Arabic Qur’an text.`,
+      url: `/quran/${surahNumber}`,
+      siteName: "Maslak-e-Ala Hazrat",
+    },
+  };
+}
 
 export default async function SurahPage({
   params,
