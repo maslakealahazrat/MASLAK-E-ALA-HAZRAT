@@ -30,6 +30,24 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
   },
 
   {
+    id: "childhood",
+    title: "Childhood and Early Life",
+    paragraphs: [
+      "Imam Ahmad Raza Khan grew up in Bareilly in a family deeply connected with Islamic scholarship. His father, Mawlana Naqi Ali Khan, and grandfather, Rida Ali Khan, were both recognised as scholars.",
+      
+      "According to the documented biographical record, his grandfather was his first teacher. In his early years, he was also taught by a teacher in Bareilly before continuing his studies with other scholars.",
+      
+      "He later studied for some time under Mawlana Ghulam Qadir Beyg and Mawlana Abd al-Ali Rampuri. These early stages formed part of his traditional Islamic education.",
+      
+      "A substantial portion of his traditional syllabus was taught by his father, Mawlana Naqi Ali Khan. His father also recognised his scholarly ability at a very young age and authorised him to issue fatwas when he was fourteen.",
+      
+      "His early development was therefore shaped by family scholarship, traditional religious education and direct instruction from recognised scholars. The documented sources also describe him as an autodidact who independently learned and mastered a number of sciences.",
+      
+      "The famous account of the young jurist records that at fourteen he was already entrusted with the attestation of a fatwa by his father. This episode is presented here as a documented biographical account rather than as an independently reconstructed event.",
+    ],
+  },
+  
+  {
     id: "scholarly-identity",
     title: "Scholarly Identity",
     paragraphs: [
