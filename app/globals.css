@@ -5085,3 +5085,159 @@ html.dark .alaHazratReferenceCard {
   }
 
 }
+/* =========================================================
+   ALA HAZRAT SEERAT — CONTENT LAYOUT
+   ========================================================= */
+
+.alaHazratSeeratContentList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.alaHazratSeeratContentCard {
+  padding: 28px 30px;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.alaHazratSeeratContentCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(121, 167, 165, 0.4);
+  box-shadow: 0 16px 40px rgba(38, 77, 74, 0.1);
+}
+
+.alaHazratSeeratContentTop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.alaHazratSeeratContentTop > div:last-child {
+  min-width: 0;
+}
+
+.alaHazratSeeratContentTop .alaHazratSeeratNumber {
+  flex: 0 0 auto;
+}
+
+.alaHazratSeeratContentTop h3 {
+  margin: 0;
+
+  color: var(--text);
+  font-size: 21px;
+  line-height: 1.35;
+}
+
+.alaHazratSeeratContentTop .alaHazratSeeratStatus {
+  margin: 0 0 5px;
+}
+
+.alaHazratSeeratParagraphs {
+  margin-top: 20px;
+  padding-top: 19px;
+
+  border-top: 1px solid var(--border);
+}
+
+.alaHazratSeeratParagraphs p {
+  margin: 0 0 13px;
+
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.alaHazratSeeratParagraphs p:last-child {
+  margin-bottom: 0;
+}
+
+.alaHazratSeeratPending {
+  margin: 20px 0 0;
+  padding: 16px 18px;
+
+  background: var(--surface-soft);
+  border-radius: 15px;
+
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.alaHazratSeeratCardFooter {
+  margin-top: 20px;
+  padding-top: 16px;
+
+  border-top: 1px solid var(--border);
+}
+
+/* =========================================================
+   SEERAT CONTENT — MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .alaHazratSeeratContentList {
+    gap: 12px;
+  }
+
+  .alaHazratSeeratContentCard {
+    padding: 19px 17px;
+    border-radius: 19px;
+  }
+
+  .alaHazratSeeratContentTop {
+    gap: 12px;
+  }
+
+  .alaHazratSeeratContentTop h3 {
+    font-size: 17px;
+  }
+
+  .alaHazratSeeratParagraphs {
+    margin-top: 16px;
+    padding-top: 15px;
+  }
+
+  .alaHazratSeeratParagraphs p {
+    margin-bottom: 11px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .alaHazratSeeratPending {
+    margin-top: 16px;
+    padding: 13px 14px;
+    font-size: 11px;
+  }
+
+  .alaHazratSeeratCardFooter {
+    margin-top: 16px;
+    padding-top: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+
+  .alaHazratSeeratContentCard {
+    padding: 17px 14px;
+  }
+
+  .alaHazratSeeratContentTop {
+    gap: 10px;
+  }
+
+  .alaHazratSeeratContentTop h3 {
+    font-size: 16px;
+  }
+
+}
