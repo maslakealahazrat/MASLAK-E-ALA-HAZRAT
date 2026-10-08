@@ -389,6 +389,47 @@ console.log(
   "✓ Seerat research IDs passed validation."
 );
 
+const duplicateMappingIds = [];
+
+function findDuplicates(ids) {
+  const seen = new Set();
+
+  for (const id of ids) {
+    if (seen.has(id)) {
+      duplicateMappingIds.push(id);
+    }
+
+    seen.add(id);
+  }
+}
+
+findDuplicates(mappedFactIds);
+findDuplicates(mappedWorkIds);
+findDuplicates(mappedTeacherIds);
+findDuplicates(mappedFamilyIds);
+findDuplicates(mappedStudentIds);
+
+if (duplicateMappingIds.length > 0) {
+  console.log("");
+
+  for (const id of duplicateMappingIds) {
+    console.log(
+      `❌ Duplicate research mapping ID: ${id}`
+    );
+  }
+
+  console.error("");
+  console.error(
+    "❌ Duplicate Seerat research mapping validation failed."
+  );
+
+  process.exit(1);
+}
+
+console.log(
+  "✓ No duplicate Seerat research mapping IDs found."
+);
+
 console.log("");
 console.log(
   "✓ All research records passed validation."
