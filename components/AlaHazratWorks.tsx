@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { alaHazratWorks } from "@/data/ala-hazrat/works";
+import { getAlaHazratWork } from "@/data/ala-hazrat/works-research";
 
 export default function AlaHazratWorks() {
   return (
@@ -23,6 +24,8 @@ export default function AlaHazratWorks() {
         {alaHazratWorks.map((work) => {
           const isAvailable = work.status === "available";
 
+          const researchWork = getAlaHazratWork(work.slug);
+
           return (
             <article
               key={work.slug}
@@ -30,13 +33,27 @@ export default function AlaHazratWorks() {
                 !isAvailable ? "isComingSoon" : ""
               }`}
             >
-              <div className="alaHazratWorkIcon">📖</div>
+              <div className="alaHazratWorkIcon">
+                📖
+              </div>
 
               <div className="alaHazratWorkContent">
                 <h3>{work.title}</h3>
 
                 {work.description && (
                   <p>{work.description}</p>
+                )}
+
+                {researchWork?.verificationStatus === "verified" && (
+                  <p className="alaHazratWorkVerified">
+                    ✓ Verified research record
+                  </p>
+                )}
+
+                {researchWork?.language && (
+                  <p className="alaHazratWorkLanguage">
+                    Language: {researchWork.language}
+                  </p>
                 )}
 
                 {isAvailable ? (
