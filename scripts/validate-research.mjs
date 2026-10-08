@@ -212,6 +212,183 @@ console.log(
   "✓ Seerat research mapping passed validation."
 );
 
+const seeratResearchMapContent =
+  await readFile(
+    "data/ala-hazrat/seerat-research-map.ts",
+    "utf8"
+  );
+
+const researchFactIds = new Set(
+  [
+    ...(
+      await readFile(
+        "data/ala-hazrat/research.ts",
+        "utf8"
+      )
+    ).matchAll(
+      /id:\s*"([^"]+)"/g
+    ),
+  ].map((match) => match[1])
+);
+
+const workResearchIds = new Set(
+  [
+    ...(
+      await readFile(
+        "data/ala-hazrat/works-research.ts",
+        "utf8"
+      )
+    ).matchAll(
+      /id:\s*"([^"]+)"/g
+    ),
+  ].map((match) => match[1])
+);
+
+const teacherIds = new Set(
+  [
+    ...(
+      await readFile(
+        "data/ala-hazrat/teachers.ts",
+        "utf8"
+      )
+    ).matchAll(
+      /id:\s*"([^"]+)"/g
+    ),
+  ].map((match) => match[1])
+);
+
+const familyIds = new Set(
+  [
+    ...(
+      await readFile(
+        "data/ala-hazrat/family.ts",
+        "utf8"
+      )
+    ).matchAll(
+      /id:\s*"([^"]+)"/g
+    ),
+  ].map((match) => match[1])
+);
+
+const studentIds = new Set(
+  [
+    ...(
+      await readFile(
+        "data/ala-hazrat/students.ts",
+        "utf8"
+      )
+    ).matchAll(
+      /id:\s*"([^"]+)"/g
+    ),
+  ].map((match) => match[1])
+);
+
+const mappedFactIds = [
+  ...seeratResearchMapContent.matchAll(
+    /factIds:\s*\[([\s\S]*?)\]/g
+  ),
+].flatMap((match) =>
+  [...match[1].matchAll(/"([^"]+)"/g)].map(
+    (item) => item[1]
+  )
+);
+
+const mappedWorkIds = [
+  ...seeratResearchMapContent.matchAll(
+    /workIds:\s*\[([\s\S]*?)\]/g
+  ),
+].flatMap((match) =>
+  [...match[1].matchAll(/"([^"]+)"/g)].map(
+    (item) => item[1]
+  )
+);
+
+const mappedTeacherIds = [
+  ...seeratResearchMapContent.matchAll(
+    /teacherIds:\s*\[([\s\S]*?)\]/g
+  ),
+].flatMap((match) =>
+  [...match[1].matchAll(/"([^"]+)"/g)].map(
+    (item) => item[1]
+  )
+);
+
+const mappedFamilyIds = [
+  ...seeratResearchMapContent.matchAll(
+    /familyIds:\s*\[([\s\S]*?)\]/g
+  ),
+].flatMap((match) =>
+  [...match[1].matchAll(/"([^"]+)"/g)].map(
+    (item) => item[1]
+  )
+);
+
+const mappedStudentIds = [
+  ...seeratResearchMapContent.matchAll(
+    /studentIds:\s*\[([\s\S]*?)\]/g
+  ),
+].flatMap((match) =>
+  [...match[1].matchAll(/"([^"]+)"/g)].map(
+    (item) => item[1]
+  )
+);
+
+const mappingIdErrors = [
+  ...mappedFactIds
+    .filter((id) => !researchFactIds.has(id))
+    .map(
+      (id) =>
+        `Unknown research fact ID: ${id}`
+    ),
+
+  ...mappedWorkIds
+    .filter((id) => !workResearchIds.has(id))
+    .map(
+      (id) =>
+        `Unknown research work ID: ${id}`
+    ),
+
+  ...mappedTeacherIds
+    .filter((id) => !teacherIds.has(id))
+    .map(
+      (id) =>
+        `Unknown teacher ID: ${id}`
+    ),
+
+  ...mappedFamilyIds
+    .filter((id) => !familyIds.has(id))
+    .map(
+      (id) =>
+        `Unknown family ID: ${id}`
+    ),
+
+  ...mappedStudentIds
+    .filter((id) => !studentIds.has(id))
+    .map(
+      (id) =>
+        `Unknown student ID: ${id}`
+    ),
+];
+
+if (mappingIdErrors.length > 0) {
+  console.log("");
+
+  for (const error of mappingIdErrors) {
+    console.log(`❌ ${error}`);
+  }
+
+  console.error("");
+  console.error(
+    "❌ Seerat research ID validation failed."
+  );
+
+  process.exit(1);
+}
+
+console.log(
+  "✓ Seerat research IDs passed validation."
+);
+
 console.log("");
 console.log(
   "✓ All research records passed validation."
