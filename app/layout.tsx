@@ -2,10 +2,68 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+const SITE_URL =
+  "https://maslak-e-ala-hazrat-weld.vercel.app";
+
 export const metadata: Metadata = {
-  title: "MASLAK-E-ALA-HAZRAT",
+  metadataBase: new URL(SITE_URL),
+
+  title: {
+    default: "Maslak-e-Ala Hazrat",
+    template: "%s | Maslak-e-Ala Hazrat",
+  },
+
   description:
-    "Islamic knowledge, Quran, Hadith, Naat, Manqabat, Islamic Books and Seerat.",
+    "Maslak-e-Ala Hazrat — Islamic knowledge, Qur’an, Hadith, Naat, Manqabat, Islamic Books, Seerat and more.",
+
+  applicationName: "Maslak-e-Ala Hazrat",
+
+  authors: [
+    {
+      name: "Maslak-e-Ala Hazrat",
+    },
+  ],
+
+  creator: "Maslak-e-Ala Hazrat",
+  publisher: "Maslak-e-Ala Hazrat",
+
+  keywords: [
+    "Maslak-e-Ala Hazrat",
+    "Islamic knowledge",
+    "Quran",
+    "Qur’an",
+    "Hadith",
+    "Naat",
+    "Manqabat",
+    "Kanz-ul-Iman",
+    "Fatawa Razawiyya",
+    "Seerat-un-Nabi",
+    "Islamic Books",
+    "Ala Hazrat",
+  ],
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: SITE_URL,
+    siteName: "Maslak-e-Ala Hazrat",
+    title: "Maslak-e-Ala Hazrat",
+    description:
+      "Islamic knowledge, Qur’an, Hadith, Naat, Manqabat, Islamic Books, Seerat and more.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default function RootLayout({
