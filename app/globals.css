@@ -5995,3 +5995,66 @@ html.dark .alaHazratReferenceCard {
     font-size: 14px;
   }
 }
+/* =========================================
+   ALA HAZRAT — SEERAT DETAIL RESEARCH SOURCES
+   ========================================= */
+
+.alaHazratSeeratDetailResearchSources {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(121, 167, 165, 0.16);
+}
+
+.alaHazratSeeratDetailResearchSourcesTitle {
+  margin: 0 0 9px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+
+.alaHazratSeeratDetailResearchSourceLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 11px;
+  margin-top: 7px;
+  border: 1px solid rgba(121, 167, 165, 0.14);
+  border-radius: 10px;
+  background: rgba(121, 167, 165, 0.04);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.alaHazratSeeratDetailResearchSourceLink:hover {
+  border-color: rgba(121, 167, 165, 0.38);
+  background: rgba(121, 167, 165, 0.09);
+  transform: translateX(2px);
+}
+
+.alaHazratSeeratDetailResearchSourceLink span:last-child {
+  flex-shrink: 0;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+@media (max-width: 640px) {
+  .alaHazratSeeratDetailResearchSources {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+
+  .alaHazratSeeratDetailResearchSourceLink {
+    font-size: 11px;
+    padding: 9px 10px;
+  }
+}
