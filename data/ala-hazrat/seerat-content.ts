@@ -9,9 +9,11 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     id: "introduction",
     title: "Introduction",
     paragraphs: [
-      "Imam Ahmad Raza Khan, widely known as Ala Hazrat, was an Islamic scholar, jurist and devotional poet associated with Bareilly, India.",
-      "He is particularly known for his scholarship in Hanafi Islamic jurisprudence, his religious writings, his Urdu Qur'an translation Kanz-ul-Iman, and his devotional poetry.",
-      "His scholarly legacy includes works in Islamic jurisprudence, Qur'anic studies, Hadith, theology, Arabic, Persian and Urdu literature.",
+      "Imam Ahmad Raza Khan, widely known as Ala Hazrat, was a Sunni Hanafi-Maturidi Islamic scholar associated with Bareilly in North India.",
+      "He was born in 1272 AH (1856 CE) in Bareilly, into a family of Islamic scholars. His father, Mawlana Naqi Ali Khan, and his grandfather, Rida Ali Khan, were both recognised as scholars of their time.",
+      "From an early age, Imam Ahmad Raza Khan received his Islamic education under the guidance of his father. He went on to become a Mufti at a young age and became particularly renowned for his scholarship in Hanafi jurisprudence.",
+      "His scholarly legacy extends across Islamic jurisprudence, Qur'anic scholarship, Hadith and other Islamic sciences, as well as Arabic, Persian and Urdu writing. His works also include the Urdu Qur'an translation Kanz-ul-Iman and a substantial body of devotional poetry.",
+      "His published legacy is extensive. Bibliographical sources record hundreds of writings, including original works, commentaries, annotations and translations. Because these categories are not identical, this website will catalogue them separately rather than treating every recorded title as an independent book.",
     ],
   },
 
@@ -19,9 +21,11 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     id: "birth-and-family",
     title: "Birth and Family",
     paragraphs: [
-      "Imam Ahmad Raza Khan was born in Bareilly in 1856 into a family associated with Islamic scholarship.",
-      "His father was Mawlana Naqi Ali Khan, who was also a scholar and played an important role in his early religious education.",
-      "The details of his family history will be expanded using reliable biographical and bibliographical sources.",
+      "Imam Ahmad Raza Khan was born in 1272 AH (1856 CE) in Bareilly, a city in North India. The biographical record identifies Bareilly as both his birthplace and the place with which his scholarly life remained closely associated.",
+      "His father was Mawlana Naqi Ali Khan, a prominent scholar of his time. His grandfather was Rida Ali Khan, who is also identified in the biographical record as a scholar.",
+      "The family environment was therefore closely connected with Islamic scholarship. His early religious education began under the tutelage of his father, which became an important foundation for his later scholarly career.",
+      "Reliable biographical sources also identify Imam Ahmad Raza Khan as a Sunni Hanafi-Maturidi scholar. The website will preserve these established identifiers while avoiding unsupported details about family relationships, dates or genealogy.",
+      "A detailed family and descendants section will be developed separately. Family-tree information will only be added after individual relationships and relevant dates have been independently verified.",
     ],
   },
 
@@ -30,8 +34,9 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     title: "Scholarly Identity",
     paragraphs: [
       "Ala Hazrat became widely known for his scholarship in Hanafi jurisprudence and for his extensive religious and literary writings.",
-      "His known body of work covers legal writings, Qur'anic translation, devotional poetry, Arabic and Persian works, and other religious treatises.",
-      "His works and bibliographical record will be presented separately so that individual books and monographs are not confused with commentaries, annotations or later derived works.",
+      "His scholarly record includes works dealing with Islamic jurisprudence, Qur'anic scholarship, Hadith and other religious sciences.",
+      "His writings also demonstrate engagement with Arabic, Persian and Urdu literary traditions.",
+      "Bibliographical research shows that his oeuvre contains different types of writings, including original works, commentaries and annotations. These categories will be distinguished throughout this website.",
     ],
   },
 
@@ -49,7 +54,7 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     title: "Fatawa Razawiyya",
     paragraphs: [
       "Fatawa Razawiyya represents a major part of Imam Ahmad Raza Khan's legal writings and scholarly legacy.",
-      "Different published editions and volumes exist, so the website will preserve edition information wherever it is relevant.",
+      "Published editions of Fatawa Razawiyya exist in different volume configurations. The website will identify the relevant edition whenever volume or page references are provided.",
       "Fatawa Razawiyya is treated as an independent work/collection and is not placed inside Hadaiq-e-Bakhshish.",
     ],
   },
@@ -59,8 +64,8 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     title: "Hadaiq-e-Bakhshish",
     paragraphs: [
       "Hadaiq-e-Bakhshish is a separate collection of devotional poetry associated with Imam Ahmad Raza Khan.",
-      "Its contents include devotional poetic forms such as Naat, Manqabat, Salam and Hamd, with further categorisation to be added from verified source material.",
-      "The website will maintain Hadaiq-e-Bakhshish as an independent book and will not place other books such as Fatawa Razawiyya inside it.",
+      "The collection is associated with devotional poetic forms including Naat, Manqabat, Salam and Hamd.",
+      "The website will maintain Hadaiq-e-Bakhshish as an independent book. Its internal poetry categories will be developed separately from the other books and works of Ala Hazrat.",
     ],
   },
 
@@ -69,8 +74,9 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     title: "Books, Writings and Legacy",
     paragraphs: [
       "Imam Ahmad Raza Khan left a substantial body of religious and literary writings.",
-      "Bibliographical sources record many works under different categories, including books, monographs, commentaries, annotations and translations.",
-      "The website will gradually build a verified catalogue and clearly distinguish works authored by Ala Hazrat from books written about him by later scholars.",
+      "Ridawi's biographical record states that nearly 1000 works are attributed to him and that 679 names are known. It also explains that these records include original works, commentaries, annotations and translations.",
+      "An independent academic bibliography published by Islamic Studies in 2023 provides a descriptive bibliography of 200 published writings and notes that many more works exist.",
+      "The website will therefore build the catalogue progressively from reliable bibliographical sources and will clearly distinguish books, monographs, commentaries, annotations, translations and other categories.",
     ],
   },
 
@@ -78,8 +84,9 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     id: "wisal",
     title: "Wisal",
     paragraphs: [
-      "Imam Ahmad Raza Khan passed away in 1340 AH / 1921 CE.",
-      "The exact date, corresponding calendar information and other final-life details will be presented with source references and edition information where required.",
+      "Imam Ahmad Raza Khan passed away in 1340 AH (1921 CE).",
+      "Biographical sources identify Bareilly as the place of his passing as well as his birthplace.",
+      "The exact date and detailed account of his final days will be added after edition-level source verification.",
     ],
   },
 
@@ -88,7 +95,8 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
     title: "Legacy",
     paragraphs: [
       "Ala Hazrat's legacy is preserved through his religious writings, legal scholarship, Qur'anic translation, devotional poetry and the extensive bibliographical record of his works.",
-      "This website aims to bring verified information about his life, works and intellectual legacy together in one organised place.",
+      "His works have been documented through multiple bibliographies and published catalogues. Ridawi maintains separate catalogues for his works and for books written about his life and works.",
+      "This website will bring these different areas together in an organised structure while keeping Ala Hazrat's own works separate from later biographies and studies about him.",
     ],
   },
 ];
@@ -97,6 +105,10 @@ export const alaHazratSeeratContentSources = [
   {
     title: "Ridawi — Imam Ahmad Rida Khan",
     url: "https://www.ridawi.org/alahazrat/",
+  },
+  {
+    title: "Ridawi — Frequently Asked Questions",
+    url: "https://www.ridawi.org/faq/",
   },
   {
     title: "Ridawi — Published Works",
