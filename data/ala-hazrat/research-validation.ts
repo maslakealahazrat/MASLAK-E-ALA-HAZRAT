@@ -3,7 +3,8 @@ import { alaHazratSources } from "@/data/ala-hazrat";
 type SourceIdRecord = {
   id: string;
   sourceIds: string[];
-  verificationStatus: string;
+  status?: string;
+  verificationStatus?: string;
 };
 
 export type ResearchValidationResult = {
@@ -34,8 +35,11 @@ export function validateResearchRecord(
     );
   }
 
+  const verificationStatus =
+    record.verificationStatus ?? record.status;
+
   if (
-    record.verificationStatus === "verified" &&
+    verificationStatus === "verified" &&
     record.sourceIds.length === 0
   ) {
     errors.push(
