@@ -9,3 +9,4 @@ export * from "./books-about";
 export * from "./research-facts";
 export * from "./source-utils";
 export * from "./seerat-research-map";
+export * from "./seerat-research";
