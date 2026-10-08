@@ -5861,3 +5861,137 @@ html.dark .alaHazratReferenceCard {
     font-size: 12px;
   }
 }
+/* =========================================
+   ALA HAZRAT — SEERAT DETAIL RESEARCH
+   ========================================= */
+
+.alaHazratSeeratDetailResearch {
+  width: min(1100px, 100%);
+  margin: 34px auto 0;
+  padding: 34px 0 0;
+  border-top: 1px solid rgba(121, 167, 165, 0.2);
+}
+
+.alaHazratSeeratDetailResearchHeader {
+  margin-bottom: 22px;
+}
+
+.alaHazratSeeratDetailResearchEyebrow {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.68;
+}
+
+.alaHazratSeeratDetailResearchHeader h2 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1.2;
+}
+
+.alaHazratSeeratDetailResearchHeader p:last-child {
+  max-width: 700px;
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  opacity: 0.72;
+}
+
+.alaHazratSeeratDetailResearchGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.alaHazratSeeratDetailResearchCard {
+  padding: 20px;
+  border: 1px solid rgba(121, 167, 165, 0.24);
+  border-radius: 18px;
+  background: rgba(152, 197, 195, 0.07);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.alaHazratSeeratDetailResearchCard h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.alaHazratSeeratDetailResearchTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.alaHazratSeeratDetailResearchTop span,
+.alaHazratSeeratDetailResearchTop strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.alaHazratSeeratDetailResearchTop span {
+  background: rgba(121, 167, 165, 0.13);
+}
+
+.alaHazratSeeratDetailResearchTop strong {
+  background: rgba(46, 125, 50, 0.11);
+  color: #2e7d32;
+}
+
+.alaHazratSeeratDetailResearchClaim {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.75;
+  opacity: 0.84;
+}
+
+.alaHazratSeeratDetailResearchNotes {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(121, 167, 165, 0.16);
+  font-size: 12px;
+  line-height: 1.65;
+  opacity: 0.65;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .alaHazratSeeratDetailResearch {
+    margin-top: 26px;
+    padding-top: 26px;
+  }
+
+  .alaHazratSeeratDetailResearchGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .alaHazratSeeratDetailResearchCard {
+    padding: 18px;
+    border-radius: 15px;
+  }
+
+  .alaHazratSeeratDetailResearchHeader h2 {
+    font-size: 25px;
+  }
+
+  .alaHazratSeeratDetailResearchHeader p:last-child {
+    font-size: 13px;
+  }
+
+  .alaHazratSeeratDetailResearchClaim {
+    font-size: 14px;
+  }
+}
