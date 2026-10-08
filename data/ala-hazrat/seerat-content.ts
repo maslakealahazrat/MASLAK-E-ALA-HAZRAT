@@ -274,6 +274,204 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
       "The detailed Hadaiq-e-Bakhshish database will eventually allow readers to explore individual Naat, Manqabat, Salam, Hamd and other documented poetic material without confusing the poetry collection with Ala Hazrat's separate scholarly books.",
     ],
   },
+
+  {
+    id: "major-works",
+    title: "Major Books and Works",
+    paragraphs: [
+      "Imam Ahmad Raza Khan left behind a very large body of religious and literary writings. His works cover Islamic jurisprudence, Qur'anic scholarship, Hadith, theology, Arabic and Persian scholarship, Urdu literature and devotional poetry.",
+      
+      "The bibliographical record contains different types of writings, including independent books, monographs or risalas, commentaries, annotations, translations and works later included within larger collections.",
+      
+      "Among the best-known works associated with him are Fatawa Razawiyya, Kanz-ul-Iman and Hadaiq-e-Bakhshish. Other documented works include Husam-ul-Haramain, Al-Daulah al-Makkiyyah, Al-Amn wa al-Ula, Tamheed-e-Iman and Kifl-ul-Faqih al-Fahim.",
+      
+      "These works will be maintained as separate entries on the website. A book will not be placed inside another book merely because its subject matter is related.",
+      
+      "Bibliographical sources also record many additional writings, including shorter treatises and annotations. Therefore, the website will not describe the current list of major works as a complete list of every writing attributed to Ala Hazrat.",
+      
+      "Ridawi's bibliographical record notes that hundreds of titles are known, while also explaining that the recorded titles include original works, commentaries, annotations and translations. An independent academic bibliography likewise documents a substantial published oeuvre.",
+      
+      "The website will gradually build a structured works database containing the title, original-language title, category, subject, source edition and verification status of each documented work.",
+      
+      "This classification will allow readers to distinguish Ala Hazrat's own works from books written about him by later scholars and from translations or studies derived from his writings.",
+    ],
+  },
+
+  {
+    id: "students",
+    title: "Students and Disciples",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's scholarly legacy continued through the students, disciples and scholars who studied with him and remained connected with his religious and spiritual work.",
+      
+      "His teaching activity formed an important part of his role as a scholar. Students came to him for religious learning, legal guidance and scholarly instruction.",
+      
+      "His wider scholarly network also included scholars who received authorisations from him and later transmitted or continued aspects of his scholarly tradition.",
+      
+      "The biographical and bibliographical record contains information about a number of students and associated scholars. However, different sources do not always present the same list or describe every relationship in the same way.",
+      
+      "For this reason, the website will not publish an unverified master list of students and disciples. Each person's relationship with Ala Hazrat will be checked against reliable biographical sources before being added.",
+      
+      "The detailed Students and Disciples section will eventually provide the person's name, type of scholarly or spiritual relationship, relevant dates where verified, and the source supporting the connection.",
+      
+      "Where a person was both a student and a spiritual disciple, or where the available sources use different descriptions, the website will preserve those distinctions instead of reducing the relationship to a single unsupported label.",
+    ],
+  },
+
+  {
+    id: "spiritual-life",
+    title: "Spiritual Life and Qadiri Connection",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's life included both scholarly activity and a documented spiritual connection with the Qadiri tradition.",
+      
+      "The biographical record states that he was initiated into the Qadiri spiritual path by Sayyid Aal-e-Rasul al-Ahmadi of Marehra in 1294 AH.",
+      
+      "This spiritual connection formed an important part of his religious life and is recorded separately from his formal scholarly education and ijazahs.",
+      
+      "His spiritual life should therefore be understood through both his documented relationship with his spiritual guide and the wider Qadiri tradition in which he was connected.",
+      
+      "The website will distinguish between spiritual initiation, scholarly teaching and ijazah. These represent different types of relationships and should not be merged into a single category.",
+      
+      "Detailed information about his spiritual guide, the documented Qadiri chain and related biographical material will be added after checking reliable source editions.",
+      
+      "Where different sources provide different details about the spiritual chain or terminology, the website will identify the source and preserve the distinction rather than presenting an uncertain detail as established fact.",
+    ],
+  },
+
+  {
+    id: "family",
+    title: "Family and Descendants",
+    paragraphs: [
+      "Imam Ahmad Raza Khan belonged to a family with a strong tradition of Islamic scholarship. His father, Mawlana Naqi Ali Khan, and grandfather, Rida Ali Khan, are both documented as scholars.",
+      
+      "His family background played an important role in his early religious education and scholarly development. His father was one of his principal teachers.",
+      
+      "The later family history includes scholars and religious figures connected with the legacy of Ala Hazrat. However, family relationships and descendant lines need to be distinguished carefully from later institutional or spiritual associations.",
+      
+      "The website will therefore develop the family section using individually verified relationships rather than reproducing an unverified family tree from secondary websites.",
+      
+      "For each documented family relationship, the website will aim to provide the person's name, relationship to Ala Hazrat and relevant dates or biographical information where reliable sources establish them.",
+      
+      "Where different sources give different spellings, relationships or dates, the relevant source and uncertainty will be recorded instead of silently choosing one version.",
+      
+      "A separate visual family tree may be added after the underlying relationships have been independently verified. The visual tree will be generated from the verified data so that later corrections can be made without rebuilding the entire section.",
+    ],
+  },
+
+  {
+    id: "scholarly-life",
+    title: "Scholarly and Social Life",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's life was closely connected with scholarship, teaching, writing and religious guidance. His activities extended beyond individual books and included legal responses, correspondence and interaction with other scholars.",
+      
+      "His reputation as a scholar developed through his work in Hanafi jurisprudence and through the large body of religious and literary writings associated with him.",
+      
+      "His scholarly activity also connected him with scholars and religious centres beyond Bareilly. His documented ijazahs and scholarly correspondence provide evidence of a wider network of scholarly relationships.",
+      
+      "His social and religious life should be understood in the context of nineteenth- and early twentieth-century South Asian Muslim scholarship. His writings addressed questions of religious belief, practice, law and devotional life relevant to the Muslim communities of his time.",
+      
+      "The website will distinguish documented historical events from later interpretations or devotional narratives. Historical claims will be presented with their sources wherever possible.",
+      
+      "A detailed section on correspondence, scholarly debates, public religious activity and documented interactions with other scholars will be developed separately after source-level research.",
+      
+      "Where accounts differ in their description of an event or relationship, the website will identify the difference rather than presenting one disputed account as an unquestioned historical fact.",
+    ],
+  },
+
+  {
+    id: "important-events",
+    title: "Important Events and Timeline",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's life can be understood through a chronological record of his birth, education, scholarly development, spiritual connection, major writings and final years.",
+      
+      "The documented timeline begins with his birth in 1272 AH (1856 CE) in Bareilly and continues through his early religious education under his family and other scholars.",
+      
+      "His scholarly development included advanced study in the Islamic sciences, early involvement in issuing fatwas, scholarly authorisations and a documented Qadiri spiritual connection.",
+      
+      "His later life was marked by extensive writing and legal scholarship, including the works and collections associated with his name and the development of his wider scholarly network.",
+      
+      "A detailed timeline on this website will use individual dated events rather than approximate chronological claims. Each event will include the relevant Hijri and Gregorian dates where both can be reliably established.",
+      
+      "Where a Gregorian conversion differs between sources because of calendar or edition differences, the original Hijri date will be preserved and the conversion will be identified appropriately.",
+      
+      "The timeline will eventually include links to the relevant Seerat section, book, manuscript or source record so that readers can move directly from a historical event to its supporting material.",
+      
+      "Only events supported by reliable biographical or bibliographical evidence will be included in the verified timeline. Popular anecdotes without sufficient source support will not be presented as established historical events.",
+    ],
+  },
+
+  {
+    id: "final-days",
+    title: "Final Days",
+    paragraphs: [
+      "Imam Ahmad Raza Khan spent the final period of his life in Bareilly, where he had lived and carried out much of his scholarly work.",
+      
+      "The final phase of his life is documented in biographical sources and is connected with his continuing religious and scholarly activities.",
+      
+      "His final days should be presented carefully because detailed accounts may differ between biographical works and editions.",
+      
+      "The website will therefore distinguish firmly documented information from later narrative details. Any account concerning his health, final activities or events immediately before his passing will be included only when supported by a reliable source.",
+      
+      "The exact chronology of his final days, including dated events and the relevant source references, will be developed as part of the detailed Seerat timeline.",
+      
+      "This section will also connect to the separate Wisal section, where the verified date and corresponding Hijri information will be presented with the appropriate source reference.",
+    ],
+  },
+  
+  {
+    id: "final-days",
+    title: "Final Days",
+    paragraphs: [
+      "The final period of Imam Ahmad Raza Khan's life forms an important part of his documented biography. He remained associated with Bareilly, the city in which he had spent much of his scholarly life.",
+      
+      "Biographical sources record that he continued his religious and scholarly activities during the later part of his life, while his writings and scholarly legacy had already become extensive.",
+      
+      "The detailed circumstances of his final days will be presented only from reliable biographical sources and identified editions. Devotional narratives or later accounts will not be presented as historical facts without supporting evidence.",
+      
+      "Information concerning his final illness, last writings, final correspondence or other events immediately preceding his passing will be added separately after edition-level verification.",
+      
+      "The website will also distinguish between the historical record of his final days and later devotional descriptions of this period.",
+      
+      "Where sources differ concerning dates or specific events, the original source information will be preserved and the difference will be clearly identified.",
+    ],
+  },
+
+  {
+    id: "wisal",
+    title: "Wisal",
+    paragraphs: [
+      "Imam Ahmad Raza Khan passed away in 1340 AH (1921 CE). Reliable biographical sources identify Bareilly as the place of his passing.",
+      
+      "His death marked the end of a scholarly life associated with extensive religious writing, Hanafi jurisprudence, Qur'anic scholarship, devotional poetry and teaching.",
+      
+      "The Hijri year 1340 AH and Gregorian year 1921 CE are documented in the biographical record. The exact day and corresponding calendar details will be presented separately after checking the relevant biographical editions.",
+      
+      "The website will preserve the original Hijri date wherever a source provides one and will identify the source used for any Gregorian conversion.",
+      
+      "Details concerning his burial, funeral and events surrounding his passing will be added only after reliable source verification.",
+      
+      "The Wisal section will remain historically focused, while later devotional remembrance and literary tributes will be organised separately so that historical biography and later commemorative material are not mixed.",
+    ],
+  },
+  
+  {
+    id: "students",
+    title: "Students and Disciples",
+    paragraphs: [
+      "Imam Ahmad Raza Khan's scholarly legacy continued through the students, disciples and scholars who learned from him and remained connected with his intellectual and spiritual tradition.",
+      
+      "His circle included students who received instruction in Islamic sciences and scholars who benefited from his legal and religious scholarship.",
+      
+      "Some students and associates later became scholars and writers themselves, helping to preserve, transmit and document aspects of his scholarly legacy.",
+      
+      "The website will treat students and spiritual disciples as related but distinct categories. A person who studied with Ala Hazrat academically will not automatically be described as his spiritual disciple unless the relevant source establishes that relationship.",
+      
+      "A detailed list of students and disciples will be prepared from reliable biographical sources, especially documented biographies and scholarly catalogues.",
+      
+      "Each individual entry will, where the evidence permits, identify the person's name, relationship with Ala Hazrat, field of study or association, and relevant source.",
+      
+      "Names will not be added merely because they appear on unsourced online lists. Where the available evidence is uncertain or conflicting, that uncertainty will be clearly identified.",
+    ],
+  },
   
   {
     id: "scholarly-identity",
