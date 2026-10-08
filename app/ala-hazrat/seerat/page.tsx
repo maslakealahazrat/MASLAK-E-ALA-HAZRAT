@@ -1,7 +1,7 @@
 import Link from "next/link";
 import AlaHazratSeerat from "@/components/AlaHazratSeerat";
 import AlaHazratResearchSources from "@/components/AlaHazratResearchSources";
-
+import AlaHazratResearchFacts from "@/components/AlaHazratResearchFacts";
 
 export const metadata = {
   title: "Seerat-e-Ala Hazrat | Imam Ahmad Raza Khan",
@@ -43,7 +43,7 @@ export default function AlaHazratSeeratPage() {
       </section>
 
       <AlaHazratSeerat />
-
+      <AlaHazratResearchFacts />
       <AlaHazratResearchSources />
      
       <section className="alaHazratSeeratNote">
