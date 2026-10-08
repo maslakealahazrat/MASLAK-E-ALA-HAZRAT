@@ -2,7 +2,8 @@
 
 export type AlaHazratWorkCategory =
   | "book"
-  | "poetry-book";
+  | "poetry-book"
+  | "collection";
 
 export type AlaHazratWorkStatus =
   | "available"
