@@ -46,6 +46,26 @@ export const alaHazratSeeratContent: SeeratContentSection[] = [
       "The famous account of the young jurist records that at fourteen he was already entrusted with the attestation of a fatwa by his father. This episode is presented here as a documented biographical account rather than as an independently reconstructed event.",
     ],
   },
+
+  {
+    id: "education",
+    title: "Islamic Education",
+    paragraphs: [
+      "Imam Ahmad Raza Khan received his early Islamic education within the scholarly environment of his family in Bareilly. His father, Mawlana Naqi Ali Khan, played a central role in his formal religious training.",
+      
+      "His education followed the traditional Islamic scholarly curriculum of his time. His studies covered the foundational religious sciences as well as disciplines required for advanced Islamic scholarship.",
+      
+      "The biographical record identifies his father as an important teacher in his education and records that he also studied under other recognised scholars during his formative years.",
+      
+      "As his learning progressed, Imam Ahmad Raza Khan developed particular distinction in Hanafi jurisprudence. His later scholarly career was especially associated with issuing fatwas and writing detailed legal works.",
+      
+      "His education was not limited to jurisprudence alone. The documented record describes his proficiency across a broad range of Islamic sciences, while his literary output also demonstrates his command of Arabic, Persian and Urdu.",
+      
+      "His scholarly development therefore combined traditional instruction from recognised teachers with extensive independent study. This combination became an important foundation for his later work as a jurist, writer and religious scholar.",
+      
+      "Detailed information about his individual teachers, subjects studied and scholarly authorisations will be presented separately in the Teachers and Shaykhs and Ijazahs sections, so that the biography does not repeat or mix different stages of his education.",
+    ],
+  },
   
   {
     id: "scholarly-identity",
