@@ -5472,3 +5472,157 @@ html.dark .alaHazratReferenceCard {
   }
 
 }
+
+/* =========================================
+   ALA HAZRAT — RESEARCH SOURCES
+   ========================================= */
+
+.alaHazratResearchSources {
+  width: 100%;
+  padding: 72px 20px;
+}
+
+.alaHazratResearchSourcesHeader {
+  width: min(1100px, 100%);
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.alaHazratResearchSourcesEyebrow {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.alaHazratResearchSourcesHeader h2 {
+  margin: 0;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.15;
+}
+
+.alaHazratResearchSourcesIntro {
+  max-width: 720px;
+  margin: 16px auto 0;
+  font-size: 16px;
+  line-height: 1.8;
+  opacity: 0.78;
+}
+
+.alaHazratResearchSourcesGrid {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.alaHazratResearchSourceCard {
+  padding: 24px;
+  border: 1px solid rgba(121, 167, 165, 0.28);
+  border-radius: 20px;
+  background: rgba(152, 197, 195, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.alaHazratResearchSourceCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(121, 167, 165, 0.55);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.08);
+}
+
+.alaHazratResearchSourceTop {
+  margin-bottom: 16px;
+}
+
+.alaHazratResearchSourceType {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(121, 167, 165, 0.14);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.alaHazratResearchSourceCard h3 {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.35;
+}
+
+.alaHazratResearchSourceOrganization {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.alaHazratResearchSourceNote {
+  margin: 16px 0 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  opacity: 0.78;
+}
+
+.alaHazratResearchSourceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+.alaHazratResearchSourceLink span {
+  transition: transform 0.2s ease;
+}
+
+.alaHazratResearchSourceLink:hover span {
+  transform: translateX(4px);
+}
+
+@media (max-width: 900px) {
+  .alaHazratResearchSourcesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .alaHazratResearchSources {
+    padding: 52px 16px;
+  }
+
+  .alaHazratResearchSourcesHeader {
+    margin-bottom: 26px;
+  }
+
+  .alaHazratResearchSourcesIntro {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .alaHazratResearchSourcesGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .alaHazratResearchSourceCard {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .alaHazratResearchSourceCard h3 {
+    font-size: 19px;
+  }
+}
