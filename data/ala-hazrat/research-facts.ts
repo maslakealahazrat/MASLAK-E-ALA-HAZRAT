@@ -14,7 +14,7 @@ export const alaHazratResearchFactsWithSources: AlaHazratResearchFactWithSources
     sourceCount: fact.sourceIds.length,
   }));
 
-export function getResearchFactsByTopic(
+export function getResearchFactsLayerByTopic(
   topic: AlaHazratResearchFact["topic"]
 ): AlaHazratResearchFactWithSources[] {
   return alaHazratResearchFactsWithSources.filter(
