@@ -153,6 +153,20 @@ const uniqueMappedSectionIds = new Set(
 
 let seeratMappingErrors = 0;
 
+for (const sectionId of uniqueMappedSectionIds) {
+  const occurrences = mappedSectionIds.filter(
+    (id) => id === sectionId
+  ).length;
+
+  if (occurrences > 1) {
+    seeratMappingErrors++;
+
+    console.log(
+      `❌ Duplicate Seerat research mapping: ${sectionId} (${occurrences} entries)`
+    );
+  }
+}
+
 for (const sectionId of mappedSectionIds) {
   if (!seeratSectionIds.has(sectionId)) {
     seeratMappingErrors++;
