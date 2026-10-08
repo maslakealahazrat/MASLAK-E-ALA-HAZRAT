@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { alaHazratSeeratSections } from "@/data/ala-hazrat/seerat";
 import { alaHazratSeeratContent } from "@/data/ala-hazrat/seerat-content";
+import { getSeeratResearchSummary } from "@/data/ala-hazrat";
 
 export default function AlaHazratSeerat() {
   const contentMap = new Map(
@@ -28,7 +29,9 @@ export default function AlaHazratSeerat() {
       <div className="alaHazratSeeratContentList">
         {alaHazratSeeratSections.map((section, index) => {
           const content = contentMap.get(section.id);
-
+          const researchSummary = getSeeratResearchSummary(
+  section.id
+);
           return (
             <article
               key={section.id}
@@ -62,6 +65,18 @@ export default function AlaHazratSeerat() {
                 </p>
               )}
 
+{researchSummary.facts > 0 && (
+  <div className="alaHazratSeeratResearchBadge">
+    <span>✓</span>
+    <span>
+      {researchSummary.facts} verified research{" "}
+      {researchSummary.facts === 1
+        ? "fact"
+        : "facts"}
+    </span>
+  </div>
+)}
+              
               <div className="alaHazratSeeratCardFooter">
                 <Link
                   href={`/ala-hazrat/seerat#${section.id}`}
