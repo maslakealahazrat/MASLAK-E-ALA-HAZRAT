@@ -1,5 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { quranAyahs } from "@/data/quran/ayahs";
+
+export const metadata: Metadata = {
+  title: "Qur’an Majeed",
+  description:
+    "Read the complete Qur’an Majeed with all 114 Surahs in original Arabic text sourced from the Tanzil Project.",
+
+  alternates: {
+    canonical: "/quran",
+  },
+
+  openGraph: {
+    type: "website",
+    title: "Qur’an Majeed | Maslak-e-Ala Hazrat",
+    description:
+      "Read all 114 Surahs of the Qur’an Majeed in original Arabic text.",
+    url: "/quran",
+    siteName: "Maslak-e-Ala Hazrat",
+  },
+};
 
 export default function QuranPage() {
   const surahs = Array.from(
@@ -58,7 +78,6 @@ export default function QuranPage() {
 
       </section>
 
-
       {/* SURAH LIST */}
       <section className="quranContent">
 
@@ -85,7 +104,6 @@ export default function QuranPage() {
 
         </div>
 
-
         <div className="surahGrid">
 
           {surahs.map((surah) => (
@@ -100,7 +118,6 @@ export default function QuranPage() {
                 {surah.number}
               </div>
 
-
               <div className="surahInfo">
 
                 <strong>
@@ -113,11 +130,9 @@ export default function QuranPage() {
 
               </div>
 
-
               <div className="surahArabic">
                 {surah.arabicName}
               </div>
-
 
               <div className="surahOpen">
                 →
@@ -130,7 +145,6 @@ export default function QuranPage() {
         </div>
 
       </section>
-
 
       {/* SOURCE */}
       <section className="quranSource">
