@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
+
 import { quranAyahs } from "@/data/quran/ayahs";
-import { searchSiteContent } from "@/data/site/search-utils";
-import { siteSearchIndex } from "@/data/site/search-index";
+import { searchIndex } from "@/data/search";
+import { searchContent } from "@/data/search/engine";
+
+type SearchPageContentProps = {
+  query: string;
+};
 
 function findExactAyah(query: string) {
   const cleaned = query
@@ -12,7 +17,9 @@ function findExactAyah(query: string) {
     .replace(/^surah\s+/i, "")
     .replace(/\s+/g, "");
 
-  const match = cleaned.match(/^(\d{1,3})[:/](\d{1,3})$/);
+  const match = cleaned.match(
+    /^(\d{1,3})[:/](\d{1,3})$/
+  );
 
   if (!match) {
     return null;
@@ -24,15 +31,13 @@ function findExactAyah(query: string) {
   return (
     quranAyahs.find(
       (ayah) =>
-        ayah.surahNumber === surahNumber &&
-        ayah.ayahNumber === ayahNumber
+        ayah.surahNumber ===
+          surahNumber &&
+        ayah.ayahNumber ===
+          ayahNumber
     ) || null
   );
 }
-
-type SearchPageContentProps = {
-  query: string;
-};
 
 export default function SearchPageContent({
   query,
@@ -43,42 +48,40 @@ export default function SearchPageContent({
     ? findExactAyah(trimmedQuery)
     : null;
 
-  const siteResults = trimmedQuery
-    ? searchSiteContent(siteSearchIndex, trimmedQuery)
+  const searchResults = trimmedQuery
+    ? searchContent(
+        searchIndex,
+        trimmedQuery
+      )
     : [];
 
-  const normalizedQuery = trimmedQuery.toLowerCase();
+  const exactResults =
+    searchResults.filter(
+      (result) =>
+        result.matchType === "exact"
+    );
 
-  const quranResults =
-    trimmedQuery && !exactAyah
-      ? quranAyahs
-          .filter((ayah) => {
-            const arabic = ayah.arabic.toLowerCase();
-            const surahName = ayah.surahName.toLowerCase();
-            const surahArabic =
-              ayah.surahNameArabic.toLowerCase();
+  const strongResults =
+    searchResults.filter(
+      (result) =>
+        result.matchType === "strong"
+    );
 
-            return (
-              arabic.includes(normalizedQuery) ||
-              surahName.includes(normalizedQuery) ||
-              surahArabic.includes(normalizedQuery) ||
-              String(ayah.surahNumber) === normalizedQuery ||
-              String(ayah.ayahNumber) === normalizedQuery
-            );
-          })
-          .slice(0, 50)
-      : [];
+  const similarResults =
+    searchResults.filter(
+      (result) =>
+        result.matchType === "similar"
+    );
 
   const showNoResults =
-    Boolean(query) &&
+    Boolean(trimmedQuery) &&
     !exactAyah &&
-    quranResults.length === 0 &&
-    siteResults.length === 0;
+    searchResults.length === 0;
 
   return (
     <main className="searchPage">
 
-      {/* SEARCH HERO */}
+      {/* HERO */}
 
       <section className="searchHero">
 
@@ -102,37 +105,17 @@ export default function SearchPageContent({
         </h1>
 
         <p>
-          Qur’an aur Islamic knowledge mein
-          search karein.
+          Qur’an aur Islamic knowledge
+          mein search karein.
         </p>
 
       </section>
 
-
-      {/* SEARCH RESULTS */}
+      {/* RESULTS */}
 
       <section className="searchResults">
 
-        {/* RESULT HEADING */}
-
-        {query ? (
-          <div className="searchResultHeading">
-
-            <span>
-              SEARCH RESULTS
-            </span>
-
-            <h2>
-              Results for “{query}”
-            </h2>
-
-          </div>
-        ) : null}
-
-
-        {/* EMPTY SEARCH */}
-
-        {!query ? (
+        {!trimmedQuery ? (
           <div className="searchEmpty">
 
             <div className="searchEmptyIcon">
@@ -161,103 +144,53 @@ export default function SearchPageContent({
             </Link>
 
           </div>
-        ) : null}
-
-
-        {/* EXACT QURAN AYAH */}
-
-        {query && exactAyah ? (
-          <div className="searchSection">
-
-            <div className="searchSectionTitle">
+        ) : (
+          <>
+            <div className="searchResultHeading">
 
               <span>
-                QUR’AN
+                SEARCH RESULTS
               </span>
 
               <h2>
-                Exact Ayah
+                Results for “{query}”
               </h2>
 
             </div>
 
-            <Link
-              href={
-                "/quran/" +
-                exactAyah.surahNumber +
-                "#ayah-" +
-                exactAyah.ayahNumber
-              }
-              className="searchResultCard exactResult"
-            >
+            {/* EXACT REFERENCE */}
 
-              <div className="searchResultTop">
+            {exactAyah ? (
+              <div className="searchSection">
 
-                <span className="searchResultNumber">
-                  {exactAyah.ayahNumber}
-                </span>
+                <div className="searchSectionTitle">
 
-                <span className="searchResultSurah">
-                  {exactAyah.surahName}
-                </span>
+                  <span>
+                    QUR’AN
+                  </span>
 
-                <span className="searchResultArrow">
-                  →
-                </span>
+                  <h2>
+                    Exact Ayah
+                  </h2>
 
-              </div>
+                </div>
 
-              <div className="searchResultArabic">
-                {exactAyah.arabic}
-              </div>
-
-            </Link>
-
-          </div>
-        ) : null}
-
-
-        {/* QURAN RESULTS */}
-
-        {query &&
-        !exactAyah &&
-        quranResults.length > 0 ? (
-          <div className="searchSection">
-
-            <div className="searchSectionTitle">
-
-              <span>
-                QUR’AN
-              </span>
-
-              <h2>
-                Qur’an Results
-              </h2>
-
-            </div>
-
-            <div className="searchResultList">
-
-              {quranResults.map((ayah) => (
                 <Link
-                  key={ayah.id}
                   href={
-                    "/quran/" +
-                    ayah.surahNumber +
-                    "#ayah-" +
-                    ayah.ayahNumber
+                    `/quran/${exactAyah.surahNumber}` +
+                    `#ayah-${exactAyah.ayahNumber}`
                   }
-                  className="searchResultCard"
+                  className="searchResultCard exactResult"
                 >
 
                   <div className="searchResultTop">
 
                     <span className="searchResultNumber">
-                      {ayah.ayahNumber}
+                      {exactAyah.ayahNumber}
                     </span>
 
                     <span className="searchResultSurah">
-                      {ayah.surahName}
+                      {exactAyah.surahName}
                     </span>
 
                     <span className="searchResultArrow">
@@ -267,132 +200,220 @@ export default function SearchPageContent({
                   </div>
 
                   <div className="searchResultArabic">
-                    {ayah.arabic}
+                    {exactAyah.arabic}
                   </div>
 
                 </Link>
-              ))}
 
-            </div>
+              </div>
+            ) : null}
 
-          </div>
-        ) : null}
+            {/* EXACT CONTENT */}
 
+            {!exactAyah &&
+            exactResults.length > 0 ? (
+              <SearchResultSection
+                title="Exact Matches"
+                label="EXACT"
+                results={exactResults}
+              />
+            ) : null}
 
-        {/* WEBSITE RESULTS */}
+            {/* STRONG CONTENT */}
 
-        {query &&
-        !exactAyah &&
-        siteResults.length > 0 ? (
-          <div className="searchSection">
+            {strongResults.length > 0 ? (
+              <SearchResultSection
+                title="Strong Matches"
+                label="MATCHING CONTENT"
+                results={strongResults}
+              />
+            ) : null}
 
-            <div className="searchSectionTitle">
+            {/* SIMILAR CONTENT */}
 
-              <span>
-                ISLAMIC KNOWLEDGE
-              </span>
+            {similarResults.length > 0 ? (
+              <SearchResultSection
+                title="Similar Matches"
+                label="SIMILAR"
+                results={similarResults}
+              />
+            ) : null}
 
-              <h2>
-                Website Results
-              </h2>
+            {/* NO RESULTS */}
 
-            </div>
+            {showNoResults ? (
+              <div className="searchEmpty noResults">
 
-            <div className="searchResultList">
+                <div className="searchEmptyIcon">
+                  🔎
+                </div>
 
-              {siteResults.map((item) => (
+                <div className="searchEmptyLabel">
+                  SEARCH
+                </div>
+
+                <h2>
+                  No Results Found
+                </h2>
+
+                <p>
+                  “{query}” ke liye abhi
+                  koi result nahi mila.
+                </p>
+
+                <div className="noResultsHint">
+
+                  <span>
+                    Try searching for
+                  </span>
+
+                  <strong>
+                    Fatiha
+                  </strong>
+
+                  <strong>
+                    Al-Baqarah
+                  </strong>
+
+                  <strong>
+                    1:2
+                  </strong>
+
+                </div>
+
                 <Link
-                  key={item.id}
-                  href={item.href}
-                  className="searchResultCard"
+                  href="/"
+                  className="searchEmptyButton"
                 >
-
-                  <div className="searchResultTop">
-
-                    <span className="searchResultNumber">
-                      •
-                    </span>
-
-                    <span className="searchResultSurah">
-                      {item.title}
-                    </span>
-
-                    <span className="searchResultArrow">
-                      →
-                    </span>
-
-                  </div>
-
-                  {item.description ? (
-                    <div className="searchResultArabic">
-                      {item.description}
-                    </div>
-                  ) : null}
-
+                  ← Search Again
                 </Link>
-              ))}
 
-            </div>
-
-          </div>
-        ) : null}
-
-
-        {/* NO RESULTS */}
-
-        {showNoResults ? (
-          <div className="searchEmpty noResults">
-
-            <div className="searchEmptyIcon">
-              🔎
-            </div>
-
-            <div className="searchEmptyLabel">
-              SEARCH
-            </div>
-
-            <h2>
-              No Results Found
-            </h2>
-
-            <p>
-              “{query}” ke liye abhi koi
-              Qur’an ya Islamic knowledge
-              result nahi mila.
-            </p>
-
-            <div className="noResultsHint">
-
-              <span>
-                Try searching for
-              </span>
-
-              <strong>
-                Fatiha
-              </strong>
-
-              <strong>
-                Al-Baqarah
-              </strong>
-
-              <strong>
-                1:2
-              </strong>
-
-            </div>
-
-            <Link
-              href="/"
-              className="searchEmptyButton"
-            >
-              ← Search Again
-            </Link>
-
-          </div>
-        ) : null}
+              </div>
+            ) : null}
+          </>
+        )}
 
       </section>
 
     </main>
   );
-                  }
+}
+
+function SearchResultSection({
+  title,
+  label,
+  results,
+}: {
+  title: string;
+  label: string;
+  results: ReturnType<
+    typeof searchContent
+  >;
+}) {
+  return (
+    <div className="searchSection">
+
+      <div className="searchSectionTitle">
+
+        <span>
+          {label}
+        </span>
+
+        <h2>
+          {title}
+        </h2>
+
+      </div>
+
+      <div className="searchResultList">
+
+        {results.map((result) => {
+          const item =
+            result.document;
+
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              className="searchResultCard"
+            >
+
+              <div className="searchResultTop">
+
+                <span className="searchResultNumber">
+                  {getTypeLabel(item.type)}
+                </span>
+
+                <span className="searchResultSurah">
+                  {item.title}
+                </span>
+
+                <span className="searchResultArrow">
+                  →
+                </span>
+
+              </div>
+
+              <div className="searchResultArabic">
+                {getPreview(item)}
+              </div>
+
+            </Link>
+          );
+        })}
+
+      </div>
+    </div>
+  );
+}
+
+function getTypeLabel(
+  type: string
+): string {
+  switch (type) {
+    case "quran":
+      return "QUR’AN";
+
+    case "ilm-ka-safar":
+      return "ILM";
+
+    case "hadith":
+      return "HADITH";
+
+    case "naat":
+      return "NAAT";
+
+    case "manqabat":
+      return "MANQABAT";
+
+    case "kanz-ul-iman":
+      return "KANZ";
+
+    case "fatawa":
+      return "FATAWA";
+
+    case "book":
+      return "BOOK";
+
+    default:
+      return "ISLAMIC";
+  }
+}
+
+function getPreview(
+  item: {
+    arabic?: string;
+    urdu?: string;
+    hindi?: string;
+    english?: string;
+    text: string;
+  }
+): string {
+  return (
+    item.arabic ||
+    item.urdu ||
+    item.hindi ||
+    item.english ||
+    item.text
+  );
+}
