@@ -2,6 +2,7 @@
 
 import {
   alaHazratResearchFactsWithSources,
+  resolveAlaHazratSources,
 } from "@/data/ala-hazrat";
 
 function formatTopic(topic: string) {
@@ -33,41 +34,75 @@ export default function AlaHazratResearchFacts() {
       </div>
 
       <div className="alaHazratResearchFactsGrid">
-        {verifiedFacts.map((fact) => (
-          <article
-            key={fact.id}
-            className="alaHazratResearchFactCard"
-          >
-            <div className="alaHazratResearchFactTop">
-              <span className="alaHazratResearchFactTopic">
-                {formatTopic(fact.topic)}
-              </span>
+        {verifiedFacts.map((fact) => {
+          const sources = resolveAlaHazratSources(
+            fact.sourceIds
+          );
 
-              <span className="alaHazratResearchFactStatus">
-                Verified
-              </span>
-            </div>
+          return (
+            <article
+              key={fact.id}
+              className="alaHazratResearchFactCard"
+            >
+              <div className="alaHazratResearchFactTop">
+                <span className="alaHazratResearchFactTopic">
+                  {formatTopic(fact.topic)}
+                </span>
 
-            <p className="alaHazratResearchFactClaim">
-              {fact.claim}
-            </p>
+                <span className="alaHazratResearchFactStatus">
+                  Verified
+                </span>
+              </div>
 
-            <div className="alaHazratResearchFactMeta">
-              <span>
-                {fact.sourceCount}{" "}
-                {fact.sourceCount === 1
-                  ? "Source"
-                  : "Sources"}
-              </span>
-            </div>
-
-            {fact.notes && (
-              <p className="alaHazratResearchFactNotes">
-                {fact.notes}
+              <p className="alaHazratResearchFactClaim">
+                {fact.claim}
               </p>
-            )}
-          </article>
-        ))}
+
+              {fact.notes && (
+                <p className="alaHazratResearchFactNotes">
+                  {fact.notes}
+                </p>
+              )}
+
+              {sources.length > 0 && (
+                <div className="alaHazratResearchFactSources">
+                  <p className="alaHazratResearchFactSourcesTitle">
+                    Sources
+                  </p>
+
+                  <div className="alaHazratResearchFactSourceList">
+                    {sources.map((source) => (
+                      <div
+                        key={source.id}
+                        className="alaHazratResearchFactSource"
+                      >
+                        <div>
+                          <p className="alaHazratResearchFactSourceTitle">
+                            {source.title}
+                          </p>
+
+                          <p className="alaHazratResearchFactSourceOrganization">
+                            {source.organization}
+                          </p>
+                        </div>
+
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="alaHazratResearchFactSourceLink"
+                        >
+                          View Source
+                          <span aria-hidden="true">→</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </article>
+          );
+        })}
       </div>
     </section>
   );
