@@ -38,7 +38,7 @@ export const alaHazratWorks: AlaHazratWork[] = [
   {
     slug: "kanz-ul-iman",
     title: "Kanz-ul-Iman",
-    href: "/kanz-ul-iman",
+    href: "/ala-hazrat/books/kanz-ul-iman",
     category: "book",
     status: "available",
     description: "Kanz-ul-Iman",
@@ -47,7 +47,7 @@ export const alaHazratWorks: AlaHazratWork[] = [
   {
     slug: "fatawa-razawiyya",
     title: "Fatawa Razawiyya",
-    href: "/fatawa-razawiyya",
+    href: "/ala-hazrat/books/fatawa-razawiyya",
     category: "book",
     status: "available",
     description: "Fatawa Razawiyya",
@@ -56,7 +56,7 @@ export const alaHazratWorks: AlaHazratWork[] = [
   {
     slug: "hadaiq-e-bakhshish",
     title: "Hadaiq-e-Bakhshish",
-    href: "/hadaiq-e-bakhshish",
+    href: "/ala-hazrat/books/hadaiq-e-bakhshish",
     category: "poetry-book",
     status: "available",
     description:
