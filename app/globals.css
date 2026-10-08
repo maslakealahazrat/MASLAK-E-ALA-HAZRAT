@@ -5626,3 +5626,159 @@ html.dark .alaHazratReferenceCard {
     font-size: 19px;
   }
 }
+/* =========================================
+   ALA HAZRAT — VERIFIED RESEARCH FACTS
+   ========================================= */
+
+.alaHazratResearchFacts {
+  width: 100%;
+  padding: 72px 20px;
+}
+
+.alaHazratResearchFactsHeader {
+  width: min(1100px, 100%);
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.alaHazratResearchFactsEyebrow {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.alaHazratResearchFactsHeader h2 {
+  margin: 0;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.15;
+}
+
+.alaHazratResearchFactsIntro {
+  max-width: 760px;
+  margin: 16px auto 0;
+  font-size: 16px;
+  line-height: 1.8;
+  opacity: 0.78;
+}
+
+.alaHazratResearchFactsGrid {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.alaHazratResearchFactCard {
+  position: relative;
+  padding: 24px;
+  border: 1px solid rgba(121, 167, 165, 0.28);
+  border-radius: 20px;
+  background: rgba(152, 197, 195, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.alaHazratResearchFactCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(121, 167, 165, 0.55);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.08);
+}
+
+.alaHazratResearchFactTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.alaHazratResearchFactTopic,
+.alaHazratResearchFactStatus {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.alaHazratResearchFactTopic {
+  background: rgba(121, 167, 165, 0.14);
+}
+
+.alaHazratResearchFactStatus {
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+}
+
+.alaHazratResearchFactClaim {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.alaHazratResearchFactMeta {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(121, 167, 165, 0.2);
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.72;
+}
+
+.alaHazratResearchFactNotes {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  opacity: 0.68;
+}
+
+@media (max-width: 900px) {
+  .alaHazratResearchFactsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .alaHazratResearchFacts {
+    padding: 52px 16px;
+  }
+
+  .alaHazratResearchFactsHeader {
+    margin-bottom: 26px;
+  }
+
+  .alaHazratResearchFactsIntro {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .alaHazratResearchFactsGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .alaHazratResearchFactCard {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .alaHazratResearchFactTop {
+    align-items: flex-start;
+  }
+
+  .alaHazratResearchFactClaim {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  }
