@@ -406,11 +406,15 @@ console.log(
 );
 console.log("");
 
-const contentSectionIds = [
+const contentSectionBlocks = [
   ...seeratContentFile.matchAll(
-    /id:\s*"([^"]+)"/g
+    /\{\s*id:\s*"([^"]+)"[\s\S]*?title:\s*"([^"]*)"[\s\S]*?paragraphs:\s*\[([\s\S]*?)\][\s\S]*?\}/g
   ),
-].map((match) => match[1]);
+];
+
+const contentSectionIds = contentSectionBlocks.map(
+  (match) => match[1]
+);
 
 const uniqueContentSectionIds = new Set(
   contentSectionIds
@@ -462,19 +466,16 @@ for (const sectionId of seeratSectionIds) {
 }
 
 /*
- * 4. Check every content section has a title
+ * 4. Validate every detected content section
  */
-const contentSectionBlocks = [
-  ...seeratContentFile.matchAll(
-    /\{\s*id:\s*"([^"]+)"[\s\S]*?title:\s*"([\s\S]*?)"[\s\S]*?paragraphs:\s*\[([\s\S]*?)\][\s\S]*?\}/g
-  ),
-];
-
 for (const section of contentSectionBlocks) {
   const sectionId = section[1];
   const title = section[2].trim();
   const paragraphsBlock = section[3];
 
+  /*
+   * Empty title
+   */
   if (!title) {
     seeratContentErrors++;
 
@@ -484,7 +485,7 @@ for (const section of contentSectionBlocks) {
   }
 
   /*
-   * 5. Check paragraphs exist
+   * Extract paragraph strings
    */
   const paragraphs = [
     ...paragraphsBlock.matchAll(
@@ -494,19 +495,39 @@ for (const section of contentSectionBlocks) {
     .map((match) => match[1].trim())
     .filter(Boolean);
 
+  /*
+   * Empty paragraphs array
+   */
   if (paragraphs.length === 0) {
     seeratContentErrors++;
 
     console.log(
       `❌ ${sectionId}: No Seerat content paragraph`
     );
+
+    continue;
+  }
+
+  /*
+   * Empty paragraph
+   */
+  const emptyParagraphs = [
+    ...paragraphsBlock.matchAll(
+      /"([\s\S]*?)"/g
+    ),
+  ].filter(
+    (match) => match[1].trim().length === 0
+  );
+
+  if (emptyParagraphs.length > 0) {
+    seeratContentErrors++;
+
+    console.log(
+      `❌ ${sectionId}: Contains empty paragraph(s)`
+    );
   }
 }
 
-/*
- * 6. Ensure content and Seerat structure have
- *    the same number of sections.
- */
 console.log(
   `Seerat Structure Sections: ${seeratSectionIds.size}`
 );
@@ -516,13 +537,16 @@ console.log(
 );
 
 console.log(
-  `Content Validation Errors:  ${seeratContentErrors}`
+  `Content Validation Errors: ${seeratContentErrors}`
 );
 
 if (seeratContentErrors > 0) {
   console.error("");
   console.error(
     "❌ Seerat content validation failed."
+  );
+  console.error(
+    "Fix the Seerat content errors listed above before deployment."
   );
 
   process.exit(1);
