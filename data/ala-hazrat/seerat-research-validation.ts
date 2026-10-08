@@ -1,7 +1,10 @@
 import { alaHazratSeeratSections } from "./seerat";
 import { alaHazratSeeratResearchMap } from "./seerat-research-map";
 import { alaHazratResearchFacts } from "./research";
-import { alaHazratTeachers, alaHazratIjazahs } from "./teachers";
+import {
+  alaHazratTeachers,
+  alaHazratIjazahs,
+} from "./teachers";
 import { alaHazratFamily } from "./family";
 import { alaHazratStudents } from "./students";
 import { alaHazratResearchWorks } from "./works-research";
@@ -26,16 +29,14 @@ export function validateSeeratResearchMapping(): SeeratResearchValidationResult 
     )
   );
 
-  const teacherIds = new Set(
-    [
-      ...alaHazratTeachers.map(
-        (teacher) => teacher.id
-      ),
-      ...alaHazratIjazahs.map(
-        (ijazah) => ijazah.scholarId
-      ),
-    ]
-  );
+  const teacherIds = new Set([
+    ...alaHazratTeachers.map(
+      (teacher) => teacher.id
+    ),
+    ...alaHazratIjazahs.map(
+      (ijazah) => ijazah.scholarId
+    ),
+  ]);
 
   const familyIds = new Set(
     alaHazratFamily.map(
@@ -61,6 +62,12 @@ export function validateSeeratResearchMapping(): SeeratResearchValidationResult 
     if (!sectionIds.has(mapping.sectionId)) {
       errors.push(
         `Unknown Seerat section: ${mapping.sectionId}`
+      );
+    }
+
+    if (mappedSectionIds.has(mapping.sectionId)) {
+      errors.push(
+        `Duplicate Seerat research mapping: ${mapping.sectionId}`
       );
     }
 
