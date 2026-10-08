@@ -6,3 +6,4 @@ export * from "./students";
 export * from "./works-research";
 export * from "./work-categories";
 export * from "./books-about";
+export * from "./research-facts";
