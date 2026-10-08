@@ -9,6 +9,13 @@ import {
 
 import { validateResearchRecord } from "./research-validation";
 
+type ValidatableResearchRecord = {
+  id: string;
+  sourceIds: string[];
+  status?: string;
+  verificationStatus?: string;
+};
+
 export type AlaHazratValidationReport = {
   collection: string;
   total: number;
@@ -22,11 +29,7 @@ export type AlaHazratValidationReport = {
 
 function validateCollection(
   collection: string,
-  records: {
-    id: string;
-    sourceIds: string[];
-    verificationStatus: string;
-  }[]
+  records: ValidatableResearchRecord[]
 ): AlaHazratValidationReport {
   const results = records.map(validateResearchRecord);
 
@@ -37,7 +40,9 @@ function validateCollection(
   return {
     collection,
     total: results.length,
-    valid: results.filter((result) => result.valid).length,
+    valid: results.filter(
+      (result) => result.valid
+    ).length,
     invalid: invalidResults.length,
     errors: invalidResults.map((result) => ({
       id: result.id,
