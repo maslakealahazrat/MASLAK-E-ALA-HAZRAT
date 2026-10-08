@@ -5,6 +5,7 @@ import { alaHazratSeeratSections } from "@/data/ala-hazrat/seerat";
 import { alaHazratSeeratContent } from "@/data/ala-hazrat/seerat-content";
 
 import {
+  alaHazratSources,
   getSeeratResearchFacts,
   getSeeratResearchTeachers,
   getSeeratResearchFamily,
@@ -143,6 +144,43 @@ export default async function AlaHazratSeeratSectionPage({
                       {fact.notes}
                     </p>
                   )}
+                
+                {fact.sourceCount > 0 && (
+  <div className="alaHazratSeeratDetailResearchSources">
+    <p className="alaHazratSeeratDetailResearchSourcesTitle">
+      Sources
+    </p>
+
+    {fact.sourceIds.map((sourceId) => {
+      const source = alaHazratSources.find(
+        (item) => item.id === sourceId
+      );
+
+      if (!source) {
+        return null;
+      }
+
+      return (
+        <a
+          key={source.id}
+          href={source.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="alaHazratSeeratDetailResearchSourceLink"
+        >
+          <span>
+            {source.title}
+          </span>
+
+          <span aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      );
+    })}
+  </div>
+)}
+                
                 </article>
               ))}
             </div>
