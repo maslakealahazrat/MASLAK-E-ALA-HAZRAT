@@ -113,6 +113,93 @@ if (invalidRecords > 0) {
 
 console.log("");
 console.log(
+  "======================================"
+);
+console.log(
+  "  SEERAT RESEARCH MAPPING VALIDATION"
+);
+console.log(
+  "======================================"
+);
+console.log("");
+
+const seeratMapFile = await readFile(
+  "data/ala-hazrat/seerat-research-map.ts",
+  "utf8"
+);
+
+const seeratSectionFile = await readFile(
+  "data/ala-hazrat/seerat.ts",
+  "utf8"
+);
+
+const seeratSectionIds = new Set(
+  [
+    ...seeratSectionFile.matchAll(
+      /id:\s*"([^"]+)"/g
+    ),
+  ].map((match) => match[1])
+);
+
+const mappedSectionIds = [
+  ...seeratMapFile.matchAll(
+    /sectionId:\s*"([^"]+)"/g
+  ),
+].map((match) => match[1]);
+
+const uniqueMappedSectionIds = new Set(
+  mappedSectionIds
+);
+
+let seeratMappingErrors = 0;
+
+for (const sectionId of mappedSectionIds) {
+  if (!seeratSectionIds.has(sectionId)) {
+    seeratMappingErrors++;
+
+    console.log(
+      `❌ Unknown Seerat section in mapping: ${sectionId}`
+    );
+  }
+}
+
+for (const sectionId of seeratSectionIds) {
+  if (!uniqueMappedSectionIds.has(sectionId)) {
+    seeratMappingErrors++;
+
+    console.log(
+      `❌ Missing research mapping for Seerat section: ${sectionId}`
+    );
+  }
+}
+
+console.log(
+  `Seerat Sections: ${seeratSectionIds.size}`
+);
+
+console.log(
+  `Mapped Sections: ${uniqueMappedSectionIds.size}`
+);
+
+console.log(
+  `Mapping Errors:  ${seeratMappingErrors}`
+);
+
+if (seeratMappingErrors > 0) {
+  console.error("");
+  console.error(
+    "❌ Seerat research mapping validation failed."
+  );
+
+  process.exit(1);
+}
+
+console.log(
+  "✓ Seerat research mapping passed validation."
+);
+
+console.log("");
+console.log(
   "✓ All research records passed validation."
 );
 console.log("");
