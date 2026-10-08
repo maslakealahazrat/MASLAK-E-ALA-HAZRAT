@@ -133,6 +133,11 @@ const seeratSectionFile = await readFile(
   "utf8"
 );
 
+const seeratContentFile = await readFile(
+  "data/ala-hazrat/seerat-content.ts",
+  "utf8"
+);
+
 const seeratSectionIds = new Set(
   [
     ...seeratSectionFile.matchAll(
@@ -389,12 +394,152 @@ console.log(
   "✓ Seerat research IDs passed validation."
 );
 
+console.log("");
 console.log(
-  "✓ No duplicate Seerat research mapping IDs found."
+  "======================================"
+);
+console.log(
+  "  SEERAT CONTENT VALIDATION"
+);
+console.log(
+  "======================================"
+);
+console.log("");
+
+const contentSectionIds = [
+  ...seeratContentFile.matchAll(
+    /id:\s*"([^"]+)"/g
+  ),
+].map((match) => match[1]);
+
+const uniqueContentSectionIds = new Set(
+  contentSectionIds
+);
+
+let seeratContentErrors = 0;
+
+/*
+ * 1. Duplicate content section IDs
+ */
+for (const sectionId of uniqueContentSectionIds) {
+  const occurrences = contentSectionIds.filter(
+    (id) => id === sectionId
+  ).length;
+
+  if (occurrences > 1) {
+    seeratContentErrors++;
+
+    console.log(
+      `❌ Duplicate Seerat content section ID: ${sectionId} (${occurrences} entries)`
+    );
+  }
+}
+
+/*
+ * 2. Unknown content section IDs
+ */
+for (const sectionId of contentSectionIds) {
+  if (!seeratSectionIds.has(sectionId)) {
+    seeratContentErrors++;
+
+    console.log(
+      `❌ Unknown Seerat content section: ${sectionId}`
+    );
+  }
+}
+
+/*
+ * 3. Missing content for a Seerat section
+ */
+for (const sectionId of seeratSectionIds) {
+  if (!uniqueContentSectionIds.has(sectionId)) {
+    seeratContentErrors++;
+
+    console.log(
+      `❌ Missing Seerat content section: ${sectionId}`
+    );
+  }
+}
+
+/*
+ * 4. Check every content section has a title
+ */
+const contentSectionBlocks = [
+  ...seeratContentFile.matchAll(
+    /\{\s*id:\s*"([^"]+)"[\s\S]*?title:\s*"([\s\S]*?)"[\s\S]*?paragraphs:\s*\[([\s\S]*?)\][\s\S]*?\}/g
+  ),
+];
+
+for (const section of contentSectionBlocks) {
+  const sectionId = section[1];
+  const title = section[2].trim();
+  const paragraphsBlock = section[3];
+
+  if (!title) {
+    seeratContentErrors++;
+
+    console.log(
+      `❌ ${sectionId}: Empty Seerat content title`
+    );
+  }
+
+  /*
+   * 5. Check paragraphs exist
+   */
+  const paragraphs = [
+    ...paragraphsBlock.matchAll(
+      /"([\s\S]*?)"/g
+    ),
+  ]
+    .map((match) => match[1].trim())
+    .filter(Boolean);
+
+  if (paragraphs.length === 0) {
+    seeratContentErrors++;
+
+    console.log(
+      `❌ ${sectionId}: No Seerat content paragraph`
+    );
+  }
+}
+
+/*
+ * 6. Ensure content and Seerat structure have
+ *    the same number of sections.
+ */
+console.log(
+  `Seerat Structure Sections: ${seeratSectionIds.size}`
+);
+
+console.log(
+  `Seerat Content Sections:   ${uniqueContentSectionIds.size}`
+);
+
+console.log(
+  `Content Validation Errors:  ${seeratContentErrors}`
+);
+
+if (seeratContentErrors > 0) {
+  console.error("");
+  console.error(
+    "❌ Seerat content validation failed."
+  );
+
+  process.exit(1);
+}
+
+console.log(
+  "✓ Seerat content passed validation."
 );
 
 console.log("");
 console.log(
-  "✓ All research records passed validation."
+  "======================================"
+);
+console.log(
+  "  ALL RESEARCH VALIDATION PASSED"
+);
+console.log(
+  "======================================"
 );
 console.log("");
