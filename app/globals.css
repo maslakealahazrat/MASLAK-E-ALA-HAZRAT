@@ -3782,3 +3782,844 @@ input {
     padding-right: 6px;
   }
   }
+
+/* =========================================================
+   ALA HAZRAT — PREMIUM KNOWLEDGE HUB
+   ========================================================= */
+
+.alaHazratPage,
+.alaHazratBooksPage {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+
+/* =========================
+   HERO
+   ========================= */
+
+.alaHazratHero {
+  position: relative;
+  padding: 42px 16px 48px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(121, 167, 165, 0.18),
+      transparent 58%
+    ),
+    var(--bg);
+}
+
+.alaHazratHero::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  right: -110px;
+  bottom: -120px;
+  border-radius: 50%;
+  background: rgba(152, 197, 195, 0.08);
+  pointer-events: none;
+}
+
+.alaHazratHeroInner {
+  position: relative;
+  z-index: 1;
+  width: min(900px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.alaHazratBackLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 28px;
+
+  color: var(--primary-dark);
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.alaHazratBackLink:hover {
+  opacity: 0.75;
+  transform: translateX(-2px);
+}
+
+.alaHazratEyebrow,
+.alaHazratBooksEyebrow {
+  margin: 0 0 8px;
+
+  color: var(--primary-dark);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.2em;
+}
+
+.alaHazratHero h1 {
+  margin: 0;
+
+  font-size: clamp(36px, 8vw, 58px);
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.alaHazratArabicName {
+  margin: 12px 0 5px;
+
+  color: var(--primary-dark);
+
+  font-family:
+    "Noto Naskh Arabic",
+    "Amiri",
+    serif;
+
+  font-size: clamp(28px, 7vw, 40px);
+  line-height: 1.7;
+
+  direction: rtl;
+}
+
+.alaHazratHeroDescription {
+  margin: 8px auto 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   COMMON SECTION
+   ========================= */
+
+.alaHazratBiographySection,
+.alaHazratWorksSection,
+.alaHazratPoetrySection,
+.alaHazratReferencesSection {
+  width: min(1000px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 58px 0;
+}
+
+.alaHazratSectionHeader {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.alaHazratSectionEyebrow {
+  margin: 0 0 8px;
+
+  color: var(--primary-dark);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+}
+
+.alaHazratSectionHeader h2 {
+  margin: 0;
+
+  font-size: clamp(25px, 5vw, 34px);
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+}
+
+.alaHazratSectionHeader p {
+  max-width: 650px;
+  margin: 10px auto 0;
+
+  color: var(--muted);
+
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+
+/* =========================
+   BIOGRAPHY FACTS
+   ========================= */
+
+.alaHazratFacts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+
+  margin-bottom: 38px;
+}
+
+.alaHazratFactCard {
+  min-width: 0;
+
+  padding: 17px;
+
+  border: 1px solid var(--border);
+  border-radius: 17px;
+
+  background: var(--surface);
+
+  box-shadow: var(--shadow);
+
+  text-align: center;
+}
+
+.alaHazratFactCard span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.alaHazratFactCard strong {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   BIOGRAPHY CONTENT
+   ========================= */
+
+.alaHazratBiographyContent {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.alaHazratBiographyBlock {
+  padding: 27px 0;
+
+  border-top: 1px solid var(--border);
+}
+
+.alaHazratBiographyBlock:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.alaHazratBiographyBlock h2 {
+  margin: 0 0 12px;
+
+  color: var(--text);
+
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.alaHazratBiographyBlock p {
+  margin: 0 0 11px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.alaHazratBiographyBlock p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================
+   BOOKS & WORKS SECTION
+   ========================= */
+
+.alaHazratWorksSection {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.alaHazratWorks {
+  width: 100%;
+}
+
+.alaHazratWorksHeader {
+  display: none;
+}
+
+.alaHazratWorksIntro {
+  display: none;
+}
+
+.alaHazratWorksGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.alaHazratWorkCard {
+  position: relative;
+
+  min-width: 0;
+  min-height: 190px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(152, 197, 195, 0.14),
+      var(--surface)
+    );
+
+  border: 1px solid var(--border);
+  border-radius: 20px;
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.alaHazratWorkCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+  box-shadow:
+    0 16px 38px rgba(38, 77, 74, 0.12);
+}
+
+.alaHazratWorkCard.isComingSoon {
+  opacity: 0.7;
+}
+
+.alaHazratWorkIcon {
+  width: 44px;
+  height: 44px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 16px;
+
+  border-radius: 13px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--box) 38%,
+      var(--surface)
+    );
+
+  color: var(--primary-dark);
+
+  font-size: 21px;
+}
+
+.alaHazratWorkContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.alaHazratWorkContent h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.alaHazratWorkContent p {
+  margin: 7px 0 15px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.alaHazratWorkLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-top: auto;
+
+  color: var(--primary-dark);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  transition:
+    gap 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.alaHazratWorkLink:hover {
+  gap: 10px;
+  opacity: 0.75;
+}
+
+.alaHazratWorkComingSoon {
+  display: inline-flex;
+  align-items: center;
+
+  margin-top: auto;
+
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.alaHazratAllBooks {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 27px;
+}
+
+.alaHazratAllBooksLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 42px;
+  padding: 0 19px;
+
+  border: 1px solid rgba(121, 167, 165, 0.35);
+  border-radius: 999px;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.alaHazratAllBooksLink:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+
+/* =========================
+   POETRY
+   ========================= */
+
+.alaHazratPoetryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.alaHazratPoetryCard {
+  min-height: 145px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px 12px;
+
+  text-align: center;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 19px;
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.alaHazratPoetryCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+}
+
+.alaHazratPoetryCard span {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 10px;
+
+  border-radius: 50%;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--box) 42%,
+      var(--surface)
+    );
+
+  color: var(--primary-dark);
+
+  font-family:
+    "Noto Naskh Arabic",
+    "Amiri",
+    serif;
+
+  font-size: 21px;
+}
+
+.alaHazratPoetryCard strong {
+  font-size: 14px;
+}
+
+.alaHazratPoetryCard small {
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+}
+
+
+/* =========================
+   REFERENCES
+   ========================= */
+
+.alaHazratReferencesSection {
+  padding-bottom: 70px;
+}
+
+.alaHazratReferencesList {
+  display: grid;
+  gap: 10px;
+
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.alaHazratReferenceCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding: 16px 18px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+
+  color: var(--text);
+
+  box-shadow: 0 7px 22px rgba(38, 77, 74, 0.05);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.alaHazratReferenceCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+}
+
+.alaHazratReferenceCard span:last-child {
+  color: var(--primary-dark);
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   ALA HAZRAT — BOOKS PAGE
+   ========================================================= */
+
+.alaHazratBooksHero {
+  padding: 40px 16px 45px;
+
+  text-align: center;
+
+  border-bottom: 1px solid var(--border);
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(121, 167, 165, 0.16),
+      transparent 58%
+    ),
+    var(--bg);
+}
+
+.alaHazratBooksHeroContent {
+  width: min(850px, 100%);
+  margin: 0 auto;
+}
+
+.alaHazratBooksHero h1 {
+  margin: 0;
+
+  font-size: clamp(34px, 8vw, 52px);
+  line-height: 1.15;
+}
+
+.alaHazratBooksArabic {
+  margin: 10px 0 5px;
+
+  color: var(--primary-dark);
+
+  font-family:
+    "Noto Naskh Arabic",
+    "Amiri",
+    serif;
+
+  font-size: 30px;
+  line-height: 1.7;
+
+  direction: rtl;
+}
+
+.alaHazratBooksDescription {
+  max-width: 620px;
+  margin: 10px auto 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.alaHazratBooksContent {
+  width: min(1000px, calc(100% - 32px));
+  margin: 0 auto;
+
+  padding: 52px 0 70px;
+}
+
+
+/* =========================================================
+   ALA HAZRAT — DARK MODE
+   ========================================================= */
+
+html.dark .alaHazratHero,
+html.dark .alaHazratBooksHero {
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(121, 167, 165, 0.12),
+      transparent 58%
+    ),
+    var(--bg);
+}
+
+html.dark .alaHazratWorkCard {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(152, 197, 195, 0.08),
+      var(--surface)
+    );
+}
+
+html.dark .alaHazratPoetryCard,
+html.dark .alaHazratFactCard,
+html.dark .alaHazratReferenceCard {
+  background: var(--surface);
+}
+
+
+/* =========================================================
+   ALA HAZRAT — MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .alaHazratHero {
+    padding: 32px 14px 38px;
+  }
+
+  .alaHazratBackLink {
+    margin-bottom: 23px;
+  }
+
+  .alaHazratHero h1 {
+    font-size: 37px;
+  }
+
+  .alaHazratArabicName {
+    font-size: 29px;
+  }
+
+  .alaHazratHeroDescription {
+    font-size: 13px;
+  }
+
+  .alaHazratBiographySection,
+  .alaHazratWorksSection,
+  .alaHazratPoetrySection,
+  .alaHazratReferencesSection {
+    width: calc(100% - 22px);
+    padding: 44px 0;
+  }
+
+  .alaHazratSectionHeader {
+    margin-bottom: 24px;
+  }
+
+  .alaHazratSectionHeader h2 {
+    font-size: 25px;
+  }
+
+  .alaHazratSectionHeader p {
+    font-size: 12px;
+  }
+
+  .alaHazratFacts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+
+    margin-bottom: 30px;
+  }
+
+  .alaHazratFactCard {
+    padding: 14px 10px;
+    border-radius: 15px;
+  }
+
+  .alaHazratFactCard span {
+    font-size: 9px;
+  }
+
+  .alaHazratFactCard strong {
+    font-size: 12px;
+  }
+
+  .alaHazratBiographyBlock {
+    padding: 23px 0;
+  }
+
+  .alaHazratBiographyBlock h2 {
+    font-size: 19px;
+  }
+
+  .alaHazratBiographyBlock p {
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  .alaHazratWorksGrid {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .alaHazratWorkCard {
+    min-height: 0;
+    padding: 17px;
+    border-radius: 18px;
+  }
+
+  .alaHazratWorkIcon {
+    width: 41px;
+    height: 41px;
+    margin-bottom: 13px;
+  }
+
+  .alaHazratPoetryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .alaHazratPoetryCard {
+    min-height: 130px;
+    border-radius: 17px;
+  }
+
+  .alaHazratReferenceCard {
+    padding: 14px;
+    font-size: 11px;
+  }
+
+  .alaHazratBooksHero {
+    padding: 32px 14px 38px;
+  }
+
+  .alaHazratBooksHero h1 {
+    font-size: 35px;
+  }
+
+  .alaHazratBooksArabic {
+    font-size: 28px;
+  }
+
+  .alaHazratBooksDescription {
+    font-size: 13px;
+  }
+
+  .alaHazratBooksContent {
+    width: calc(100% - 22px);
+    padding: 42px 0 55px;
+  }
+
+}
+
+
+/* =========================================================
+   ALA HAZRAT — SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+  .alaHazratHero h1 {
+    font-size: 33px;
+  }
+
+  .alaHazratArabicName {
+    font-size: 27px;
+  }
+
+  .alaHazratFacts {
+    grid-template-columns: 1fr;
+  }
+
+  .alaHazratFactCard {
+    text-align: left;
+  }
+
+  .alaHazratPoetryCard {
+    min-height: 120px;
+    padding: 15px 8px;
+  }
+
+}
