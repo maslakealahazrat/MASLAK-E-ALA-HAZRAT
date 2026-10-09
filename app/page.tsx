@@ -390,15 +390,15 @@ if (savedReadingProgress) {
         {menuOpen && (
           <div className="mobileMenu">
             <div className="menuInner">
-              {navItems.map(([label, href]) => (
-                <a
-                  key={href}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {label}
-                </a>
-              ))}
+              {navItems.map((item) => (
+  <a
+    key={item.href}
+    href={item.href}
+    onClick={() => setMenuOpen(false)}
+  >
+    {item.label}
+  </a>
+))}
             </div>
           </div>
         )}
