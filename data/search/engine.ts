@@ -18,19 +18,11 @@ type PreparedDocument = {
   tokens: string[];
 };
 
-const preparedCache = new WeakMap<
-  SearchDocument,
-  PreparedDocument
->();
+const preparedCache = new WeakMap<SearchDocument, PreparedDocument>();
 
-function prepareDocument(
-  document: SearchDocument
-): PreparedDocument {
+function prepareDocument(document: SearchDocument): PreparedDocument {
   const cached = preparedCache.get(document);
-
-  if (cached) {
-    return cached;
-  }
+  if (cached) return cached;
 
   const text = [
     document.title,
@@ -40,6 +32,7 @@ function prepareDocument(
     document.hindi,
     document.english,
     document.roman,
+    document.keywords?.join(" "),
     document.surahNumber?.toString(),
     document.ayahNumber?.toString(),
     document.day?.toString(),
@@ -49,44 +42,32 @@ function prepareDocument(
 
   const prepared: PreparedDocument = {
     document,
-    normalizedTitle: normalizeSearchText(
-      document.title
-    ),
+    normalizedTitle: normalizeSearchText(document.title),
     normalizedText: normalizeSearchText(text),
     compactText: compactSearchText(text),
     tokens: tokenizeSearchText(text),
   };
 
   preparedCache.set(document, prepared);
-
   return prepared;
 }
 
-function levenshtein(
-  a: string,
-  b: string
-): number {
+function levenshtein(a: string, b: string): number {
   if (a === b) return 0;
-
   if (!a.length) return b.length;
   if (!b.length) return a.length;
 
-  // Avoid expensive calculations for very different lengths.
   if (Math.abs(a.length - b.length) > 3) {
     return Math.max(a.length, b.length);
   }
 
-  let previous = Array.from(
-    { length: b.length + 1 },
-    (_, i) => i
-  );
+  let previous = Array.from({ length: b.length + 1 }, (_, i) => i);
 
   for (let i = 1; i <= a.length; i++) {
     const current = [i];
 
     for (let j = 1; j <= b.length; j++) {
-      const cost =
-        a[i - 1] === b[j - 1] ? 0 : 1;
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
 
       current[j] = Math.min(
         current[j - 1] + 1,
@@ -101,35 +82,12 @@ function levenshtein(
   return previous[b.length];
 }
 
-function similarity(
-  a: string,
-  b: string
-): number {
-  if (!a || !b) return 0;
-
-  if (a === b) return 1;
-
-  if (Math.abs(a.length - b.length) > 3) {
-    return 0;
-  }
-
-  const distance = levenshtein(a, b);
-
-  return (
-    1 -
-    distance / Math.max(a.length, b.length)
-  );
-}
-
 function getScore(
   prepared: PreparedDocument,
-  normalizedQuery: string,
-  queryCompact: string,
+  query: string,
+  compactQuery: string,
   queryTokens: string[]
-): {
-  score: number;
-  matchType: SearchResult["matchType"];
-} {
+): { score: number; matchType: SearchResult["matchType"] } {
   const {
     document,
     normalizedTitle,
@@ -138,123 +96,60 @@ function getScore(
     tokens,
   } = prepared;
 
-  // Exact title match.
-  if (normalizedTitle === normalizedQuery) {
-    return {
-      score: 1000,
-      matchType: "exact",
-    };
+  if (normalizedTitle === query) {
+    return { score: 1000, matchType: "exact" };
   }
 
-  // Exact full-text match.
-  if (normalizedText === normalizedQuery) {
-    return {
-      score: 980,
-      matchType: "exact",
-    };
+  if (normalizedText === query) {
+    return { score: 980, matchType: "exact" };
   }
 
-  // Match text without spaces.
-  if (
-    queryCompact &&
-    compactText.includes(queryCompact)
-  ) {
-    return {
-      score: 950,
-      matchType: "exact",
-    };
+  if (compactQuery && compactText.includes(compactQuery)) {
+    return { score: 950, matchType: "exact" };
   }
 
-  // Strong title match.
-  if (
-    normalizedTitle.includes(normalizedQuery)
-  ) {
-    return {
-      score: 900,
-      matchType: "strong",
-    };
+  if (normalizedTitle.includes(query)) {
+    return { score: 900, matchType: "strong" };
   }
 
-  // Strong text match.
-  if (
-    containsNormalizedText(
-      document.text,
-      normalizedQuery
-    )
-  ) {
-    return {
-      score: 850,
-      matchType: "strong",
-    };
+  if (containsNormalizedText(document.text, query)) {
+    return { score: 850, matchType: "strong" };
   }
 
-  // Token matching.
   let matchedTokens = 0;
 
   for (const queryToken of queryTokens) {
-    if (
-      tokens.some((token) =>
-        token.includes(queryToken)
-      )
-    ) {
+    if (tokens.some((token) => token.includes(queryToken))) {
       matchedTokens++;
     }
   }
 
-  if (queryTokens.length > 0 && matchedTokens > 0) {
-    const ratio =
-      matchedTokens / queryTokens.length;
+  if (queryTokens.length && matchedTokens) {
+    const ratio = matchedTokens / queryTokens.length;
 
     if (ratio >= 0.75) {
-      return {
-        score: 750 + ratio * 50,
-        matchType: "strong",
-      };
+      return { score: 750 + ratio * 50, matchType: "strong" };
     }
 
     if (ratio >= 0.5) {
-      return {
-        score: 650 + ratio * 50,
-        matchType: "strong",
-      };
+      return { score: 650 + ratio * 50, matchType: "strong" };
     }
   }
 
-  // Fuzzy matching is reserved for unmatched documents.
-  // This keeps expensive comparisons out of common matches.
   let bestSimilarity = 0;
 
   for (const queryToken of queryTokens) {
     if (queryToken.length < 4) continue;
 
-    for (const documentToken of tokens) {
-      if (documentToken.length < 4) continue;
+    for (const token of tokens) {
+      if (token.length < 4) continue;
+      if (Math.abs(queryToken.length - token.length) > 2) continue;
 
-      // Ignore comparisons with substantially different lengths.
-      if (
-        Math.abs(
-          queryToken.length - documentToken.length
-        ) > 2
-      ) {
-        continue;
-      }
+      const distance = levenshtein(queryToken, token);
+      const similarity =
+        1 - distance / Math.max(queryToken.length, token.length);
 
-      const value = similarity(
-        queryToken,
-        documentToken
-      );
-
-      if (value > bestSimilarity) {
-        bestSimilarity = value;
-      }
-
-      if (bestSimilarity >= 0.9) {
-        break;
-      }
-    }
-
-    if (bestSimilarity >= 0.9) {
-      break;
+      bestSimilarity = Math.max(bestSimilarity, similarity);
     }
   }
 
@@ -265,10 +160,26 @@ function getScore(
     };
   }
 
-  return {
-    score: 0,
-    matchType: "similar",
-  };
+  return { score: 0, matchType: "similar" };
+}
+
+function getUniqueKey(document: SearchDocument): string {
+  if (document.type === "quran") {
+    return `quran:${document.id}`;
+  }
+
+  const normalizedTitle = compactSearchText(
+    normalizeSearchText(document.title)
+  );
+
+  const normalizedHref = document.href
+    .split("#")[0]
+    .split("?")[0]
+    .replace(/\/+$/, "")
+    .toLowerCase();
+
+  // Same page linked more than once.
+  return `${document.type}:${normalizedHref || normalizedTitle}`;
 }
 
 export function searchContent(
@@ -276,33 +187,21 @@ export function searchContent(
   query: string
 ): SearchResult[] {
   const trimmed = query.trim();
+  if (!trimmed) return [];
 
-  if (!trimmed) {
-    return [];
-  }
+  const normalizedQuery = normalizeSearchText(trimmed);
+  const compactQuery = compactSearchText(trimmed);
+  const queryTokens = tokenizeSearchText(trimmed);
 
-  const normalizedQuery =
-    normalizeSearchText(trimmed);
-
-  const queryCompact =
-    compactSearchText(trimmed);
-
-  const queryTokens =
-    tokenizeSearchText(trimmed);
-
-  if (!normalizedQuery) {
-    return [];
-  }
+  if (!normalizedQuery) return [];
 
   const results: SearchResult[] = [];
 
   for (const document of documents) {
-    const prepared = prepareDocument(document);
-
     const result = getScore(
-      prepared,
+      prepareDocument(document),
       normalizedQuery,
-      queryCompact,
+      compactQuery,
       queryTokens
     );
 
@@ -315,38 +214,17 @@ export function searchContent(
     }
   }
 
-    results.sort((a, b) => {
-    if (a.matchType !== b.matchType) {
-      const order = {
-        exact: 0,
-        strong: 1,
-        similar: 2,
-      };
+  results.sort((a, b) => b.score - a.score);
 
-      return order[a.matchType] - order[b.matchType];
-    }
-
-    return b.score - a.score;
-  });
-
-  // Qur'an ke alag-alag Ayah results ko alag rakho.
-  // Baaki content mein ek hi page ke duplicate results hatao.
   const uniqueResults: SearchResult[] = [];
   const seen = new Set<string>();
 
   for (const result of results) {
-    const document = result.document;
+    const key = getUniqueKey(result.document);
 
-    const uniqueKey =
-      document.type === "quran"
-        ? `quran:${document.id}`
-        : `${document.type}:${document.href}`;
+    if (seen.has(key)) continue;
 
-    if (seen.has(uniqueKey)) {
-      continue;
-    }
-
-    seen.add(uniqueKey);
+    seen.add(key);
     uniqueResults.push(result);
   }
 
