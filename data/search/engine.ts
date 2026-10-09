@@ -10,6 +10,58 @@ import type {
   SearchResult,
 } from "./types";
 
+type PreparedDocument = {
+  document: SearchDocument;
+  normalizedTitle: string;
+  normalizedText: string;
+  compactText: string;
+  tokens: string[];
+};
+
+const preparedCache = new WeakMap<
+  SearchDocument,
+  PreparedDocument
+>();
+
+function prepareDocument(
+  document: SearchDocument
+): PreparedDocument {
+  const cached = preparedCache.get(document);
+
+  if (cached) {
+    return cached;
+  }
+
+  const text = [
+    document.title,
+    document.text,
+    document.arabic,
+    document.urdu,
+    document.hindi,
+    document.english,
+    document.roman,
+    document.surahNumber?.toString(),
+    document.ayahNumber?.toString(),
+    document.day?.toString(),
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const prepared: PreparedDocument = {
+    document,
+    normalizedTitle: normalizeSearchText(
+      document.title
+    ),
+    normalizedText: normalizeSearchText(text),
+    compactText: compactSearchText(text),
+    tokens: tokenizeSearchText(text),
+  };
+
+  preparedCache.set(document, prepared);
+
+  return prepared;
+}
+
 function levenshtein(
   a: string,
   b: string
@@ -18,6 +70,11 @@ function levenshtein(
 
   if (!a.length) return b.length;
   if (!b.length) return a.length;
+
+  // Avoid expensive calculations for very different lengths.
+  if (Math.abs(a.length - b.length) > 3) {
+    return Math.max(a.length, b.length);
+  }
 
   let previous = Array.from(
     { length: b.length + 1 },
@@ -50,84 +107,57 @@ function similarity(
 ): number {
   if (!a || !b) return 0;
 
+  if (a === b) return 1;
+
+  if (Math.abs(a.length - b.length) > 3) {
+    return 0;
+  }
+
   const distance = levenshtein(a, b);
 
   return (
     1 -
-    distance /
-      Math.max(a.length, b.length)
+    distance / Math.max(a.length, b.length)
   );
 }
 
-function getDocumentText(
-  document: SearchDocument
-): string {
-  return [
-    document.title,
-    document.text,
-    document.arabic,
-    document.urdu,
-    document.hindi,
-    document.english,
-    document.roman,
-    document.surahNumber?.toString(),
-    document.ayahNumber?.toString(),
-    document.day?.toString(),
-  ]
-    .filter(Boolean)
-    .join(" ");
-}
-
 function getScore(
-  document: SearchDocument,
-  query: string
+  prepared: PreparedDocument,
+  normalizedQuery: string,
+  queryCompact: string,
+  queryTokens: string[]
 ): {
   score: number;
   matchType: SearchResult["matchType"];
 } {
-  const normalizedQuery =
-    normalizeSearchText(query);
+  const {
+    document,
+    normalizedTitle,
+    normalizedText,
+    compactText,
+    tokens,
+  } = prepared;
 
-  const queryCompact =
-    compactSearchText(query);
-
-  const documentText =
-    getDocumentText(document);
-
-  const normalizedDocument =
-    normalizeSearchText(documentText);
-
-  const compactDocument =
-    compactSearchText(documentText);
-
-  // -------------------------
-  // EXACT
-  // -------------------------
-
-  if (
-    normalizeSearchText(
-      document.title
-    ) === normalizedQuery
-  ) {
+  // Exact title match.
+  if (normalizedTitle === normalizedQuery) {
     return {
       score: 1000,
       matchType: "exact",
     };
   }
 
-  if (
-    normalizedDocument ===
-    normalizedQuery
-  ) {
+  // Exact full-text match.
+  if (normalizedText === normalizedQuery) {
     return {
       score: 980,
       matchType: "exact",
     };
   }
 
+  // Match text without spaces.
   if (
     queryCompact &&
-    compactDocument.includes(queryCompact)
+    compactText.includes(queryCompact)
   ) {
     return {
       score: 950,
@@ -135,17 +165,9 @@ function getScore(
     };
   }
 
-  // -------------------------
-  // STRONG
-  // -------------------------
-
-  const normalizedTitle =
-    normalizeSearchText(document.title);
-
+  // Strong title match.
   if (
-    normalizedTitle.includes(
-      normalizedQuery
-    )
+    normalizedTitle.includes(normalizedQuery)
   ) {
     return {
       score: 900,
@@ -153,10 +175,11 @@ function getScore(
     };
   }
 
+  // Strong text match.
   if (
     containsNormalizedText(
       document.text,
-      query
+      normalizedQuery
     )
   ) {
     return {
@@ -165,17 +188,12 @@ function getScore(
     };
   }
 
-  const queryTokens =
-    tokenizeSearchText(query);
-
-  const documentTokens =
-    tokenizeSearchText(documentText);
-
+  // Token matching.
   let matchedTokens = 0;
 
   for (const queryToken of queryTokens) {
     if (
-      documentTokens.some((token) =>
+      tokens.some((token) =>
         token.includes(queryToken)
       )
     ) {
@@ -183,13 +201,9 @@ function getScore(
     }
   }
 
-  if (
-    queryTokens.length > 0 &&
-    matchedTokens > 0
-  ) {
+  if (queryTokens.length > 0 && matchedTokens > 0) {
     const ratio =
-      matchedTokens /
-      queryTokens.length;
+      matchedTokens / queryTokens.length;
 
     if (ratio >= 0.75) {
       return {
@@ -206,22 +220,22 @@ function getScore(
     }
   }
 
-  // -------------------------
-  // SIMILAR / FUZZY
-  // -------------------------
-
-  const compactTokens =
-    tokenizeSearchText(query);
-
+  // Fuzzy matching is reserved for unmatched documents.
+  // This keeps expensive comparisons out of common matches.
   let bestSimilarity = 0;
 
-  for (const queryToken of compactTokens) {
-    if (queryToken.length < 3) {
-      continue;
-    }
+  for (const queryToken of queryTokens) {
+    if (queryToken.length < 4) continue;
 
-    for (const documentToken of documentTokens) {
-      if (documentToken.length < 3) {
+    for (const documentToken of tokens) {
+      if (documentToken.length < 4) continue;
+
+      // Ignore comparisons with substantially different lengths.
+      if (
+        Math.abs(
+          queryToken.length - documentToken.length
+        ) > 2
+      ) {
         continue;
       }
 
@@ -267,12 +281,29 @@ export function searchContent(
     return [];
   }
 
+  const normalizedQuery =
+    normalizeSearchText(trimmed);
+
+  const queryCompact =
+    compactSearchText(trimmed);
+
+  const queryTokens =
+    tokenizeSearchText(trimmed);
+
+  if (!normalizedQuery) {
+    return [];
+  }
+
   const results: SearchResult[] = [];
 
   for (const document of documents) {
+    const prepared = prepareDocument(document);
+
     const result = getScore(
-      document,
-      trimmed
+      prepared,
+      normalizedQuery,
+      queryCompact,
+      queryTokens
     );
 
     if (result.score > 0) {
@@ -285,19 +316,14 @@ export function searchContent(
   }
 
   results.sort((a, b) => {
-    if (
-      a.matchType !== b.matchType
-    ) {
+    if (a.matchType !== b.matchType) {
       const order = {
         exact: 0,
         strong: 1,
         similar: 2,
       };
 
-      return (
-        order[a.matchType] -
-        order[b.matchType]
-      );
+      return order[a.matchType] - order[b.matchType];
     }
 
     return b.score - a.score;
