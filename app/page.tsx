@@ -133,6 +133,9 @@ function SunMoonIcon() {
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedMenuCategory, setSelectedMenuCategory] = useState("Home");
+const [selectedMenuSubcategory, setSelectedMenuSubcategory] = useState("");
+const [menuSearchQuery, setMenuSearchQuery] = useState("");
   const [languageOpen, setLanguageOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
 
@@ -388,20 +391,79 @@ if (savedReadingProgress) {
         </div>
 
         {menuOpen && (
-          <div className="mobileMenu">
-            <div className="menuInner">
-              {navItems.map((item) => (
-  <a
-    key={item.href}
-    href={item.href}
-    onClick={() => setMenuOpen(false)}
-  >
-    {item.label}
-  </a>
-))}
-            </div>
+  <div className="mobileMenu">
+    <div className="menuInner">
+      <input
+        type="search"
+        className="menuSearchInput"
+        placeholder="Search books, Qur’an, Ala Hazrat..."
+        value={menuSearchQuery}
+        onChange={(e) => setMenuSearchQuery(e.target.value)}
+        aria-label="Search website"
+      />
+
+      <div className="menuCategoryRow">
+        {navItems.map((item) => (
+          <button
+            key={item.href}
+            type="button"
+            className={
+              selectedMenuCategory === item.label
+                ? "menuCategory active"
+                : "menuCategory"
+            }
+            onClick={() => {
+              setSelectedMenuCategory(item.label);
+              setSelectedMenuSubcategory(null);
+              setMenuSearchQuery("");
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {(() => {
+        const selectedCategory = navItems.find(
+          (item) => item.label === selectedMenuCategory
+        );
+
+        const selectedSubcategory =
+          selectedCategory?.children?.find(
+            (item) => item.label === selectedMenuSubcategory
+          );
+
+        const visibleItems =
+          selectedSubcategory?.children?.length
+            ? selectedSubcategory.children
+            : selectedCategory?.children ?? [];
+
+        return visibleItems.length > 0 ? (
+          <div className="menuSubcategoryRow">
+            {visibleItems.map((item) => (
+              <button
+                key={item.href + item.label}
+                type="button"
+                className="menuSubcategory"
+                onClick={() => {
+                  if (item.children?.length) {
+                    setSelectedMenuSubcategory(item.label);
+                  } else {
+                    window.location.href = item.href;
+                    setMenuOpen(false);
+                  }
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
-        )}
+        ) : null;
+      })()}
+    </div>
+  </div>
+)}
+        
       </header>
 
 
