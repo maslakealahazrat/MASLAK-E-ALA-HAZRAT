@@ -235,27 +235,103 @@ input {
   background: var(--surface);
 }
 
+.mobileMenu {
+  width: 100%;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
 .menuInner {
-  width: min(1080px, 88%);
+  width: min(1080px, 92%);
   margin: auto;
-
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 12px 0 16px;
 }
 
-.menuInner a {
-  padding: 10px 8px;
+.menuSearchInput {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  outline: none;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
 
+.menuSearchInput:focus {
+  border-color: var(--primary);
+}
+
+.menuCategoryRow,
+.menuSubcategoryRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  overflow-x: auto;
+  padding: 2px 0 8px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.menuCategoryRow::-webkit-scrollbar,
+.menuSubcategoryRow::-webkit-scrollbar {
+  display: none;
+}
+
+.menuCategory,
+.menuSubcategory,
+.menuSearchResult {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menuCategory.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.menuCategory:hover,
+.menuSubcategory:hover,
+.menuSearchResult:hover {
+  border-color: var(--primary);
+  background: var(--surface-soft);
+}
+
+.menuSearchResults {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.menuSearchResult {
+  width: 100%;
+  text-align: left;
+}
+
+.menuSearchEmpty {
+  padding: 12px;
   color: var(--muted);
-
   font-size: 13px;
 }
-
-.menuInner a:hover {
-  color: var(--primary-dark);
-}
+  
 
 
 /* ================= HERO ================= */
@@ -766,11 +842,6 @@ input {
 
   .smallCard {
     min-width: 235px;
-  }
-
-  .menuInner {
-    width: 92%;
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .popup {
