@@ -163,9 +163,10 @@ function getScore(
   return { score: 0, matchType: "similar" };
 }
 
-if (document.type === "quran") {
-  return `quran:${document.surahNumber ?? document.title}`;
-}
+function getUniqueKey(document: SearchDocument): string {
+  if (document.type === "quran") {
+    return `quran:${document.surahNumber ?? document.title}`;
+  }
 
   const normalizedTitle = compactSearchText(
     normalizeSearchText(document.title)
@@ -177,7 +178,7 @@ if (document.type === "quran") {
     .replace(/\/+$/, "")
     .toLowerCase();
 
-  // Same page linked more than once.
+    // Same page linked more than once.
   return `${document.type}:${normalizedHref || normalizedTitle}`;
 }
 
