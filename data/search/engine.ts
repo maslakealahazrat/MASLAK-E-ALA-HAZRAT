@@ -315,7 +315,7 @@ export function searchContent(
     }
   }
 
-  results.sort((a, b) => {
+    results.sort((a, b) => {
     if (a.matchType !== b.matchType) {
       const order = {
         exact: 0,
@@ -329,5 +329,26 @@ export function searchContent(
     return b.score - a.score;
   });
 
-  return results;
+  // Qur'an ke alag-alag Ayah results ko alag rakho.
+  // Baaki content mein ek hi page ke duplicate results hatao.
+  const uniqueResults: SearchResult[] = [];
+  const seen = new Set<string>();
+
+  for (const result of results) {
+    const document = result.document;
+
+    const uniqueKey =
+      document.type === "quran"
+        ? `quran:${document.id}`
+        : `${document.type}:${document.href}`;
+
+    if (seen.has(uniqueKey)) {
+      continue;
+    }
+
+    seen.add(uniqueKey);
+    uniqueResults.push(result);
+  }
+
+  return uniqueResults;
 }
