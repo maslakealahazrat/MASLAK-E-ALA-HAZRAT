@@ -163,10 +163,9 @@ function getScore(
   return { score: 0, matchType: "similar" };
 }
 
-function getUniqueKey(document: SearchDocument): string {
-  if (document.type === "quran") {
-    return `quran:${document.id}`;
-  }
+if (document.type === "quran") {
+  return `quran:${document.surahNumber ?? document.title}`;
+}
 
   const normalizedTitle = compactSearchText(
     normalizeSearchText(document.title)
