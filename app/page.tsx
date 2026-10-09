@@ -5,7 +5,13 @@ import Link from "next/link";
 import { searchIndex } from "@/data/search";
 import { searchContent } from "@/data/search/engine";
 
-const navItems = [
+type MenuItem = {
+  label: string;
+  href: string;
+  children?: MenuItem[];
+};
+
+const navItems: MenuItem[] = [
   { label: "Home", href: "/", children: [] },
   {
     label: "Ala Hazrat",
@@ -132,10 +138,16 @@ function SunMoonIcon() {
 }
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedMenuCategory, setSelectedMenuCategory] = useState("Home");
-const [selectedMenuSubcategory, setSelectedMenuSubcategory] = useState("");
+const [menuOpen, setMenuOpen] = useState(false);
+
+const [selectedMenuCategory, setSelectedMenuCategory] =
+  useState("Home");
+
+const [selectedMenuSubcategory, setSelectedMenuSubcategory] =
+  useState<MenuItem | null>(null);
+
 const [menuSearchQuery, setMenuSearchQuery] = useState("");
+
   const [languageOpen, setLanguageOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
 
@@ -430,7 +442,7 @@ if (savedReadingProgress) {
 
         const selectedSubcategory =
           selectedCategory?.children?.find(
-            (item) => item.label === selectedMenuSubcategory
+        (item) => item.label === selectedMenuSubcategory?.label
           );
 
         const visibleItems =
