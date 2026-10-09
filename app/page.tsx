@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { quranAyahs } from "@/data/quran/ayahs";
+import { searchIndex } from "@/data/search";
+import { searchContent } from "@/data/search/engine";
 
 const navItems = [
   ["Home", "/"],
@@ -107,24 +108,7 @@ function handleSearch() {
     "/search?q=" + encodeURIComponent(query);
 }
 const liveSearchResults = searchQuery.trim()
-  ? quranAyahs
-      .filter((ayah) => {
-        const query =
-          searchQuery.trim().toLowerCase();
-
-        return (
-          ayah.arabic
-            .toLowerCase()
-            .includes(query) ||
-          ayah.surahName
-            .toLowerCase()
-            .includes(query) ||
-          ayah.surahNameArabic
-            .toLowerCase()
-            .includes(query)
-        );
-      })
-      .slice(0, 6)
+  ? searchContent(searchIndex, searchQuery.trim()).slice(0, 6)
   : [];
 
   useEffect(() => {
@@ -378,39 +362,36 @@ if (savedReadingProgress) {
     <div className="liveSearchResults">
 
       {liveSearchResults.length > 0 ? (
-        liveSearchResults.map((ayah) => (
-          <a
-            key={ayah.id}
-            href={
-              "/quran/" +
-              ayah.surahNumber +
-              "#ayah-" +
-              ayah.ayahNumber
-            }
-            className="liveSearchItem"
-          >
+        
+      liveSearchResults.map(({ document }) => (
+  <Link
+    key={document.id}
+    href={document.href}
+    className="liveSearchItem"
+  >
+    <div className="liveSearchInfo">
+      <strong>{document.title}</strong>
+      <span>
+        {document.type === "quran"
+          ? "Qur’an"
+          : document.type === "ilm-ka-safar"
+            ? "Ilm Ka Safar"
+            : "Islamic Knowledge"}
+      </span>
+    </div>
 
-            <div className="liveSearchInfo">
-
-              <strong>
-                {ayah.surahName}
-              </strong>
-
-              <span>
-                Ayat {ayah.ayahNumber}
-              </span>
-
-            </div>
-
-            <div className="liveSearchArabic">
-              {ayah.arabic}
-            </div>
-
-          </a>
-        ))
+    <div className="liveSearchArabic">
+      {document.arabic ||
+        document.urdu ||
+        document.hindi ||
+        document.text}
+    </div>
+  </Link>
+))
+      
       ) : (
         <div className="liveSearchEmpty">
-          No Qur’an result found
+              No results found
         </div>
       )}
 
