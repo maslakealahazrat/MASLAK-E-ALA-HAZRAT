@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 
 import { quranAyahs } from "@/data/quran/ayahs";
 import { searchIndex } from "@/data/search";
@@ -48,12 +49,34 @@ export default function SearchPageContent({
     ? findExactAyah(trimmedQuery)
     : null;
 
-  const searchResults = trimmedQuery
-    ? searchContent(
-        searchIndex,
-        trimmedQuery
-      )
-    : [];
+    const searchResults = useMemo(() => {
+    if (!trimmedQuery) return [];
+
+    const results = searchContent(searchIndex, trimmedQuery);
+
+    const uniqueResults = [];
+    const seen = new Set<string>();
+
+    for (const result of results) {
+      const item = result.document;
+
+      // Ek Surah ki kai ayaton ko ek hi search result rakho.
+      const key =
+        item.type === "quran"
+          ? `quran-surah:${item.surahNumber ?? item.title}`
+          : `${item.type}:${item.href
+              .split("#")[0]
+              .split("?")[0]
+              .replace(/\/+$/, "")}`;
+
+      if (seen.has(key)) continue;
+
+      seen.add(key);
+      uniqueResults.push(result);
+    }
+
+    return uniqueResults;
+  }, [trimmedQuery]);
 
   const exactResults =
     searchResults.filter(
