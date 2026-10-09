@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { searchIndex } from "@/data/search";
 import { searchContent } from "@/data/search/engine";
@@ -107,9 +107,48 @@ function handleSearch() {
   window.location.href =
     "/search?q=" + encodeURIComponent(query);
 }
-const liveSearchResults = searchQuery.trim()
-  ? searchContent(searchIndex, searchQuery.trim()).slice(0, 6)
-  : [];
+const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
+useEffect(() => {
+  const query = searchQuery.trim();
+
+  const timer = setTimeout(() => {
+    setDebouncedSearchQuery(query);
+  }, 250);
+
+  return () => clearTimeout(timer);
+}, [searchQuery]);
+
+const liveSearchResults = useMemo(() => {
+  const query = debouncedSearchQuery;
+
+  if (!query) return [];
+
+  const results = searchContent(searchIndex, query);
+
+  // Live suggestions mein ek hi Surah ki baar-baar aane wali
+  // ayaton ki jagah us Surah ka sirf ek result dikhao.
+  const uniqueResults = [];
+  const seen = new Set<string>();
+
+  for (const result of results) {
+    const document = result.document;
+
+    const key =
+      document.type === "quran"
+        ? `quran-surah:${document.surahNumber ?? document.title}`
+        : `${document.type}:${document.href.split("#")[0].split("?")[0].replace(/\/+$/, "")}`;
+
+    if (seen.has(key)) continue;
+
+    seen.add(key);
+    uniqueResults.push(result);
+
+    if (uniqueResults.length === 6) break;
+  }
+
+  return uniqueResults;
+}, [debouncedSearchQuery]);
 
   useEffect(() => {
     
