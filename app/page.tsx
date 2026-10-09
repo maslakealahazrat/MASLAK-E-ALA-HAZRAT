@@ -459,7 +459,7 @@ if (savedReadingProgress) {
                 className="menuSubcategory"
                 onClick={() => {
                   if (item.children?.length) {
-                    setSelectedMenuSubcategory(item.label);
+                    setSelectedMenuSubcategory(item);
                   } else {
                     window.location.href = item.href;
                     setMenuOpen(false);
