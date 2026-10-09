@@ -17,7 +17,24 @@ const navItems: MenuItem[] = [
     label: "Ala Hazrat",
     href: "/ala-hazrat",
     children: [
-      { label: "Seerat", href: "/ala-hazrat/seerat" },
+      {
+  label: "Seerat",
+  href: "/ala-hazrat/seerat",
+  children: [
+    {
+      label: "Birth & Family",
+      href: "/seerat/birth-and-family",
+    },
+    {
+      label: "Seerat",
+      href: "/ala-hazrat/seerat",
+    },
+    {
+      label: "Introduction",
+      href: "/ala-hazrat/seerat/introduction",
+    },
+  ],
+},
       { label: "Books", href: "/islamic-books" },
       { label: "Fatawa Razawiyya", href: "/fatawa-razawiyya" },
       { label: "Hadaiq-e-Bakhshish", href: "/hadaiq-e-bakhshish" },
@@ -147,6 +164,38 @@ const [selectedMenuSubcategory, setSelectedMenuSubcategory] =
   useState<MenuItem | null>(null);
 
 const [menuSearchQuery, setMenuSearchQuery] = useState("");
+
+const menuSearchResults = useMemo(() => {
+  const query = menuSearchQuery.trim().toLowerCase();
+
+  if (!query) return [];
+
+  const results: {
+    item: MenuItem;
+    path: string[];
+  }[] = [];
+
+  function searchItems(items: MenuItem[], parentPath: string[] = []) {
+    for (const item of items) {
+      const currentPath = [...parentPath, item.label];
+
+      if (item.label.toLowerCase().includes(query)) {
+        results.push({
+          item,
+          path: currentPath,
+        });
+      }
+
+      if (item.children?.length) {
+        searchItems(item.children, currentPath);
+      }
+    }
+  }
+
+  searchItems(navItems);
+
+  return results;
+}, [menuSearchQuery]);
 
   const [languageOpen, setLanguageOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
@@ -414,7 +463,46 @@ if (savedReadingProgress) {
         aria-label="Search website"
       />
 
-      <div className="menuCategoryRow">
+{menuSearchQuery.trim() !== "" && (
+  <div className="menuSearchResults">
+    {menuSearchResults.length > 0 ? (
+      menuSearchResults.map(({ item, path }) => (
+        <button
+          key={`${path.join("/")}-${item.href}`}
+          type="button"
+          className="menuSearchResult"
+          onClick={() => {
+            if (item.children?.length) {
+              const topCategory = navItems.find(
+                (category) => category.label === path[0]
+              );
+
+              if (topCategory) {
+                setSelectedMenuCategory(topCategory.label);
+              }
+
+              setSelectedMenuSubcategory(item);
+              setMenuSearchQuery("");
+            } else {
+              window.location.href = item.href;
+              setMenuOpen(false);
+              setMenuSearchQuery("");
+            }
+          }}
+        >
+          {item.label}
+        </button>
+      ))
+    ) : (
+      <div className="menuSearchEmpty">
+        No menu options found
+      </div>
+    )}
+  </div>
+)}
+
+      {!menuSearchQuery.trim() && (
+  <div className="menuCategoryRow">
         {navItems.map((item) => (
           <button
             key={item.href}
@@ -435,22 +523,18 @@ if (savedReadingProgress) {
         ))}
       </div>
 
+)}
+
       {(() => {
         const selectedCategory = navItems.find(
           (item) => item.label === selectedMenuCategory
         );
 
-        const selectedSubcategory =
-          selectedCategory?.children?.find(
-        (item) => item.label === selectedMenuSubcategory?.label
-          );
+const visibleItems: MenuItem[] = selectedMenuSubcategory
+  ? selectedMenuSubcategory.children ?? []
+  : selectedCategory?.children ?? [];
 
-        const visibleItems =
-          selectedSubcategory?.children?.length
-            ? selectedSubcategory.children
-            : selectedCategory?.children ?? [];
-
-        return visibleItems.length > 0 ? (
+        return !menuSearchQuery.trim() && visibleItems.length > 0 ? (
           <div className="menuSubcategoryRow">
             {visibleItems.map((item) => (
               <button
