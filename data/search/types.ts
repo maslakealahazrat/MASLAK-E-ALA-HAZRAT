@@ -14,6 +14,7 @@ export type SearchDocument = {
   type: SearchContentType;
   title: string;
   text: string;
+  keywords?: string[];
   href: string;
 
   // Extra searchable fields
