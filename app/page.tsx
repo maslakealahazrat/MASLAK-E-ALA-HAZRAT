@@ -6,24 +6,79 @@ import { searchIndex } from "@/data/search";
 import { searchContent } from "@/data/search/engine";
 
 const navItems = [
-  ["Home", "/"],
-  ["Ala Hazrat", "/ala-hazrat"],
-  ["Naat / Manqabat", "/naat-manqabat"],
-  ["Hadaiq-e-Bakhshish", "/hadaiq-e-bakhshish"],
-  ["Fatawa Razawiyya", "/fatawa-razawiyya"],
-  ["Kanz-ul-Iman", "/kanz-ul-iman"],
-  ["Seerat-un-Nabi ﷺ", "/seerat-un-nabi"],
-  ["Hadith", "/hadith"],
-
-  ["Ilm Ka Safar", "/ilm-ka-safar"],
-  ["Islamic Books", "/islamic-books"],
-  ["Gulzar-e-Millat", "/gulzar-e-millat"],
-  ["Qur’an Samajhne Ka Safar", "/quran-samajhne-ka-safar"],
-  ["Artist Biography", "/artist-biography"],
-
-  ["About", "/about"],
-  ["Contact", "/contact"],
-  ["Disclaimer", "/disclaimer"],
+  { label: "Home", href: "/", children: [] },
+  {
+    label: "Ala Hazrat",
+    href: "/ala-hazrat",
+    children: [
+      { label: "Seerat", href: "/ala-hazrat/seerat" },
+      { label: "Books", href: "/islamic-books" },
+      { label: "Fatawa Razawiyya", href: "/fatawa-razawiyya" },
+      { label: "Hadaiq-e-Bakhshish", href: "/hadaiq-e-bakhshish" },
+      { label: "Kanz-ul-Iman", href: "/kanz-ul-iman" },
+      { label: "Teachers", href: "/ala-hazrat/teachers" },
+      { label: "Students", href: "/ala-hazrat/students" },
+      { label: "Family", href: "/ala-hazrat/family" },
+      { label: "Research", href: "/ala-hazrat/research" },
+    ],
+  },
+  {
+    label: "Qur’an",
+    href: "/quran",
+    children: [
+      { label: "Read Qur’an", href: "/quran" },
+      { label: "Qur’an Samajhne Ka Safar", href: "/quran-samajhne-ka-safar" },
+    ],
+  },
+  {
+    label: "Gulzar-e-Millat",
+    href: "/gulzar-e-millat",
+    children: [
+      { label: "Biography", href: "/gulzar-e-millat" },
+    ],
+  },
+  {
+    label: "Hadith",
+    href: "/hadith",
+    children: [],
+  },
+  {
+    label: "Seerat-un-Nabi ﷺ",
+    href: "/seerat-un-nabi",
+    children: [],
+  },
+  {
+    label: "Poet",
+    href: "/artist-biography",
+    children: [
+      { label: "Artist Biography", href: "/artist-biography" },
+      { label: "Naat / Manqabat", href: "/naat-manqabat" },
+    ],
+  },
+  {
+    label: "Books",
+    href: "/islamic-books",
+    children: [
+      { label: "Islamic Books", href: "/islamic-books" },
+      { label: "Fatawa Razawiyya", href: "/fatawa-razawiyya" },
+      { label: "Hadaiq-e-Bakhshish", href: "/hadaiq-e-bakhshish" },
+      { label: "Kanz-ul-Iman", href: "/kanz-ul-iman" },
+    ],
+  },
+  {
+    label: "Ilm Ka Safar",
+    href: "/ilm-ka-safar",
+    children: [],
+  },
+  {
+    label: "More",
+    href: "/about",
+    children: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+      { label: "Disclaimer", href: "/disclaimer" },
+    ],
+  },
 ];
 
 const knowledgeCards = [
