@@ -13,14 +13,14 @@ const translationFiles = [
     name: "Urdu — Kanz-ul-Iman",
     file: path.join(
       root,
-      "data/translations/private/ur.kanzuliman.txt"
+      "data/translations/ur.kanzuliman.txt"
     ),
   },
   {
     name: "English — Ahmed Raza Khan",
     file: path.join(
       root,
-      "data/translations/private/en.ahmedraza.txt"
+      "data/translations/en.ahmedraza.txt"
     ),
   },
 ];
