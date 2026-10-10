@@ -6172,10 +6172,11 @@ html.dark .alaHazratReferenceCard {
     height: 16px;
   }
 }
+
 /* =========================================================
-   MASLAK-E-ALA HAZRAT — KANZ-UL-IMAN READER
-   Sirf Kanz-ul-Iman reader ke liye CSS
-   Arabic Qur'an text/data ko ye CSS modify nahi karta.
+   MASLAK-E-ALA HAZRAT
+   KANZ-UL-IMAN — COMPLETE READER CSS
+   Sirf Kanz-ul-Iman component ke liye
    ========================================================= */
 
 /* Main reader */
@@ -6194,7 +6195,7 @@ html.dark .alaHazratReferenceCard {
   width: 100%;
 }
 
-/* Ayat card */
+/* Individual Ayat card */
 .kanzAyahCard {
   position: relative;
   width: 100%;
@@ -6203,11 +6204,20 @@ html.dark .alaHazratReferenceCard {
   border-radius: 18px;
   background: var(--card, #ffffff);
   box-shadow: 0 5px 20px rgba(29, 66, 55, 0.045);
-  scroll-margin-top: 150px;
   overflow-wrap: anywhere;
+  scroll-margin-top: 145px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Surah / Ayat reference */
+/* Selected Ayat after clicking a search result */
+.kanzAyahActive {
+  border-color: var(--accent, #79a7a5);
+  box-shadow: 0 0 0 2px rgba(121, 167, 165, 0.18);
+}
+
+/* Ayat reference */
 .kanzAyahReference {
   display: flex;
   align-items: center;
@@ -6221,8 +6231,12 @@ html.dark .alaHazratReferenceCard {
   line-height: 1.6;
 }
 
-/* Arabic Qur'an text
-   Sirf presentation styling — text ko edit nahi karta. */
+/* =========================================================
+   ARABIC AYAT
+   CSS sirf display styling karta hai.
+   Original Arabic text/data ko edit nahi karta.
+   ========================================================= */
+
 .kanzArabicText {
   display: block;
   width: 100%;
@@ -6242,7 +6256,7 @@ html.dark .alaHazratReferenceCard {
   text-align: right;
   direction: rtl;
   unicode-bidi: isolate;
-  white-space: normal;
+  white-space: pre-wrap;
   overflow-wrap: normal;
   word-break: normal;
   font-variant-ligatures: normal;
@@ -6250,19 +6264,228 @@ html.dark .alaHazratReferenceCard {
   -webkit-font-smoothing: antialiased;
 }
 
+/* =========================================================
+   STICKY SEARCH BAR
+   Page / Surah / Ayat navigation ki jagah
+   ========================================================= */
+
+.kanzSearchSticky {
+  position: sticky;
+  top: 12px;
+  z-index: 40;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 12px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 16px;
+  background: var(--card, #ffffff);
+  box-shadow: 0 5px 18px rgba(29, 66, 55, 0.09);
+}
+
+/* Search label */
+.kanzSearchLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text, #243b36);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* Search input wrapper */
+.kanzSearchInputWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 12px;
+  background: var(--surface, #f7faf9);
+  transition: border-color 0.2s ease;
+}
+
+.kanzSearchInputWrap:focus-within {
+  border-color: var(--accent, #79a7a5);
+}
+
+/* Search icon */
+.kanzSearchIcon {
+  flex: 0 0 auto;
+  color: var(--muted, #71847d);
+  font-size: 25px;
+  line-height: 1;
+}
+
+/* Search input */
+.kanzSearchInput {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text, #243b36);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.kanzSearchInput::placeholder {
+  color: var(--muted, #71847d);
+  opacity: 1;
+}
+
+.kanzSearchInput::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+/* Clear search button */
+.kanzSearchClear {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text, #243b36);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.kanzSearchClear:hover {
+  background: var(--border, #dce8e4);
+}
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+.kanzSearchResults {
+  margin-top: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 12px;
+  background: var(--card, #ffffff);
+}
+
+.kanzSearchResultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border, #dce8e4);
+  color: var(--muted, #71847d);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.kanzSearchResultsList {
+  max-height: 300px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Individual search result */
+.kanzSearchResult {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border, #dce8e4);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text, #243b36);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.kanzSearchResult:last-child {
+  border-bottom: 0;
+}
+
+.kanzSearchResult:hover,
+.kanzSearchResult:focus-visible {
+  background: var(--surface, #f4f8f6);
+}
+
+.kanzSearchResult:focus-visible {
+  outline: 2px solid var(--accent, #79a7a5);
+  outline-offset: -2px;
+}
+
+/* Result reference */
+.kanzSearchResultReference {
+  display: block;
+  color: var(--muted, #71847d);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Arabic preview inside search result */
+.kanzSearchResultArabic {
+  display: block;
+  width: 100%;
+  color: var(--text, #243b36);
+  font-family:
+    "KFGQPC Uthmanic Script HAFS",
+    "Amiri Quran",
+    "Noto Naskh Arabic",
+    serif;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1.9;
+  text-align: right;
+  direction: rtl;
+  unicode-bidi: isolate;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* No result / result limit messages */
+.kanzSearchMore,
+.kanzSearchEmpty {
+  margin: 0;
+  padding: 14px;
+  color: var(--muted, #71847d);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   TRANSLATION
+   ========================================================= */
+
 /* Translation language button */
 .kanzTranslationButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   min-height: 36px;
+  max-width: 100%;
   padding: 7px 13px;
   border: 1px solid var(--border, #dce8e4);
   border-radius: 10px;
   background: var(--surface, #f4f8f6);
   color: var(--text, #243b36);
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.5;
   cursor: pointer;
   transition:
     background 0.2s ease,
@@ -6272,24 +6495,29 @@ html.dark .alaHazratReferenceCard {
 
 .kanzTranslationButton:hover {
   border-color: var(--accent, #79a7a5);
-  background: var(--card, #ffffff);
 }
 
 .kanzTranslationButton:active {
   transform: scale(0.98);
 }
 
-/* Translation text */
+.kanzTranslationButton:focus-visible {
+  outline: 2px solid var(--accent, #79a7a5);
+  outline-offset: 2px;
+}
+
+/* Translation paragraph */
 .kanzTranslationText {
   margin: 14px 0 0;
   color: var(--text, #243b36);
   font-size: 16px;
+  font-weight: 400;
   line-height: 1.95;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
-/* Urdu translation */
+/* Urdu translation alignment */
 .kanzTranslationText[lang="ur"],
 .kanzTranslationText[dir="rtl"] {
   direction: rtl;
@@ -6297,116 +6525,18 @@ html.dark .alaHazratReferenceCard {
   unicode-bidi: isolate;
 }
 
-/* Missing translation message */
+/* Translation unavailable */
 .kanzMissingTranslation {
   margin: 12px 0 0;
   color: var(--muted, #71847d);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
-/* Sticky Page / Surah / Ayat navigation */
-.kanzStickyNavigation {
-  position: sticky;
-  top: 12px;
-  z-index: 30;
-  width: 100%;
-  margin: 0 0 20px;
-  padding: 8px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  border: 1px solid var(--border, #dce8e4);
-  border-radius: 15px;
-  background: var(--card, #ffffff);
-  box-shadow: 0 5px 18px rgba(29, 66, 55, 0.09);
-}
+/* =========================================================
+   TANZIL ATTRIBUTION
+   ========================================================= */
 
-/* Navigation buttons */
-.kanzStickyNavigation button {
-  min-width: 0;
-  min-height: 42px;
-  padding: 8px 5px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text, #243b36);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.4;
-  cursor: pointer;
-  overflow-wrap: anywhere;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.kanzStickyNavigation button:hover,
-.kanzStickyNavigation button[aria-expanded="true"] {
-  border-color: var(--border, #dce8e4);
-  background: var(--surface, #f1f7f5);
-}
-
-/* Navigation dropdown/list */
-.kanzNavigationList {
-  width: 100%;
-  max-height: min(45vh, 340px);
-  margin: -10px 0 20px;
-  padding: 10px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border: 1px solid var(--border, #dce8e4);
-  border-radius: 14px;
-  background: var(--card, #ffffff);
-  box-shadow: 0 6px 20px rgba(29, 66, 55, 0.06);
-}
-
-/* Individual navigation list item */
-.kanzNavigationList button {
-  width: 100%;
-  min-height: 40px;
-  padding: 9px 10px;
-  border: 1px solid var(--border, #dce8e4);
-  border-radius: 9px;
-  background: var(--surface, #f7faf9);
-  color: var(--text, #243b36);
-  font-family: inherit;
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: start;
-  cursor: pointer;
-}
-
-.kanzNavigationList button:hover {
-  border-color: var(--accent, #79a7a5);
-}
-
-/* Page/Surah/Ayat anchors should not hide under sticky navigation */
-.kanzAyahCard[id],
-.kanzSurahHeading[id],
-.kanzPageHeading[id] {
-  scroll-margin-top: 150px;
-}
-
-/* Surah heading, if the component renders one */
-.kanzSurahHeading,
-.kanzPageHeading {
-  margin: 28px 0 16px;
-  padding: 14px;
-  border: 1px solid var(--border, #dce8e4);
-  border-radius: 14px;
-  background: var(--surface, #f4f8f6);
-  color: var(--text, #243b36);
-  font-size: 18px;
-  font-weight: 700;
-  text-align: center;
-}
-
-/* Tanzil source/license notice */
 .kanzTanzilAttribution {
   margin: 28px 0 0;
   padding: 16px;
@@ -6425,36 +6555,64 @@ html.dark .alaHazratReferenceCard {
   text-underline-offset: 3px;
 }
 
-/* Dark theme */
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
 .dark .kanzAyahCard,
-.dark .kanzStickyNavigation,
-.dark .kanzNavigationList {
-  background: var(--card, #172521);
+.dark .kanzSearchSticky,
+.dark .kanzSearchResults {
   border-color: var(--border, #30443d);
+  background: var(--card, #172521);
+}
+
+.dark .kanzAyahReference,
+.dark .kanzSearchResultsHeader {
+  border-color: var(--border, #30443d);
+  color: var(--muted, #a7b8b0);
 }
 
 .dark .kanzArabicText,
 .dark .kanzTranslationText,
-.dark .kanzStickyNavigation button,
-.dark .kanzNavigationList button {
+.dark .kanzSearchLabel,
+.dark .kanzSearchInput,
+.dark .kanzSearchClear,
+.dark .kanzSearchResult,
+.dark .kanzSearchResultArabic {
   color: var(--text, #edf5f1);
 }
 
+.dark .kanzSearchInputWrap,
 .dark .kanzTranslationButton,
-.dark .kanzNavigationList button,
-.dark .kanzSurahHeading,
-.dark .kanzPageHeading,
 .dark .kanzTanzilAttribution {
+  border-color: var(--border, #30443d);
   background: var(--surface, #202f2a);
+}
+
+.dark .kanzSearchResult {
   border-color: var(--border, #30443d);
 }
 
-.dark .kanzAyahReference,
-.dark .kanzMissingTranslation {
+.dark .kanzSearchResult:hover,
+.dark .kanzSearchResult:focus-visible {
+  background: var(--surface, #202f2a);
+}
+
+.dark .kanzSearchResultReference,
+.dark .kanzMissingTranslation,
+.dark .kanzSearchMore,
+.dark .kanzSearchEmpty {
   color: var(--muted, #a7b8b0);
 }
 
-/* Mobile layout */
+.dark .kanzTanzilAttribution a {
+  color: var(--text, #edf5f1);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 600px) {
   .kanzReader {
     width: calc(100% - 20px);
@@ -6468,7 +6626,13 @@ html.dark .alaHazratReferenceCard {
   .kanzAyahCard {
     padding: 15px;
     border-radius: 14px;
-    scroll-margin-top: 135px;
+    scroll-margin-top: 130px;
+  }
+
+  .kanzAyahReference {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    font-size: 12px;
   }
 
   .kanzArabicText {
@@ -6479,39 +6643,62 @@ html.dark .alaHazratReferenceCard {
   }
 
   .kanzTranslationText {
+    margin-top: 12px;
     font-size: 15px;
     line-height: 1.85;
   }
 
-  .kanzStickyNavigation {
+  .kanzSearchSticky {
     top: 8px;
-    gap: 4px;
-    padding: 6px;
-    border-radius: 12px;
+    padding: 9px;
+    border-radius: 13px;
   }
 
-  .kanzStickyNavigation button {
-    min-height: 40px;
-    padding: 7px 3px;
+  .kanzSearchLabel {
     font-size: 12px;
   }
 
-  .kanzNavigationList {
-    grid-template-columns: 1fr;
-    max-height: 42vh;
+  .kanzSearchInputWrap {
+    min-height: 43px;
+    padding: 0 9px;
   }
 
-  .kanzAyahCard[id],
-  .kanzSurahHeading[id],
-  .kanzPageHeading[id] {
-    scroll-margin-top: 135px;
+  .kanzSearchInput {
+    padding: 10px 0;
+    font-size: 13px;
+  }
+
+  .kanzSearchResultsList {
+    max-height: 260px;
+  }
+
+  .kanzSearchResult {
+    padding: 10px;
+  }
+
+  .kanzSearchResultArabic {
+    font-size: 21px;
+    line-height: 1.85;
+  }
+
+  .kanzTranslationButton {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .kanzTanzilAttribution {
+    padding: 12px;
+    font-size: 11px;
   }
 }
 
-/* Respect reduced-motion accessibility preference */
+/* Accessibility: reduce animation when requested */
 @media (prefers-reduced-motion: reduce) {
+  .kanzAyahCard,
   .kanzTranslationButton,
-  .kanzStickyNavigation button {
+  .kanzSearchInputWrap,
+  .kanzSearchResult {
     transition: none;
   }
-}
+  }
