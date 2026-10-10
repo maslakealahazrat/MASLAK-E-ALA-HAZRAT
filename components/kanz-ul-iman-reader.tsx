@@ -1,7 +1,7 @@
 "use client";
 
 /*
-  FILE: components/KanzUlImanReader.tsx
+  FILE: components/kanz-ul-iman-reader.tsx
 
   KAAM:
   Kanz-ul-Iman ke Qur'an reader ka reusable component.
