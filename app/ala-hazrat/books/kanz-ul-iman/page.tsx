@@ -1,5 +1,5 @@
 import AlaHazratBookPage from "@/components/AlaHazratBookPage";
-import KanzUlImanReader from "@/components/KanzUlImanReader";
+import KanzUlImanReader from "@/components/kanz-ul-iman-reader";
 
 export default function KanzUlImanPage() {
 return (
