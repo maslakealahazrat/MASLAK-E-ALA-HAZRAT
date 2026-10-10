@@ -1,50 +1,16 @@
 "use client";
 
-/*
- * MASLAK-E-ALA HAZRAT
- * KANZ-UL-IMAN READER
- *
- * Features:
- * 1. Arabic Ayat
- * 2. Available translations only
- * 3. Har Ayat ki language alag change karna
- * 4. Sticky Page / Surah / Ayat navigation
- * 5. Compact navigation lists
- * 6. Mobile-friendly layout
- *
- * NOTE:
- * Arabic text ko modify nahi karna.
- * Bina verified source aur permission ke translation enable nahi karna.
- */
-
 import { useEffect, useMemo, useState } from "react";
-
-/* =========================================================
-   TYPES
-   ========================================================= */
 
 export type KanzLanguage = "en" | "hi" | "ur" | "roman";
 
-export type KanzTranslations = Partial<
-  Record<KanzLanguage, string>
->;
+export type KanzTranslations = Partial<Record<KanzLanguage, string>>;
 
 export type KanzReaderAyah = {
   surahNumber: number;
   ayahNumber: number;
   arabic: string;
   translations: KanzTranslations;
-
-  /*
-   * Actual Madani Mushaf page number available ho,
-   * to yahan pageNumber pass kar sakte hain.
-   */
-  pageNumber?: number;
-
-  /*
-   * Optional: Surah ka naam.
-   * Nahi diya gaya to "Surah 1", "Surah 2" etc. dikhayega.
-   */
   surahName?: string;
 };
 
@@ -52,686 +18,321 @@ type Props = {
   ayahs: KanzReaderAyah[];
 };
 
-type KanzNavigationTab = "page" | "surah" | "ayah";
+const LANGUAGE_ORDER: KanzLanguage[] = ["en", "ur", "hi", "roman"];
 
-type NavigationItem = {
-  key: string;
-  label: string;
-  targetId: string;
-};
+function readSiteLanguage(): string {
+  if (typeof window === "undefined") return "auto";
 
-/* =========================================================
-   LANGUAGE SETTINGS
-   ========================================================= */
+  try {
+    return localStorage.getItem("site-language") || "auto";
+  } catch {
+    return "auto";
+  }
+}
 
-const LANGUAGE_ORDER: KanzLanguage[] = [
-  "en",
-  "hi",
-  "ur",
-  "roman",
-];
-
-const LANGUAGE_LABELS: Record<KanzLanguage, string> = {
-  en: "English",
-  hi: "हिन्दी",
-  ur: "اردو",
-  roman: "Roman Urdu",
-};
-
-/* =========================================================
-   LANGUAGE HELPERS
-   ========================================================= */
+/*
+ * Search matching ke liye sirf search query aur comparison text
+ * normalize hote hain. Original Arabic data ko modify nahi kiya jata.
+ */
+function normalizeSearchText(value: string): string {
+  return value
+    .normalize("NFC")
+    .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ى/g, "ي")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLocaleLowerCase();
+}
 
 function getAvailableLanguages(
   translations: KanzTranslations
 ): KanzLanguage[] {
-  return LANGUAGE_ORDER.filter((language) =>
-    Boolean(translations[language]?.trim())
-  );
+  return LANGUAGE_ORDER.filter((language) => {
+    return Boolean(translations[language]?.trim());
+  });
 }
 
-function getNextAvailableLanguage(
-  currentLanguage: KanzLanguage | null,
-  translations: KanzTranslations
-): KanzLanguage | null {
-  const available = getAvailableLanguages(translations);
-
-  if (available.length === 0) {
-    return null;
-  }
-
-  if (!currentLanguage) {
-    return available[0];
-  }
-
-  const currentIndex = available.indexOf(currentLanguage);
-
-  if (currentIndex === -1) {
-    return available[0];
-  }
-
-  return available[(currentIndex + 1) % available.length];
-}
-
-function getAyahKey(
-  surahNumber: number,
-  ayahNumber: number
-): string {
-  return `${surahNumber}:${ayahNumber}`;
-}
-
-function getAyahElementId(
-  surahNumber: number,
-  ayahNumber: number
-): string {
-  return `kanz-ayah-${surahNumber}-${ayahNumber}`;
-}
-
-function getSurahElementId(surahNumber: number): string {
-  return `kanz-surah-${surahNumber}`;
-}
-
-function getPageElementId(pageNumber: number): string {
-  return `kanz-page-${pageNumber}`;
-}
-
-/* =========================================================
-   SURAH NAMES
-   ========================================================= */
-
-/*
- * Agar data mein surahName diya ho to wahi use hoga.
- * Warna filhaal Surah number dikhaya jayega.
- *
- * Isse galat ya andaze se Surah ka naam nahi dikhaya jayega.
- */
-
-function getSurahLabel(ayah: KanzReaderAyah): string {
-  return ayah.surahName?.trim() || `Surah ${ayah.surahNumber}`;
-}
-
-/* =========================================================
-   MAIN COMPONENT
-   ========================================================= */
-
-export default function KanzUlImanReader({
-  ayahs,
-}: Props) {
-  /*
-   * Auto Mode:
-   * Har Ayat ke translation button par tap karke
-   * available translations ke beech switch kar sakte hain.
-   */
-  const [autoMode, setAutoMode] = useState(true);
-
-  /*
-   * Manual language state internal compatibility ke liye hai.
-   * Reader mein alag language selector nahi dikhaya jayega.
-   */
-  const [manualLanguage, setManualLanguage] =
-    useState<KanzLanguage>("en");
-
-  /*
-   * Har Ayat ki selected language alag store hoti hai.
-   */
-  const [ayahLanguages, setAyahLanguages] =
-    useState<Record<string, KanzLanguage>>({});
-
-  /*
-   * Navigation ki currently open list.
-   */
-  const [activeTab, setActiveTab] =
-    useState<KanzNavigationTab | null>(null);
-
-  /*
-   * Navigation list mein selected item.
-   */
-  const [selectedItem, setSelectedItem] = useState("");
-
-  /* =======================================================
-     GLOBAL LANGUAGE SETTING
-     ======================================================= */
+export default function KanzUlImanReader({ ayahs }: Props) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [siteLanguage, setSiteLanguage] = useState("auto");
+  const [ayahLanguages, setAyahLanguages] = useState<
+    Record<string, KanzLanguage>
+  >({});
+  const [activeAyah, setActiveAyah] = useState<string | null>(null);
 
   useEffect(() => {
-    function readSiteLanguage(): string {
-      try {
-        return localStorage.getItem("site-language") || "auto";
-      } catch {
-        return "auto";
+    setSiteLanguage(readSiteLanguage());
+
+    const updateLanguage = (event: Event) => {
+      setSiteLanguage(readSiteLanguage());
+
+      const customEvent = event as CustomEvent<{ language?: string }>;
+
+      if (customEvent.detail?.language) {
+        setSiteLanguage(customEvent.detail.language);
       }
-    }
+    };
 
-    function updateLanguage(value?: string) {
-      let savedLanguage = value;
-
-      if (!savedLanguage) {
-        savedLanguage = readSiteLanguage();
-      }
-
-      if (
-        savedLanguage === "en" ||
-        savedLanguage === "hi" ||
-        savedLanguage === "ur" ||
-        savedLanguage === "roman"
-      ) {
-        setManualLanguage(savedLanguage);
-        setAutoMode(false);
-      } else {
-        setAutoMode(true);
-      }
-    }
-
-    function handleStorage() {
-      updateLanguage();
-    }
-
-    function handleLanguageChange(event: Event) {
-      const customEvent = event as CustomEvent<string>;
-      updateLanguage(customEvent.detail);
-    }
-
-    updateLanguage();
-
-    window.addEventListener("storage", handleStorage);
-
-    window.addEventListener(
-      "site-language-change",
-      handleLanguageChange
-    );
+    window.addEventListener("storage", updateLanguage);
+    window.addEventListener("site-language-change", updateLanguage);
 
     return () => {
-      window.removeEventListener("storage", handleStorage);
-
-      window.removeEventListener(
-        "site-language-change",
-        handleLanguageChange
-      );
+      window.removeEventListener("storage", updateLanguage);
+      window.removeEventListener("site-language-change", updateLanguage);
     };
   }, []);
 
-  /* =======================================================
-     NAVIGATION DATA
-     ======================================================= */
+  const filteredAyahs = useMemo(() => {
+    const query = normalizeSearchText(searchQuery);
 
-  /*
-   * Surah list ayahs ke actual data se banti hai.
-   * Sirf wahi Surah aayengi jinki Ayat data mein maujood hain.
-   */
-  const surahItems = useMemo<NavigationItem[]>(() => {
-    const seen = new Map<number, NavigationItem>();
+    if (!query) return [];
 
-    for (const ayah of ayahs) {
-      if (!seen.has(ayah.surahNumber)) {
-        seen.set(ayah.surahNumber, {
-          key: String(ayah.surahNumber),
-          label: getSurahLabel(ayah),
-          targetId: getSurahElementId(ayah.surahNumber),
-        });
-      }
-    }
+    return ayahs.filter((ayah) => {
+      const reference = `${ayah.surahNumber}:${ayah.ayahNumber}`;
 
-    return Array.from(seen.values());
-  }, [ayahs]);
+      const surahName = normalizeSearchText(
+        ayah.surahName || `Surah ${ayah.surahNumber}`
+      );
 
-  /*
-   * Ayat list actual Ayat references se banti hai.
-   */
-  const ayahItems = useMemo<NavigationItem[]>(() => {
-    return ayahs.map((ayah) => ({
-      key: getAyahKey(ayah.surahNumber, ayah.ayahNumber),
-      label: `${getSurahLabel(ayah)} · Ayat ${ayah.ayahNumber}`,
-      targetId: getAyahElementId(
-        ayah.surahNumber,
-        ayah.ayahNumber
-      ),
-    }));
-  }, [ayahs]);
+      const arabic = normalizeSearchText(ayah.arabic);
 
-  /*
-   * Page list sirf tab banegi jab actual pageNumber data ho.
-   *
-   * Important:
-   * Is code mein fake page numbers generate nahi hote.
-   */
-  const pageItems = useMemo<NavigationItem[]>(() => {
-    const pages = new Map<number, NavigationItem>();
+      const translations = Object.values(ayah.translations)
+        .filter((value): value is string => Boolean(value))
+        .map(normalizeSearchText);
 
-    for (const ayah of ayahs) {
-      if (
-        typeof ayah.pageNumber !== "number" ||
-        !Number.isFinite(ayah.pageNumber)
-      ) {
-        continue;
-      }
+      return (
+        reference.includes(query) ||
+        surahName.includes(query) ||
+        arabic.includes(query) ||
+        translations.some((translation) => translation.includes(query))
+      );
+    });
+  }, [ayahs, searchQuery]);
 
-      if (!pages.has(ayah.pageNumber)) {
-        pages.set(ayah.pageNumber, {
-          key: String(ayah.pageNumber),
-          label: `Page ${ayah.pageNumber}`,
-          targetId: getPageElementId(ayah.pageNumber),
-        });
-      }
-    }
-
-    return Array.from(pages.values()).sort(
-      (a, b) => Number(a.key) - Number(b.key)
-    );
-  }, [ayahs]);
-
-  /* =======================================================
-     CURRENT TRANSLATION LANGUAGE
-     ======================================================= */
+  function getAyahKey(ayah: KanzReaderAyah): string {
+    return `${ayah.surahNumber}:${ayah.ayahNumber}`;
+  }
 
   function getCurrentLanguage(
     ayah: KanzReaderAyah
   ): KanzLanguage | null {
     const available = getAvailableLanguages(ayah.translations);
 
-    if (available.length === 0) {
-      return null;
+    if (available.length === 0) return null;
+
+    const selected = ayahLanguages[getAyahKey(ayah)];
+
+    if (selected && available.includes(selected)) {
+      return selected;
     }
-
-    /*
-     * Manual mode mein doosri language ka translation
-     * apne aap fallback nahi hoga.
-     */
-    if (!autoMode) {
-      return ayah.translations[manualLanguage]?.trim()
-        ? manualLanguage
-        : null;
-    }
-
-    const key = getAyahKey(
-      ayah.surahNumber,
-      ayah.ayahNumber
-    );
-
-    const savedLanguage = ayahLanguages[key];
 
     if (
-      savedLanguage &&
-      ayah.translations[savedLanguage]?.trim()
+      siteLanguage !== "auto" &&
+      available.includes(siteLanguage as KanzLanguage)
     ) {
-      return savedLanguage;
-    }
-
-    if (ayah.translations.en?.trim()) {
-      return "en";
+      return siteLanguage as KanzLanguage;
     }
 
     return available[0];
   }
 
-  /* =======================================================
-     TAP TO CHANGE TRANSLATION
-     ======================================================= */
+  function cycleTranslation(ayah: KanzReaderAyah) {
+    const available = getAvailableLanguages(ayah.translations);
 
-  function handleTranslationTap(ayah: KanzReaderAyah) {
-    if (!autoMode) {
-      return;
-    }
+    if (available.length < 2) return;
 
-    const key = getAyahKey(
-      ayah.surahNumber,
-      ayah.ayahNumber
-    );
-
-    const currentLanguage = getCurrentLanguage(ayah);
-
-    const nextLanguage = getNextAvailableLanguage(
-      currentLanguage,
-      ayah.translations
-    );
-
-    if (!nextLanguage) {
-      return;
-    }
+    const key = getAyahKey(ayah);
+    const current = getCurrentLanguage(ayah);
+    const currentIndex = current ? available.indexOf(current) : -1;
+    const next = available[(currentIndex + 1) % available.length];
 
     setAyahLanguages((previous) => ({
       ...previous,
-      [key]: nextLanguage,
+      [key]: next,
     }));
   }
 
-  /* =======================================================
-     NAVIGATION ACTIONS
-     ======================================================= */
+  function jumpToAyah(ayah: KanzReaderAyah) {
+    const key = getAyahKey(ayah);
+    setActiveAyah(key);
+    setSearchQuery("");
 
-  function toggleTab(tab: KanzNavigationTab) {
-    setActiveTab((current) => (current === tab ? null : tab));
-    setSelectedItem("");
+    window.setTimeout(() => {
+      const element = document.getElementById(`kanz-ayah-${key}`);
+
+      element?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
   }
-
-  function getItemsForTab(): NavigationItem[] {
-    if (activeTab === "page") {
-      return pageItems;
-    }
-
-    if (activeTab === "surah") {
-      return surahItems;
-    }
-
-    if (activeTab === "ayah") {
-      return ayahItems;
-    }
-
-    return [];
-  }
-
-  /*
-   * Item select hone par:
-   * 1. List close hogi.
-   * 2. Selected item target par smooth scroll hoga.
-   *
-   * Sticky navigation ki height ko CSS scroll-margin-top
-   * se handle kiya jayega.
-   */
-  function navigateToItem(item: NavigationItem) {
-    setSelectedItem(item.key);
-    setActiveTab(null);
-
-    window.requestAnimationFrame(() => {
-      const element = document.getElementById(item.targetId);
-
-      if (element) {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-    });
-  }
-
-  /* =======================================================
-     PAGE NUMBER GROUPS
-     ======================================================= */
-
-  /*
-   * Page number available ho to page ke pehle Ayat par
-   * page anchor banega.
-   *
-   * Page metadata nahi ho to fake page anchor nahi banega.
-   */
-  const firstAyahForPage = useMemo(() => {
-    const firstByPage = new Map<number, string>();
-
-    for (const ayah of ayahs) {
-      if (
-        typeof ayah.pageNumber !== "number" ||
-        !Number.isFinite(ayah.pageNumber)
-      ) {
-        continue;
-      }
-
-      if (!firstByPage.has(ayah.pageNumber)) {
-        firstByPage.set(
-          ayah.pageNumber,
-          getAyahElementId(
-            ayah.surahNumber,
-            ayah.ayahNumber
-          )
-        );
-      }
-    }
-
-    return firstByPage;
-  }, [ayahs]);
-
-  /* =======================================================
-     EMPTY STATE
-     ======================================================= */
-
-  if (ayahs.length === 0) {
-    return (
-      <section className="kanzReader">
-        <div className="kanzEmptyState">
-          <div className="kanzEmptyIcon" aria-hidden="true">
-            ۞
-          </div>
-
-          <h3>Reader data available nahi hai</h3>
-
-          <p>
-            Arabic Ayat ka data connect hone par yahan
-            Qur’an reader dikhaya jayega.
-          </p>
-        </div>
-      </section>
-    );
-  }
-
-  /* =======================================================
-     READER UI
-     ======================================================= */
 
   return (
     <section className="kanzReader">
-      {/* ===================================================
-          STICKY NAVIGATION
-          Reader ka duplicate title aur language selector
-          yahan nahi hai.
-         =================================================== */}
+      {/* Sticky search bar: Page / Surah / Ayat navigation ki jagah */}
+      <div className="kanzSearchSticky">
+        <label className="kanzSearchLabel" htmlFor="kanz-ayah-search">
+          Qur’an mein search karein
+        </label>
 
-      <nav
-        className="kanzStickyNavigation"
-        aria-label="Qur’an reader navigation"
-      >
-        <div className="kanzNavigationRow">
-          <button
-            type="button"
-            className={
-              activeTab === "page"
-                ? "kanzNavigationButton active"
-                : "kanzNavigationButton"
-            }
-            onClick={() => toggleTab("page")}
-            aria-expanded={activeTab === "page"}
-          >
-            Page ka list
-          </button>
+        <div className="kanzSearchInputWrap">
+          <span className="kanzSearchIcon" aria-hidden="true">
+            ⌕
+          </span>
 
-          <button
-            type="button"
-            className={
-              activeTab === "surah"
-                ? "kanzNavigationButton active"
-                : "kanzNavigationButton"
-            }
-            onClick={() => toggleTab("surah")}
-            aria-expanded={activeTab === "surah"}
-          >
-            Surah ka list
-          </button>
+          <input
+            id="kanz-ayah-search"
+            className="kanzSearchInput"
+            type="search"
+            placeholder="Arabic ayat, tarjuma ya 2:255..."
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            autoComplete="off"
+          />
 
-          <button
-            type="button"
-            className={
-              activeTab === "ayah"
-                ? "kanzNavigationButton active"
-                : "kanzNavigationButton"
-            }
-            onClick={() => toggleTab("ayah")}
-            aria-expanded={activeTab === "ayah"}
-          >
-            Ayat ka list
-          </button>
+          {searchQuery && (
+            <button
+              type="button"
+              className="kanzSearchClear"
+              onClick={() => setSearchQuery("")}
+              aria-label="Search clear karein"
+            >
+              ×
+            </button>
+          )}
         </div>
 
-        {activeTab && (
-          <div className="kanzNavigationPanel">
-            {activeTab === "page" && pageItems.length === 0 ? (
-              <p className="kanzNavigationMessage">
-                Page list dikhane ke liye Qur’an ke actual
-                Mushaf page numbers data mein connect karne
-                honge. Filhaal page numbers available nahi hain.
-              </p>
-            ) : (
-              <div className="kanzNavigationList">
-                {getItemsForTab().map((item) => (
-                  <button
-                    type="button"
-                    key={item.key}
-                    className={
-                      selectedItem === item.key
-                        ? "kanzNavigationListItem selected"
-                        : "kanzNavigationListItem"
-                    }
-                    onClick={() => navigateToItem(item)}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+        {searchQuery.trim() && (
+          <div className="kanzSearchResults" role="status">
+            <div className="kanzSearchResultsHeader">
+              <span>Search results</span>
+              <span>{filteredAyahs.length} results</span>
+            </div>
+
+            {filteredAyahs.length > 0 ? (
+              <div className="kanzSearchResultsList">
+                {filteredAyahs.slice(0, 50).map((ayah) => {
+                  const key = getAyahKey(ayah);
+
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      className="kanzSearchResult"
+                      onClick={() => jumpToAyah(ayah)}
+                    >
+                      <span className="kanzSearchResultReference">
+                        {ayah.surahName || `Surah ${ayah.surahNumber}`}
+                        {" · "}
+                        Ayat {ayah.ayahNumber}
+                      </span>
+
+                      <span className="kanzSearchResultArabic" dir="rtl">
+                        {ayah.arabic}
+                      </span>
+                    </button>
+                  );
+                })}
+
+                {filteredAyahs.length > 50 && (
+                  <p className="kanzSearchMore">
+                    Pehle 50 results dikhaye gaye hain. Search ko aur specific
+                    banayein.
+                  </p>
+                )}
               </div>
+            ) : (
+              <p className="kanzSearchEmpty">
+                Koi matching Ayat nahi mili. Doosre alfaaz se search karein.
+              </p>
             )}
           </div>
         )}
-      </nav>
+      </div>
 
-      {/* ===================================================
-          AYAT LIST
-         =================================================== */}
-
+      {/* Ayat list — Arabic text ko original form mein render kiya jata hai */}
       <div className="kanzAyahList">
-        {ayahs.map((ayah, index) => {
-          const key = getAyahKey(
-            ayah.surahNumber,
-            ayah.ayahNumber
-          );
-
-          const currentLanguage = getCurrentLanguage(ayah);
-
-          const translation = currentLanguage
-            ? ayah.translations[currentLanguage]?.trim()
-            : "";
-
-          const availableLanguages =
-            getAvailableLanguages(ayah.translations);
-
-          const canCycle =
-            autoMode && availableLanguages.length > 1;
-
-          const previousAyah = ayahs[index - 1];
-
-          const isFirstAyahOfSurah =
-            !previousAyah ||
-            previousAyah.surahNumber !== ayah.surahNumber;
-
-          const isFirstAyahOfPage =
-            typeof ayah.pageNumber === "number" &&
-            (
-              !previousAyah ||
-              previousAyah.pageNumber !== ayah.pageNumber
-            );
+        {ayahs.map((ayah) => {
+          const key = getAyahKey(ayah);
+          const language = getCurrentLanguage(ayah);
+          const translation = language
+            ? ayah.translations[language]
+            : undefined;
 
           return (
             <article
-              className="kanzAyahCard"
               key={key}
-              id={getAyahElementId(
-                ayah.surahNumber,
-                ayah.ayahNumber
-              )}
+              id={`kanz-ayah-${key}`}
+              className={`kanzAyahCard ${
+                activeAyah === key ? "kanzAyahActive" : ""
+              }`}
             >
-              {/* Page anchor: actual page metadata par hi. */}
-              {isFirstAyahOfPage &&
-                typeof ayah.pageNumber === "number" && (
-                  <span
-                    className="kanzPageAnchor"
-                    id={getPageElementId(ayah.pageNumber)}
-                    aria-hidden="true"
-                  />
-                )}
-
-              {/* Surah anchor: har Surah ke pehle Ayat par. */}
-              {isFirstAyahOfSurah && (
-                <span
-                  className="kanzSurahAnchor"
-                  id={getSurahElementId(ayah.surahNumber)}
-                  aria-hidden="true"
-                />
-              )}
-
               <div className="kanzAyahReference">
-                <span>{getSurahLabel(ayah)}</span>
+                <span>
+                  {ayah.surahName || `Surah ${ayah.surahNumber}`}
+                </span>
 
-                <span className="kanzAyahNumber">
-                  Ayat {ayah.ayahNumber}
+                <span>
+                  {ayah.surahNumber}:{ayah.ayahNumber}
                 </span>
               </div>
 
-              {/* Original Arabic text ko badla nahi ja raha. */}
-              <p
-                className="kanzArabicText"
-                dir="rtl"
-                lang="ar"
-              >
+              <p className="kanzArabicText" dir="rtl" lang="ar">
                 {ayah.arabic}
               </p>
 
-              <div className="kanzTranslationArea">
-                <button
-                  type="button"
-                  className="kanzTranslationButton"
-                  onClick={() => handleTranslationTap(ayah)}
-                  disabled={!canCycle}
-                  aria-label={
-                    `Surah ${ayah.surahNumber}, Ayat ${ayah.ayahNumber}: agla available tarjuma`
-                  }
-                  title={
-                    canCycle
-                      ? "Agli available language"
-                      : "Ek se zyada translations available nahi hain"
-                  }
-                >
-                  <span className="kanzTranslationLabel">
-                    {currentLanguage
-                      ? LANGUAGE_LABELS[currentLanguage]
-                      : LANGUAGE_LABELS[
-                          autoMode ? "en" : manualLanguage
-                        ]}
-                  </span>
+              {language && translation ? (
+                <>
+                  <button
+                    type="button"
+                    className="kanzTranslationButton"
+                    onClick={() => cycleTranslation(ayah)}
+                    aria-label="Tarjuma badalne ke liye tap karein"
+                    title="Available translations badalne ke liye tap karein"
+                  >
+                    {language === "en"
+                      ? "English"
+                      : language === "ur"
+                        ? "اردو"
+                        : language === "hi"
+                          ? "हिन्दी"
+                          : "Roman Urdu"}
+                    {getAvailableLanguages(ayah.translations).length > 1
+                      ? " ↻"
+                      : ""}
+                  </button>
 
-                  {canCycle && (
-                    <span
-                      className="kanzCycleIcon"
-                      aria-hidden="true"
-                    >
-                      ↻
-                    </span>
-                  )}
-                </button>
-
-                {translation ? (
                   <p
                     className="kanzTranslationText"
-                    dir={
-                      currentLanguage === "ur"
-                        ? "rtl"
-                        : "auto"
-                    }
-                    lang={currentLanguage || "en"}
+                    dir={language === "ur" ? "rtl" : "auto"}
+                    lang={language}
                   >
                     {translation}
                   </p>
-                ) : (
-                  <p className="kanzMissingTranslation">
-                    Is language mein is Ayat ka tarjuma abhi
-                    available nahi hai. Verified source aur
-                    zaroori permission confirm hone ke baad hi
-                    tarjuma yahan dikhaya jayega.
-                  </p>
-                )}
-              </div>
+                </>
+              ) : (
+                <p className="kanzMissingTranslation">
+                  Is Ayat ka tarjuma abhi available nahi hai.
+                </p>
+              )}
             </article>
           );
         })}
       </div>
 
-      <p className="kanzReaderFooter">
-        Arabic Qur’an text original form mein preserve kiya
-        jata hai. Translation ki availability verified source
-        aur permission par depend karti hai.
-      </p>
+      <div className="kanzTanzilAttribution">
+        Arabic text ke liye Tanzil ka attribution aur license notice usi
+        surat mein rakhein jab istemal kiya gaya text Tanzil se aaya ho.
+        <br />
+        <a
+          href="https://tanzil.net/docs/Text_License"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tanzil Text License
+        </a>
+      </div>
     </section>
   );
 }
