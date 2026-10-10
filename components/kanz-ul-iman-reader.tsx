@@ -1,41 +1,71 @@
 "use client";
 
 /*
-  FILE: components/kanz-ul-iman-reader.tsx
-
-  KAAM:
-  Kanz-ul-Iman ke Qur'an reader ka reusable component.
-
-  YE FILE:
-  1. Arabic ayat aur translation display karti hai.
-  2. Auto Mode mein translation par tap karne se language badalti hai.
-  3. English -> Hindi -> Urdu -> English ka order rakhti hai.
-  4. Future mein Roman Urdu/Hinglish support kar sakti hai.
-
-  DATA:
-  Is component mein asli translation hard-code nahi ki gayi.
-  Ayat aur translations parent page se props ke zariye aayenge.
-
-  IMPORTANT:
-  Arabic Qur'an ki original file ko ye component modify nahi karta.
-*/
+ * ============================================================
+ * MASLAK-E-ALA HAZRAT — KANZ-UL-IMAN READER
+ * ============================================================
+ *
+ * IS FILE KA KAAM:
+ * 1. Qur'an ki Arabic ayatein dikhana.
+ * 2. Har ayat ke neeche available tarjuma dikhana.
+ * 3. Auto Mode aur Manual Language Mode dena.
+ * 4. Mobile screen par reader ko aasaan banana.
+ *
+ * ZAROORI BAAT:
+ * - Arabic Qur'an text ko modify nahi karna.
+ * - Bina permission confirm kiye kisi translation ko publish
+ *   ya enable nahi karna.
+ * - Hindi aur Roman Urdu translation available na ho to
+ *   unka tarjuma khud se bana kar nahi dikhana.
+ *
+ * LANGUAGE DATA KA EXAMPLE:
+ *
+ * {
+ *   en: "Example English translation",
+ *   ur: "Tarjume ka Urdu text"
+ * }
+ *
+ * Upar diya gaya text sirf example hai, Qur'an ka asli tarjuma
+ * nahi. Is tarah ka example website ke actual data mein mat daalna.
+ * ============================================================
+ */
 
 import { useEffect, useState } from "react";
 
-/* Supported translation languages.
-   Future example: Roman Urdu add karne ke liye "roman" pehle se maujood hai. */
+/*
+ * ============================================================
+ * SECTION 1: TYPES
+ * ============================================================
+ *
+ * Type ka kaam:
+ * TypeScript ko batana ki data kis tarah ka hoga.
+ *
+ * KanzLanguage:
+ * Translation ki supported language ka naam.
+ *
+ * KanzTranslations:
+ * Ek ayat ke available translations.
+ *
+ * KanzReaderAyah:
+ * Ek ayat ka number, Arabic text aur translations.
+ *
+ * Example:
+ * {
+ *   surahNumber: 1,
+ *   ayahNumber: 1,
+ *   arabic: "...",
+ *   translations: { en: "..." }
+ * }
+ *
+ * Ye sirf data ka structure samjhane ke liye example hai.
+ */
+
 export type KanzLanguage = "en" | "hi" | "ur" | "roman";
 
-/* Har language ka tarjuma optional hai.
-   Example: translations.en = English translation.
-   Example: translations.hi = Hindi translation.
-   Example: translations.ur = Urdu translation.
-   Example: translations.roman = Roman Urdu/Hinglish translation. */
 export type KanzTranslations = Partial<
   Record<KanzLanguage, string>
 >;
 
-/* Har ayat ka data is structure mein aayega. */
 export type KanzReaderAyah = {
   surahNumber: number;
   ayahNumber: number;
@@ -43,33 +73,161 @@ export type KanzReaderAyah = {
   translations: KanzTranslations;
 };
 
-/* Parent page ayat ki list is component ko degi. */
+/*
+ * Props ka matlab:
+ * Is component ko parent page se kaunsa data milega.
+ *
+ * Is reader ko "ayahs" naam ki ayaton ki list milti hai.
+ */
 type Props = {
   ayahs: KanzReaderAyah[];
 };
 
-/* Auto Mode ka required switching order.
-   Tap 1: English -> Hindi
-   Tap 2: Hindi -> Urdu
-   Tap 3: Urdu -> English
-
-   Future mein Roman Urdu ko cycle mein shamil karna ho,
-   to is array mein "roman" add kar sakte hain. */
+/*
+ * ============================================================
+ * SECTION 2: LANGUAGE SETTINGS
+ * ============================================================
+ *
+ * LANGUAGE_ORDER:
+ * Auto Mode mein language badalne ka order.
+ *
+ * Example:
+ * Agar kisi ayat mein English aur Urdu dono available hon,
+ * to button dabane par English se Urdu aur phir English
+ * par wapas ja sakte hain.
+ *
+ * Hindi ya Roman Urdu tabhi select honge jab unka asli
+ * translation data available hoga.
+ */
 const LANGUAGE_ORDER: KanzLanguage[] = [
   "en",
   "hi",
   "ur",
+  "roman",
 ];
 
-/* Button par dikhne wale language names. */
+/*
+ * LANGUAGE_LABELS:
+ * Internal language code ko user-friendly naam mein badalta hai.
+ *
+ * Example:
+ * "en"    -> "English"
+ * "hi"    -> "हिन्दी"
+ * "ur"    -> "اردو"
+ * "roman" -> "Roman Urdu"
+ */
 const LANGUAGE_LABELS: Record<KanzLanguage, string> = {
   en: "English",
   hi: "हिन्दी",
   ur: "اردو",
-  roman: "Hinglish",
+  roman: "Roman Urdu",
 };
 
-/* Website ke global language setting se language samajhna. */
+/*
+ * ============================================================
+ * SECTION 3: AVAILABLE TRANSLATIONS CHECK KARNA
+ * ============================================================
+ *
+ * FUNCTION: getAvailableLanguages
+ *
+ * Kaam:
+ * Check karna ki kisi ayat ke liye kaun-kaun se translations
+ * sach mein available hain.
+ *
+ * Example:
+ * Input:
+ * { en: "Example English text", ur: "مثال" }
+ *
+ * Output:
+ * ["en", "ur"]
+ *
+ * Agar translation khaali hai ya missing hai, to us language
+ * ko available list mein nahi rakhenge.
+ */
+function getAvailableLanguages(
+  translations: KanzTranslations
+): KanzLanguage[] {
+  return LANGUAGE_ORDER.filter((language) =>
+    Boolean(translations[language]?.trim())
+  );
+}
+
+/*
+ * FUNCTION: getNextAvailableLanguage
+ *
+ * Kaam:
+ * Current language ke baad agli available language chunna.
+ *
+ * Example:
+ * Available languages: ["en", "ur"]
+ *
+ * Current "en"  -> Next "ur"
+ * Current "ur"  -> Next "en"
+ *
+ * Agar sirf English available hai, to English hi milegi.
+ * Agar koi translation available nahi hai, to null milega.
+ */
+function getNextAvailableLanguage(
+  currentLanguage: KanzLanguage | null,
+  translations: KanzTranslations
+): KanzLanguage | null {
+  const available = getAvailableLanguages(translations);
+
+  /*
+   * Koi translation nahi mila.
+   * null ka matlab: filhaal dikhane ke liye tarjuma nahi hai.
+   */
+  if (available.length === 0) {
+    return null;
+  }
+
+  /*
+   * Abhi language select nahi hai, isliye pehli available
+   * language se shuru karenge.
+   */
+  if (!currentLanguage) {
+    return available[0];
+  }
+
+  const currentIndex = available.indexOf(currentLanguage);
+
+  /*
+   * Current language available list mein nahi hai.
+   * Aise mein pehli available language se shuru karein.
+   */
+  if (currentIndex === -1) {
+    return available[0];
+  }
+
+  /*
+   * % ka istemal list ke aakhri item ke baad dobara pehle
+   * item par aane ke liye hota hai.
+   *
+   * Example:
+   * ["en", "ur"] mein "ur" ke baad phir "en".
+   */
+  return available[(currentIndex + 1) % available.length];
+}
+
+/*
+ * ============================================================
+ * SECTION 4: WEBSITE KI SAVED LANGUAGE PADHNA
+ * ============================================================
+ *
+ * FUNCTION: readSiteLanguage
+ *
+ * Kaam:
+ * Browser ki localStorage se website ki saved language padhna.
+ *
+ * Website mein "site-language" naam ki setting use hoti hai.
+ *
+ * Example:
+ * localStorage mein "ur" save hai -> "ur" return hoga.
+ * Koi setting nahi hai -> "auto" return hoga.
+ *
+ * try/catch isliye hai taaki browser storage access fail hone
+ * par page crash na ho.
+ */
 function readSiteLanguage(): string {
   try {
     return localStorage.getItem("site-language") || "auto";
@@ -78,122 +236,202 @@ function readSiteLanguage(): string {
   }
 }
 
-/* Agli available translation language dhoondhna.
-   Isse kisi missing translation ki wajah se khaali text nahi dikhega. */
-function getNextAvailableLanguage(
-  currentLanguage: KanzLanguage,
-  translations: KanzTranslations
-): KanzLanguage | null {
-  const availableLanguages = LANGUAGE_ORDER.filter(
-    (language) =>
-      Boolean(translations[language]?.trim())
-  );
-
-  /* Future Roman Urdu translation bhi available ho,
-     to use cycle mein shamil karne ke liye LANGUAGE_ORDER
-     mein "roman" add karna hoga. */
-
-  if (availableLanguages.length === 0) {
-    return null;
-  }
-
-  if (availableLanguages.length === 1) {
-    return availableLanguages[0];
-  }
-
-  const currentIndex =
-    availableLanguages.indexOf(currentLanguage);
-
-  /* Current language available na ho to pehli available language. */
-  if (currentIndex === -1) {
-    return availableLanguages[0];
-  }
-
-  /* Example: English ke baad Hindi, Hindi ke baad Urdu. */
-  return availableLanguages[
-    (currentIndex + 1) % availableLanguages.length
-  ];
-}
-
+/*
+ * ============================================================
+ * SECTION 5: MAIN READER COMPONENT
+ * ============================================================
+ *
+ * KanzUlImanReader ko parent page ayaton ki list deta hai.
+ * Component har ayat ka Arabic text aur available translation
+ * render karta hai.
+ */
 export default function KanzUlImanReader({
   ayahs,
 }: Props) {
-  /* Auto Mode ON/OFF aur manual language. */
+  /*
+   * STATE: autoMode
+   *
+   * true  = Auto Mode.
+   * false = Manual Mode.
+   *
+   * Auto Mode mein har ayat ka translation button available
+   * languages ke beech switch karta hai.
+   *
+   * Manual Mode mein upar selector se language chuni jaati hai.
+   */
   const [autoMode, setAutoMode] = useState(true);
+
+  /*
+   * STATE: manualLanguage
+   *
+   * Manual Mode mein user ki selected language.
+   *
+   * Default "en" hai, lekin English translation na hone par
+   * code galti se doosri language ka tarjuma nahi dikhayega.
+   */
   const [manualLanguage, setManualLanguage] =
     useState<KanzLanguage>("en");
 
-  /* Har ayat ki language alag store hoti hai.
-     Example: ayah "1:1" Urdu par ho sakti hai,
-     jabki ayah "1:2" English par ho sakti hai. */
+  /*
+   * STATE: ayahLanguages
+   *
+   * Har ayat ke liye alag selected language yaad rakhta hai.
+   *
+   * Example:
+   * {
+   *   "1:1": "ur",
+   *   "1:2": "en"
+   * }
+   *
+   * Iska matlab:
+   * Surah 1 Ayah 1 par Urdu selected hai.
+   * Surah 1 Ayah 2 par English selected hai.
+   *
+   * Ye selection browser refresh ke baad save rehne ki
+   * guarantee nahi deta; ye React component ki current state hai.
+   */
   const [ayahLanguages, setAyahLanguages] =
     useState<Record<string, KanzLanguage>>({});
 
-  /* Page khulne par website ki language setting padhein. */
+  /*
+   * ==========================================================
+   * SECTION 6: GLOBAL LANGUAGE SETTING KE SAATH SYNC
+   * ==========================================================
+   *
+   * Page load hone par website ki saved language padhein.
+   *
+   * Agar website ki language "en", "hi" ya "ur" hai,
+   * to Manual Mode mein us language ko select karein.
+   *
+   * Agar website ki language "auto" hai, to Auto Mode chalu karein.
+   *
+   * IMPORTANT:
+   * Isi browser tab mein language change hone par "storage" event
+   * aam taur par fire nahi hota. Isliye hum custom event
+   * "site-language-change" bhi sunte hain.
+   *
+   * Homepage se custom event dispatch karne ke liye uske
+   * changeLanguage function mein bhi event add karna hoga.
+   */
   useEffect(() => {
-    const updateLanguageSetting = () => {
-      const savedLanguage = readSiteLanguage();
+    const updateLanguageSetting = (value?: string) => {
+      const savedLanguage = value ?? readSiteLanguage();
 
       if (
         savedLanguage === "en" ||
         savedLanguage === "hi" ||
-        savedLanguage === "ur"
+        savedLanguage === "ur" ||
+        savedLanguage === "roman"
       ) {
         setManualLanguage(savedLanguage);
         setAutoMode(false);
       } else {
-        /* Website setting "auto" ho to English se shuru karein. */
-        setManualLanguage("en");
         setAutoMode(true);
       }
     };
 
+    /*
+     * Pehli baar saved setting read karein.
+     */
     updateLanguageSetting();
 
-    /* Doosre tab mein language setting badle to update karein. */
-    window.addEventListener("storage", updateLanguageSetting);
+    /*
+     * Doosre browser tab se setting badalne par.
+     */
+    const handleStorage = () => {
+      updateLanguageSetting();
+    };
 
+    /*
+     * Isi tab mein custom event se language badalne par.
+     */
+    const handleLanguageChange = (event: Event) => {
+      const customEvent = event as CustomEvent<string>;
+
+      updateLanguageSetting(customEvent.detail);
+    };
+
+    window.addEventListener("storage", handleStorage);
+
+    window.addEventListener(
+      "site-language-change",
+      handleLanguageChange
+    );
+
+    /*
+     * Component hatne par listeners remove karna zaroori hai.
+     * Isse unwanted duplicate listeners nahi bante.
+     */
     return () => {
+      window.removeEventListener("storage", handleStorage);
+
       window.removeEventListener(
-        "storage",
-        updateLanguageSetting
+        "site-language-change",
+        handleLanguageChange
       );
     };
   }, []);
 
-  /* Surah aur ayat number se unique key banti hai.
-     Example: Surah 1, Ayat 2 -> "1:2". */
+  /*
+   * ==========================================================
+   * SECTION 7: AYAT KI UNIQUE KEY
+   * ==========================================================
+   *
+   * Har ayat ko unique naam dena zaroori hai.
+   *
+   * Example:
+   * Surah 1 Ayah 1 -> "1:1"
+   * Surah 2 Ayah 1 -> "2:1"
+   *
+   * Is key se har ayat ki language alag track hoti hai.
+   */
   const getAyahKey = (
     surahNumber: number,
     ayahNumber: number
-  ) => `${surahNumber}:${ayahNumber}`;
+  ): string => `${surahNumber}:${ayahNumber}`;
 
-  /* Current ayat ke liye kaunsi language dikhani hai. */
+  /*
+   * ==========================================================
+   * SECTION 8: AYAT KI CURRENT LANGUAGE
+   * ==========================================================
+   *
+   * FUNCTION: getCurrentLanguage
+   *
+   * Kaam:
+   * Decide karna ki kisi ayat ke liye kaunsi language dikhani hai.
+   *
+   * Rules:
+   * 1. Koi translation available nahi -> null.
+   * 2. Manual Mode -> sirf selected language.
+   * 3. Auto Mode -> ayat ki saved language, agar available ho.
+   * 4. Warna English available ho to English.
+   * 5. English na ho to pehli available language.
+   *
+   * IMPORTANT:
+   * Manual Mode mein selected language missing hone par
+   * doosri language ka tarjuma automatically nahi dikhayenge.
+   */
   const getCurrentLanguage = (
     ayah: KanzReaderAyah
   ): KanzLanguage | null => {
-    const availableLanguages = LANGUAGE_ORDER.filter(
-      (language) =>
-        Boolean(ayah.translations[language]?.trim())
-    );
+    const available = getAvailableLanguages(ayah.translations);
 
-    if (availableLanguages.length === 0) {
+    if (available.length === 0) {
       return null;
     }
 
+    /*
+     * Manual Mode mein selected language ko hi use karein.
+     */
     if (!autoMode) {
-      /* Manual mode mein selected language available ho to wahi. */
-      if (
-        ayah.translations[manualLanguage]?.trim()
-      ) {
-        return manualLanguage;
-      }
-
-      /* Selected language ka text abhi nahi hai,
-         isliye available text dikhayein. */
-      return availableLanguages[0];
+      return ayah.translations[manualLanguage]?.trim()
+        ? manualLanguage
+        : null;
     }
 
+    /*
+     * Auto Mode mein pehle ayat ki apni saved language dekhein.
+     */
     const key = getAyahKey(
       ayah.surahNumber,
       ayah.ayahNumber
@@ -208,54 +446,127 @@ export default function KanzUlImanReader({
       return savedLanguage;
     }
 
-    /* Auto Mode ka default: English, agar available ho. */
+    /*
+     * Pehli preference English hai, agar available ho.
+     */
     if (ayah.translations.en?.trim()) {
       return "en";
     }
 
-    /* English abhi available nahi ho to pehla available tarjuma. */
-    return availableLanguages[0];
+    /*
+     * English na ho to pehli available language.
+     */
+    return available[0];
   };
 
-  /* Translation card par tap karne se language cycle hoti hai. */
+  /*
+   * ==========================================================
+   * SECTION 9: TRANSLATION BUTTON
+   * ==========================================================
+   *
+   * FUNCTION: handleTranslationTap
+   *
+   * Kaam:
+   * Auto Mode mein ayat ke tarjume ko agli available language
+   * par switch karna.
+   *
+   * Example:
+   * English aur Urdu available hain:
+   * English button tap -> Urdu.
+   * Urdu button tap -> English.
+   *
+   * Manual Mode mein ye function switch nahi karega.
+   */
   const handleTranslationTap = (
     ayah: KanzReaderAyah
   ) => {
-    /* Manual mode mein tap karne se language nahi badlegi. */
-    if (!autoMode) return;
+    if (!autoMode) {
+      return;
+    }
 
     const key = getAyahKey(
       ayah.surahNumber,
       ayah.ayahNumber
     );
 
-    const currentLanguage =
-      getCurrentLanguage(ayah);
-
-    if (!currentLanguage) return;
+    const currentLanguage = getCurrentLanguage(ayah);
 
     const nextLanguage = getNextAvailableLanguage(
       currentLanguage,
       ayah.translations
     );
 
-    if (!nextLanguage) return;
+    /*
+     * Koi translation available nahi hai.
+     * Isliye selected language update nahi karni.
+     */
+    if (!nextLanguage) {
+      return;
+    }
 
+    /*
+     * Sirf isi ayat ki language update karein.
+     * Baaki ayaton ki language ko preserve karein.
+     */
     setAyahLanguages((previous) => ({
       ...previous,
       [key]: nextLanguage,
     }));
   };
 
+  /*
+   * ==========================================================
+   * SECTION 10: LANGUAGE SELECTOR
+   * ==========================================================
+   *
+   * User Auto ya Manual language select karta hai.
+   *
+   * value "auto" -> Auto Mode.
+   * value "en"   -> English Manual Mode.
+   * value "hi"   -> Hindi Manual Mode.
+   * value "ur"   -> Urdu Manual Mode.
+   * value "roman" -> Roman Urdu Manual Mode.
+   */
+  const handleModeChange = (value: string) => {
+    if (value === "auto") {
+      setAutoMode(true);
+      return;
+    }
+
+    if (
+      value === "en" ||
+      value === "hi" ||
+      value === "ur" ||
+      value === "roman"
+    ) {
+      setManualLanguage(value);
+      setAutoMode(false);
+    }
+  };
+
+  /*
+   * ==========================================================
+   * SECTION 11: READER KA HTML / UI
+   * ==========================================================
+   *
+   * Yahan Arabic text, reference, translation button aur
+   * translation message render hote hain.
+   *
+   * CSS classes app/globals.css mein define hongi.
+   */
   return (
     <section className="kanzReader">
-      {/* Reader heading aur mode indicator. */}
-      <div className="kanzReaderHeader">
-        <div>
-          <h2>Kanz-ul-Iman Reader</h2>
+      {/* Reader ka title aur current mode. */}
+      <header className="kanzReaderHeader">
+        <div className="kanzReaderHeading">
+          <span className="kanzReaderEyebrow">
+            ALA HAZRAT
+          </span>
+
+          <h2>Kanz-ul-Iman</h2>
 
           <p>
-            Arabic ayat ke saath tarjuma padhein.
+            Qur’an ki Arabic ayat aur available tarjuma.
           </p>
         </div>
 
@@ -268,55 +579,115 @@ export default function KanzUlImanReader({
         >
           {autoMode ? "Auto Mode" : "Manual Mode"}
         </span>
+      </header>
+
+      {/* Language selector: Auto ya Manual language. */}
+      <div className="kanzLanguageControls">
+        <label htmlFor="kanz-language-select">
+          Tarjume ki language
+        </label>
+
+        <select
+          id="kanz-language-select"
+          value={autoMode ? "auto" : manualLanguage}
+          onChange={(event) =>
+            handleModeChange(event.target.value)
+          }
+        >
+          <option value="auto">
+            Auto — available language
+          </option>
+
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="ur">اردو</option>
+          <option value="roman">Roman Urdu</option>
+        </select>
       </div>
 
-      {/* Language order ka chhota guide. */}
+      {/* Mode ke mutabiq user ko chhoti si help. */}
       <p className="kanzLanguageHint">
-        Auto Mode: English → Hindi → Urdu → English
+        {autoMode
+          ? "Auto Mode: Har ayat ka tarjuma badalne ke liye tarjume wale button par tap karein, agar ek se zyada languages available hon."
+          : `Manual Mode: ${LANGUAGE_LABELS[manualLanguage]} selected hai. Is language ka tarjuma available na hone par message dikhega.`}
       </p>
 
-      {/* Ayat list parent page se aayegi. */}
+      {/* Agar ayahs list khaali hai to empty state dikhayein. */}
       {ayahs.length === 0 ? (
         <div className="kanzEmptyState">
-          <h3>Reader tayyar ho raha hai</h3>
+          <div
+            className="kanzEmptyIcon"
+            aria-hidden="true"
+          >
+            ۞
+          </div>
+
+          <h3>Reader data available nahi hai</h3>
 
           <p>
-            Arabic ayat aur verified translation data
-            connect karne ke baad yahan reader dikhega.
+            Arabic ayaton ka data connect hone par yahan
+            Qur’an reader dikhaya jayega.
           </p>
         </div>
       ) : (
+        /*
+         * Har ayat ke liye alag card banega.
+         * map() list ke har item ko display karta hai.
+         */
         <div className="kanzAyahList">
           {ayahs.map((ayah) => {
+            /*
+             * Current ayat ki unique key.
+             */
             const key = getAyahKey(
               ayah.surahNumber,
               ayah.ayahNumber
             );
 
+            /*
+             * Is ayat ke liye selected language.
+             */
             const currentLanguage =
               getCurrentLanguage(ayah);
 
+            /*
+             * Selected language ka actual translation text.
+             */
             const translation = currentLanguage
-              ? ayah.translations[currentLanguage]
-              : undefined;
+              ? ayah.translations[currentLanguage]?.trim()
+              : "";
+
+            /*
+             * Kitni languages ka tarjuma available hai?
+             */
+            const availableLanguages =
+              getAvailableLanguages(ayah.translations);
+
+            /*
+             * Cycle button tabhi active hoga jab Auto Mode ho
+             * aur ek se zyada translations available hon.
+             */
+            const canCycle =
+              autoMode && availableLanguages.length > 1;
 
             return (
               <article
                 className="kanzAyahCard"
                 key={key}
               >
-                {/* Ayat reference. */}
+                {/* Surah aur ayah ka reference. */}
                 <div className="kanzAyahReference">
                   <span>
                     Surah {ayah.surahNumber}
                   </span>
 
-                  <span>
+                  <span className="kanzAyahNumber">
                     Ayah {ayah.ayahNumber}
                   </span>
                 </div>
 
-                {/* Original Arabic text ko sirf display karte hain. */}
+                {/* Arabic Qur'an text.
+                    dir="rtl" Arabic ko right-to-left rakhta hai. */}
                 <p
                   className="kanzArabicText"
                   dir="rtl"
@@ -325,81 +696,88 @@ export default function KanzUlImanReader({
                   {ayah.arabic}
                 </p>
 
-                {/* Tap karne par translation language badlegi. */}
-                <button
-                  type="button"
-                  className="kanzTranslationButton"
-                  onClick={() =>
-                    handleTranslationTap(ayah)
-                  }
-                  disabled={
-                    !autoMode ||
-                    !currentLanguage ||
-                    LANGUAGE_ORDER.filter(
-                      (language) =>
-                        Boolean(
-                          ayah.translations[language]?.trim()
-                        )
-                    ).length < 2
-                  }
-                  aria-label="Tarjume ki language badlein"
-                  title={
-                    autoMode
-                      ? "Agli available language ke liye tap karein"
-                      : "Language badalne ke liye website Language setting mein Auto chunein"
-                  }
-                >
-                  <span className="kanzTranslationLabel">
-                    {currentLanguage
-                      ? LANGUAGE_LABELS[currentLanguage]
-                      : "Translation unavailable"}
-                  </span>
-
-                  <span aria-hidden="true">
-                    {autoMode ? " ↻" : ""}
-                  </span>
-                </button>
-
-                {translation ? (
-                  <p
-                    className="kanzTranslationText"
-                    dir={
-                      currentLanguage === "ur"
-                        ? "rtl"
-                        : "auto"
+                {/* Translation section. */}
+                <div className="kanzTranslationArea">
+                  <button
+                    type="button"
+                    className="kanzTranslationButton"
+                    onClick={() =>
+                      handleTranslationTap(ayah)
                     }
-                    lang={
-                      currentLanguage === "ur"
-                        ? "ur"
-                        : currentLanguage === "hi"
-                        ? "hi"
-                        : "en"
+                    disabled={!canCycle}
+                    aria-label={
+                      `Surah ${ayah.surahNumber}, Ayah ${ayah.ayahNumber}: agla available tarjuma`
+                    }
+                    title={
+                      canCycle
+                        ? "Agli available language"
+                        : autoMode
+                        ? "Is ayat ke liye sirf ek language available hai"
+                        : "Language badalne ke liye upar selector use karein"
                     }
                   >
-                    {translation}
-                  </p>
-                ) : (
-                  <p className="kanzMissingTranslation">
-                    Is ayat ka tarjuma abhi available nahi hai.
-                  </p>
-                )}
+                    <span className="kanzTranslationLabel">
+                      {currentLanguage
+                        ? LANGUAGE_LABELS[currentLanguage]
+                        : LANGUAGE_LABELS[
+                            autoMode ? "en" : manualLanguage
+                          ]}
+                    </span>
+
+                    {canCycle && (
+                      <span
+                        className="kanzCycleIcon"
+                        aria-hidden="true"
+                      >
+                        ↻
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Translation available hai to text dikhayein. */}
+                  {translation ? (
+                    <p
+                      className="kanzTranslationText"
+                      dir={
+                        currentLanguage === "ur"
+                          ? "rtl"
+                          : "auto"
+                      }
+                      lang={
+                        currentLanguage === "ur"
+                          ? "ur"
+                          : currentLanguage === "hi"
+                          ? "hi"
+                          : "en"
+                      }
+                    >
+                      {translation}
+                    </p>
+                  ) : (
+                    /*
+                     * Translation missing hai to fake text
+                     * ya doosri language ka text nahi dikhana.
+                     */
+                    <p className="kanzMissingTranslation">
+                      Is language mein is ayat ka tarjuma abhi
+                      available nahi hai. Verified source aur
+                      zaroori permission confirm hone ke baad
+                      hi tarjuma yahan dikhaya jayega.
+                    </p>
+                  )}
+                </div>
               </article>
             );
           })}
         </div>
       )}
 
-      {/* Developer note:
-          Future mein English/Hindi/Roman Urdu files connect karne ke baad
-          translations object mein unke text add honge.
-          Example:
-          translations: {
-            en: englishText,
-            hi: hindiText,
-            ur: urduText,
-            roman: romanUrduText,
-          }
-      */}
+      {/* Reader ke neeche source aur permission reminder. */}
+      <p className="kanzReaderFooter">
+        Arabic Qur’an text ko original form mein preserve kiya
+        jata hai. Translation ki availability verified source
+        aur permission par depend karti hai.
+      </p>
     </section>
-    );
-}
+  );
+      }
