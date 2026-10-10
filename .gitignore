@@ -1,0 +1,4 @@
+# Private Quran translations — never commit
+data/translations/private/
+data/translations/ur.kanzuliman.txt
+data/translations/en.ahmedraza.txt
