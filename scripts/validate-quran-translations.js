@@ -106,10 +106,11 @@ function main() {
     console.log(`\nChecking: ${item.name}`);
 
     if (!fs.existsSync(item.file)) {
-      console.log("File nahi mili; abhi skip ki gayi.");
-      console.log(`Expected location: ${path.relative(root, item.file)}`);
-      continue;
-    }
+  console.log("File nahi mili; validation adhuri hai.");
+  console.log(`Expected location: ${path.relative(root, item.file)}`);
+  failed = true;
+  continue;
+}
 
     const translation = readReferences(item.file);
     const errors = [...translation.errors];
@@ -165,4 +166,4 @@ try {
 } catch (error) {
   console.error(`Validation nahi ho saki: ${error.message}`);
   process.exitCode = 1;
-  }
+}
