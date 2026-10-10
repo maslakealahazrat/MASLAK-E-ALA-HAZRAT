@@ -401,5 +401,5 @@ export default function KanzUlImanReader({
           }
       */}
     </section>
-  );
-      }
+    );
+}
