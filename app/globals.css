@@ -6172,303 +6172,293 @@ html.dark .alaHazratReferenceCard {
     height: 16px;
   }
 }
-/* =========================================
-   KANZ-UL-IMAN READER
-   Light aur Dark theme dono ke liye
-========================================= */
+/* =========================================================
+   MASLAK-E-ALA HAZRAT — KANZ-UL-IMAN READER
+   Sirf Kanz-ul-Iman reader ke liye CSS
+   Arabic Qur'an text/data ko ye CSS modify nahi karta.
+   ========================================================= */
 
+/* Main reader */
 .kanzReader {
-  width: min(920px, 92%);
-  margin: 28px auto 48px;
-  color: var(--text);
+  width: min(100% - 24px, 920px);
+  margin: 24px auto 40px;
+  color: var(--text, #243b36);
+  direction: ltr;
 }
 
-.kanzReaderHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 24px;
-  margin-bottom: 18px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-}
-
-.kanzReaderHeading {
-  min-width: 0;
-}
-
-.kanzReaderEyebrow {
-  display: inline-block;
-  margin-bottom: 7px;
-  color: var(--primary-dark);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-}
-
-.kanzReaderHeader h2 {
-  margin: 0;
-  font-size: clamp(22px, 4vw, 30px);
-  line-height: 1.3;
-  letter-spacing: -0.7px;
-}
-
-.kanzReaderHeader p {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.kanzModeBadge {
-  flex-shrink: 0;
-  padding: 8px 12px;
-  color: var(--muted);
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.kanzModeBadge.active {
-  color: var(--primary-dark);
-  border-color: var(--primary);
-}
-
-.kanzLanguageControls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 16px 18px;
-  margin-bottom: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 15px;
-}
-
-.kanzLanguageControls label {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.kanzLanguageControls select {
-  width: min(240px, 58%);
-  min-height: 42px;
-  padding: 9px 12px;
-  color: var(--text);
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  outline: none;
-  cursor: pointer;
-}
-
-.kanzLanguageControls select:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.kanzLanguageHint {
-  margin: 12px 2px 20px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-}
-
+/* Ayat list */
 .kanzAyahList {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
+/* Ayat card */
 .kanzAyahCard {
-  min-width: 0;
-  padding: clamp(17px, 4vw, 27px);
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 18px;
+  background: var(--card, #ffffff);
+  box-shadow: 0 5px 20px rgba(29, 66, 55, 0.045);
+  scroll-margin-top: 150px;
   overflow-wrap: anywhere;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  transition:
-    border-color 180ms ease,
-    transform 180ms ease;
 }
 
-.kanzAyahCard:hover {
-  border-color: var(--primary);
-}
-
+/* Surah / Ayat reference */
 .kanzAyahReference {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 14px;
-  color: var(--muted);
-  border-bottom: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 700;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border, #dce8e4);
+  color: var(--muted, #71847d);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-.kanzAyahNumber {
-  padding: 6px 10px;
-  color: var(--primary-dark);
-  background: var(--surface-soft);
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
+/* Arabic Qur'an text
+   Sirf presentation styling — text ko edit nahi karta. */
 .kanzArabicText {
-  margin: 28px 0;
-  color: var(--text);
-  font-family: "Amiri", "Noto Naskh Arabic", serif;
-  font-size: clamp(28px, 5.5vw, 40px);
-  line-height: 2.1;
+  display: block;
+  width: 100%;
+  margin: 8px 0 20px;
+  padding: 8px 0;
+  color: var(--text, #243b36);
+  font-family:
+    "KFGQPC Uthmanic Script HAFS",
+    "Amiri Quran",
+    "Noto Naskh Arabic",
+    "Traditional Arabic",
+    serif;
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 400;
+  line-height: 2.15;
+  letter-spacing: 0;
   text-align: right;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  direction: rtl;
+  unicode-bidi: isolate;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+  font-variant-ligatures: normal;
+  font-feature-settings: normal;
+  -webkit-font-smoothing: antialiased;
 }
 
-.kanzTranslationArea {
-  padding-top: 17px;
-  border-top: 1px solid var(--border);
-}
-
+/* Translation language button */
 .kanzTranslationButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   min-height: 36px;
-  padding: 7px 12px;
-  color: var(--primary-dark);
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
+  padding: 7px 13px;
+  border: 1px solid var(--border, #dce8e4);
   border-radius: 10px;
-  font-size: 12px;
-  font-weight: 800;
+  background: var(--surface, #f4f8f6);
+  color: var(--text, #243b36);
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition:
-    background 180ms ease,
-    border-color 180ms ease;
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.kanzTranslationButton:not(:disabled):hover {
-  background: var(--box);
-  border-color: var(--primary);
+.kanzTranslationButton:hover {
+  border-color: var(--accent, #79a7a5);
+  background: var(--card, #ffffff);
 }
 
-.kanzTranslationButton:disabled {
-  cursor: default;
-  opacity: 0.9;
+.kanzTranslationButton:active {
+  transform: scale(0.98);
 }
 
-.kanzTranslationButton:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 3px;
-}
-
-.kanzCycleIcon {
-  font-size: 16px;
-  line-height: 1;
-}
-
+/* Translation text */
 .kanzTranslationText {
-  margin: 16px 0 0;
-  color: var(--text);
-  font-size: 15px;
-  line-height: 2;
+  margin: 14px 0 0;
+  color: var(--text, #243b36);
+  font-size: 16px;
+  line-height: 1.95;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
+/* Urdu translation */
+.kanzTranslationText[lang="ur"],
+.kanzTranslationText[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
+/* Missing translation message */
 .kanzMissingTranslation {
-  margin: 15px 0 0;
-  padding: 13px 15px;
-  color: var(--muted);
-  background: var(--surface-soft);
-  border-left: 3px solid var(--primary);
-  border-radius: 0 10px 10px 0;
+  margin: 12px 0 0;
+  color: var(--muted, #71847d);
   font-size: 13px;
-  line-height: 1.9;
+  line-height: 1.7;
 }
 
-html[dir="rtl"] .kanzMissingTranslation {
-  border-right: 3px solid var(--primary);
-  border-left: 0;
-  border-radius: 10px 0 0 10px;
+/* Sticky Page / Surah / Ayat navigation */
+.kanzStickyNavigation {
+  position: sticky;
+  top: 12px;
+  z-index: 30;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 15px;
+  background: var(--card, #ffffff);
+  box-shadow: 0 5px 18px rgba(29, 66, 55, 0.09);
 }
 
-.kanzEmptyState {
-  padding: 36px 22px;
+/* Navigation buttons */
+.kanzStickyNavigation button {
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 5px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text, #243b36);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.kanzStickyNavigation button:hover,
+.kanzStickyNavigation button[aria-expanded="true"] {
+  border-color: var(--border, #dce8e4);
+  background: var(--surface, #f1f7f5);
+}
+
+/* Navigation dropdown/list */
+.kanzNavigationList {
+  width: 100%;
+  max-height: min(45vh, 340px);
+  margin: -10px 0 20px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 14px;
+  background: var(--card, #ffffff);
+  box-shadow: 0 6px 20px rgba(29, 66, 55, 0.06);
+}
+
+/* Individual navigation list item */
+.kanzNavigationList button {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 10px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 9px;
+  background: var(--surface, #f7faf9);
+  color: var(--text, #243b36);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: start;
+  cursor: pointer;
+}
+
+.kanzNavigationList button:hover {
+  border-color: var(--accent, #79a7a5);
+}
+
+/* Page/Surah/Ayat anchors should not hide under sticky navigation */
+.kanzAyahCard[id],
+.kanzSurahHeading[id],
+.kanzPageHeading[id] {
+  scroll-margin-top: 150px;
+}
+
+/* Surah heading, if the component renders one */
+.kanzSurahHeading,
+.kanzPageHeading {
+  margin: 28px 0 16px;
+  padding: 14px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 14px;
+  background: var(--surface, #f4f8f6);
+  color: var(--text, #243b36);
+  font-size: 18px;
+  font-weight: 700;
   text-align: center;
-  background: var(--surface);
-  border: 1px dashed var(--border);
-  border-radius: 20px;
 }
 
-.kanzEmptyIcon {
-  margin-bottom: 12px;
-  color: var(--primary-dark);
-  font-family: "Amiri", serif;
-  font-size: 38px;
+/* Tanzil source/license notice */
+.kanzTanzilAttribution {
+  margin: 28px 0 0;
+  padding: 16px;
+  border: 1px solid var(--border, #dce8e4);
+  border-radius: 14px;
+  background: var(--surface, #f4f8f6);
+  color: var(--muted, #647970);
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
 }
 
-.kanzEmptyState h3 {
-  margin: 0 0 10px;
-  font-size: 19px;
+.kanzTanzilAttribution a {
+  color: var(--text, #243b36);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.kanzEmptyState p {
-  max-width: 480px;
-  margin: 0 auto;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.9;
+/* Dark theme */
+.dark .kanzAyahCard,
+.dark .kanzStickyNavigation,
+.dark .kanzNavigationList {
+  background: var(--card, #172521);
+  border-color: var(--border, #30443d);
 }
 
-.kanzReaderFooter {
-  margin: 20px 3px 0;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.9;
-  text-align: center;
+.dark .kanzArabicText,
+.dark .kanzTranslationText,
+.dark .kanzStickyNavigation button,
+.dark .kanzNavigationList button {
+  color: var(--text, #edf5f1);
+}
+
+.dark .kanzTranslationButton,
+.dark .kanzNavigationList button,
+.dark .kanzSurahHeading,
+.dark .kanzPageHeading,
+.dark .kanzTanzilAttribution {
+  background: var(--surface, #202f2a);
+  border-color: var(--border, #30443d);
+}
+
+.dark .kanzAyahReference,
+.dark .kanzMissingTranslation {
+  color: var(--muted, #a7b8b0);
 }
 
 /* Mobile layout */
 @media (max-width: 600px) {
   .kanzReader {
-    width: 94%;
-    margin-top: 18px;
-    margin-bottom: 32px;
-  }
-
-  .kanzReaderHeader {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 14px;
-    padding: 19px;
-    border-radius: 17px;
-  }
-
-  .kanzModeBadge {
-    align-self: flex-start;
-  }
-
-  .kanzLanguageControls {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 9px;
-    padding: 15px;
-  }
-
-  .kanzLanguageControls select {
-    width: 100%;
-    min-height: 44px;
+    width: calc(100% - 20px);
+    margin: 16px auto 28px;
   }
 
   .kanzAyahList {
@@ -6476,25 +6466,52 @@ html[dir="rtl"] .kanzMissingTranslation {
   }
 
   .kanzAyahCard {
-    padding: 17px;
-    border-radius: 16px;
+    padding: 15px;
+    border-radius: 14px;
+    scroll-margin-top: 135px;
   }
 
   .kanzArabicText {
-    margin: 22px 0;
-    font-size: clamp(27px, 7vw, 35px);
-    line-height: 2.15;
+    margin: 6px 0 16px;
+    padding: 6px 0;
+    font-size: clamp(27px, 7vw, 34px);
+    line-height: 2.05;
   }
 
   .kanzTranslationText {
-    font-size: 14px;
-    line-height: 1.95;
+    font-size: 15px;
+    line-height: 1.85;
+  }
+
+  .kanzStickyNavigation {
+    top: 8px;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 12px;
+  }
+
+  .kanzStickyNavigation button {
+    min-height: 40px;
+    padding: 7px 3px;
+    font-size: 12px;
+  }
+
+  .kanzNavigationList {
+    grid-template-columns: 1fr;
+    max-height: 42vh;
+  }
+
+  .kanzAyahCard[id],
+  .kanzSurahHeading[id],
+  .kanzPageHeading[id] {
+    scroll-margin-top: 135px;
   }
 }
 
+/* Respect reduced-motion accessibility preference */
 @media (prefers-reduced-motion: reduce) {
-  .kanzAyahCard,
-  .kanzTranslationButton {
+  .kanzTranslationButton,
+  .kanzStickyNavigation button {
     transition: none;
   }
 }
