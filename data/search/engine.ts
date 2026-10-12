@@ -165,19 +165,19 @@ return { score: 0, matchType: "similar" };
 }
 
 function getUniqueKey(document: SearchDocument): string {
-if (document.type === "quran") {
-return "quran:${document.surahNumber ?? document.title}";
-}
+  if (document.type === "quran") {
+    return `quran:${document.surahNumber ?? document.title}`;
+  }
 
-const normalizedTitle = compactSearchText(document.title);
+  const normalizedTitle = compactSearchText(document.title);
 
-const normalizedHref = document.href
-.split("#")[0]
-.split("?")[0]
-.replace(/\/+$/, "")
-.toLowerCase();
+  const normalizedHref = document.href
+    .split("#")[0]
+    .split("?")[0]
+    .replace(/\/+$/, "")
+    .toLowerCase();
 
-return `${document.type}:${normalizedHref || normalizedTitle}`;
+  return `${document.type}:${normalizedHref || normalizedTitle}`;
 }
 
 export function findExactAyahReference(
