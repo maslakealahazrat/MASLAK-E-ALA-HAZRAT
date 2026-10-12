@@ -180,6 +180,36 @@ const normalizedHref = document.href
 return `${document.type}:${normalizedHref || normalizedTitle}`;
 }
 
+export function findExactAyahReference(
+  documents: SearchDocument[],
+  input: string
+): SearchDocument | null {
+  const query = input
+    .replace(/[٠-٩]/g, (d) =>
+      String(d.charCodeAt(0) - 1632)
+    )
+    .replace(/[۰-۹]/g, (d) =>
+      String(d.charCodeAt(0) - 1776)
+    )
+    .replace(/\s+/g, "");
+
+  const match = query.match(/^(\d{1,3})[:/](\d{1,3})$/);
+
+  if (!match) return null;
+
+  const surah = Number(match[1]);
+  const ayah = Number(match[2]);
+
+  return (
+    documents.find(
+      (doc) =>
+        doc.type === "quran" &&
+        doc.surahNumber === surah &&
+        doc.ayahNumber === ayah
+    ) ?? null
+  );
+}
+
 export function searchContent(
 documents: SearchDocument[],
 query: string
