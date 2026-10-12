@@ -1,15 +1,37 @@
+/**
+ * Maslak-e-Ala Hazrat
+ * Shared Search Text Normalizer
+ *
+ * IMPORTANT:
+ * Yeh functions sirf search ke liye text normalize karte hain.
+ * Original Qur'an ya translation data ko modify nahi karte.
+ */
+
 export function normalizeSearchText(value: string): string {
   return value
     .normalize("NFKC")
     .toLowerCase()
 
-    // Arabic harakat
+    // Arabic harakat aur Quranic marks
     .replace(
       /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g,
       ""
     )
 
-    // Arabic variants
+    // Arabic Tatweel: decorative stretching character
+    .replace(/\u0640/g, "")
+
+    // Arabic-Indic digits ko English digits mein badlein
+    .replace(/[\u0660-\u0669]/g, (digit) =>
+      String(digit.charCodeAt(0) - 0x0660)
+    )
+
+    // Persian/Urdu digits ko English digits mein badlein
+    .replace(/[\u06F0-\u06F9]/g, (digit) =>
+      String(digit.charCodeAt(0) - 0x06f0)
+    )
+
+    // Arabic letter variants
     .replace(/[إأآٱ]/g, "ا")
     .replace(/ى/g, "ي")
     .replace(/ئ/g, "ي")
@@ -21,21 +43,28 @@ export function normalizeSearchText(value: string): string {
     .replace(/ک/g, "ك")
     .replace(/ی/g, "ي")
 
-    // Urdu/Arabic punctuation
+    // Arabic aur Urdu punctuation
     .replace(/[،؛؟۔]/g, " ")
 
-    // English punctuation
-    .replace(/[.,!?;:'"()[\]{}|/\\\-_=+*&^%$#@~`<>]/g, " ")
+    // English punctuation aur reference separators
+    .replace(/[.,!?;:'"()[\]{}|/\\\-_=+*&^%$#@~`<>:]/g, " ")
 
-    // Multiple spaces
+    // Multiple spaces ko ek space banayein
     .replace(/\s+/g, " ")
     .trim();
 }
 
+/**
+ * Spaces hata kar compact search representation banata hai.
+ * Iska use partial matching mein hota hai.
+ */
 export function compactSearchText(value: string): string {
   return normalizeSearchText(value).replace(/\s+/g, "");
 }
 
+/**
+ * Search query aur content ko words mein divide karta hai.
+ */
 export function tokenizeSearchText(value: string): string[] {
   const normalized = normalizeSearchText(value);
 
@@ -49,16 +78,23 @@ export function tokenizeSearchText(value: string): string[] {
     .filter(Boolean);
 }
 
+/**
+ * Normalization ke baad exact text match check karta hai.
+ */
 export function isExactText(
   query: string,
   text: string
 ): boolean {
-  const q = normalizeSearchText(query);
-  const t = normalizeSearchText(text);
+  const normalizedQuery = normalizeSearchText(query);
+  const normalizedText = normalizeSearchText(text);
 
-  return Boolean(q) && q === t;
+  return Boolean(normalizedQuery) &&
+    normalizedQuery === normalizedText;
 }
 
+/**
+ * Normalized content mein query milti hai ya nahi.
+ */
 export function containsNormalizedText(
   text: string,
   query: string
