@@ -266,12 +266,14 @@ export default function AdminPage() {
           </label>
 
           <button
-            className="adminBtn"
-            disabled={busy || !supabase}
-          >
-            {busy ? "Please wait..." : "Sign in"}
-          </button>
-        </form>
+  type="submit"
+  className="adminBtn"
+  disabled={busy}
+>
+  {busy ? "Please wait..." : "Sign in"}
+</button>
+        
+       </form>
       ) : !isAdmin ? (
         <section className="adminCard">
           <h2>Admin access required</h2>
