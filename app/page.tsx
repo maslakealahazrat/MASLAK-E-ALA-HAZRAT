@@ -3,7 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { searchIndex } from "@/data/search";
-import { searchContent } from "@/data/search/engine";
+import {
+  searchContent,
+  findExactAyahReference,
+} from "@/data/search/engine";
 
 type MenuItem = {
   label: string;
