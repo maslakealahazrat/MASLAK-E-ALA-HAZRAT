@@ -12,32 +12,32 @@ type SearchPageContentProps = {
 };
 
 function findExactAyah(query: string) {
-  const cleaned = query
-    .trim()
-    .toLowerCase()
-    .replace(/^surah\s+/i, "")
-    .replace(/\s+/g, "");
+const cleaned = query
+.trim()
+.toLowerCase()
+.replace(/^surah\s+/i, "")
+.replace(/[\u0660-\u0669]/g, (digit) =>
+String(digit.charCodeAt(0) - 0x0660)
+)
+.replace(/[\u06F0-\u06F9]/g, (digit) =>
+String(digit.charCodeAt(0) - 0x06f0)
+)
+.replace(/\s+/g, "");
 
-  const match = cleaned.match(
-    /^(\d{1,3})[:/](\d{1,3})$/
-  );
+const match = cleaned.match(/^(\d{1,3})[:/](\d{1,3})$/);
 
-  if (!match) {
-    return null;
-  }
+if (!match) return null;
 
-  const surahNumber = Number(match[1]);
-  const ayahNumber = Number(match[2]);
+const surahNumber = Number(match[1]);
+const ayahNumber = Number(match[2]);
 
-  return (
-    quranAyahs.find(
-      (ayah) =>
-        ayah.surahNumber ===
-          surahNumber &&
-        ayah.ayahNumber ===
-          ayahNumber
-    ) || null
-  );
+return (
+quranAyahs.find(
+(ayah) =>
+ayah.surahNumber === surahNumber &&
+ayah.ayahNumber === ayahNumber
+) || null
+);
 }
 
 export default function SearchPageContent({
