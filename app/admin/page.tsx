@@ -97,23 +97,39 @@ export default function AdminPage() {
   }, [isAdmin]);
 
   async function signIn(e: FormEvent) {
-    e.preventDefault();
-    if (!supabase) return;
+  e.preventDefault();
 
-    setBusy(true);
-    setMessage("");
+  if (!supabase) {
+    setMessage("Supabase configuration missing. Vercel environment variables check karein.");
+    return;
+  }
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
+  setBusy(true);
+  setMessage("Signing in...");
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
       password,
     });
 
-    setBusy(false);
-    setMessage(
-      error?.message ?? "Signed in. Checking admin access..."
-    );
-  }
+    if (error) {
+      setMessage("Login error: " + error.message);
+      return;
+    }
 
+    setUser(data.user);
+    setMessage("Login successful. Checking admin access...");
+  } catch (error) {
+    setMessage(
+      "Error: " +
+        (error instanceof Error ? error.message : "Unknown error")
+    );
+  } finally {
+    setBusy(false);
+  }
+ }
+  
   async function save(e: FormEvent) {
     e.preventDefault();
 
