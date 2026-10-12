@@ -174,10 +174,10 @@ const normalizedTitle = compactSearchText(document.title);
 const normalizedHref = document.href
 .split("#")[0]
 .split("?")[0]
-.replace(//+$/, "")
+.replace(/\/+$/, "")
 .toLowerCase();
 
-return "${document.type}:${normalizedHref || normalizedTitle}";
+return `${document.type}:${normalizedHref || normalizedTitle}`;
 }
 
 export function searchContent(
