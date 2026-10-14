@@ -14,21 +14,6 @@ type AyahRow = {
   arabic_text: string;
 };
 
-type TranslationRow = {
-  surah_number: number;
-  ayah_number: number;
-  edition_id: string;
-  translation_text: string;
-};
-
-type EditionRow = {
-  id: string;
-  edition_slug: string;
-  language_code: string;
-  title: string;
-  is_enabled: boolean;
-};
-
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -47,22 +32,23 @@ export async function generateMetadata({
   ) {
     return {
       title: "Surah Not Found",
-      robots: { index: false, follow: false },
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
   return {
-    title: `Surah ${firstAyah.surahName}`,
-    description:
-      `Read Surah ${firstAyah.surahName} with Arabic text and translations.`,
+    title: `${firstAyah.surahNameArabic} | Qur’an Majeed`,
+    description: `Read Surah ${firstAyah.surahNameArabic} in original Arabic text.`,
     alternates: {
       canonical: `/quran/${number}`,
     },
     openGraph: {
       type: "website",
-      title: `Surah ${firstAyah.surahName} | Qur’an Majeed`,
-      description:
-        `Read Surah ${firstAyah.surahName} in Qur’an Majeed.`,
+      title: `${firstAyah.surahNameArabic} | Qur’an Majeed`,
+      description: `Read Surah ${firstAyah.surahNameArabic} in original Arabic text.`,
       url: `/quran/${number}`,
       siteName: "Maslak-e-Ala Hazrat",
     },
@@ -87,7 +73,7 @@ export default async function SurahPage({
     (ayah) => ayah.surahNumber === surahNumber
   );
 
-  if (!localAyahs.length) {
+  if (localAyahs.length === 0) {
     notFound();
   }
 
@@ -97,92 +83,19 @@ export default async function SurahPage({
     arabic_text: ayah.arabic,
   }));
 
-  let urduTranslations = new Map<number, string>();
-  let englishTranslations = new Map<number, string>();
-
-  let databaseConnected = false;
-
   if (supabase) {
     try {
-      const { data: arabicData, error: arabicError } =
-        await supabase
-          .from("quran_ayahs")
-          .select("surah_number, ayah_number, arabic_text")
-          .eq("surah_number", surahNumber)
-          .order("ayah_number", { ascending: true });
+      const { data, error } = await supabase
+        .from("quran_ayahs")
+        .select("surah_number, ayah_number, arabic_text")
+        .eq("surah_number", surahNumber)
+        .order("ayah_number", { ascending: true });
 
-      if (
-        !arabicError &&
-        arabicData &&
-        arabicData.length > 0
-      ) {
-        ayahs = arabicData as AyahRow[];
-        databaseConnected = true;
-
-        const { data: editionData, error: editionError } =
-          await supabase
-            .from("quran_translation_editions")
-            .select(
-              "id, edition_slug, language_code, title, is_enabled"
-            )
-            .eq("is_enabled", true);
-
-        if (!editionError && editionData?.length) {
-          const editions = editionData as EditionRow[];
-
-          const urduEdition = editions.find(
-            (edition) =>
-              edition.edition_slug === "ur-kanzul-iman"
-          );
-
-          const englishEdition = editions.find(
-            (edition) =>
-              edition.edition_slug === "en-ahmed-raza"
-          );
-
-          const editionIds = [
-            urduEdition?.id,
-            englishEdition?.id,
-          ].filter((id): id is string => Boolean(id));
-
-          if (editionIds.length) {
-            const { data: translationData, error: translationError } =
-              await supabase
-                .from("quran_translations")
-                .select(
-                  "surah_number, ayah_number, edition_id, translation_text"
-                )
-                .eq("surah_number", surahNumber)
-                .in("edition_id", editionIds)
-                .order("ayah_number", { ascending: true });
-
-            if (!translationError && translationData) {
-              const translations =
-                translationData as TranslationRow[];
-
-              for (const translation of translations) {
-                if (urduEdition?.id === translation.edition_id) {
-                  urduTranslations.set(
-                    translation.ayah_number,
-                    translation.translation_text
-                  );
-                }
-
-                if (
-                  englishEdition?.id === translation.edition_id
-                ) {
-                  englishTranslations.set(
-                    translation.ayah_number,
-                    translation.translation_text
-                  );
-                }
-              }
-            }
-          }
-        }
+      if (!error && data && data.length > 0) {
+        ayahs = data as AyahRow[];
       }
     } catch {
-      // Database unavailable: local Arabic data will be used.
+      // Use local Arabic Quran data if the database is unavailable.
     }
   }
 
@@ -201,19 +114,19 @@ export default async function SurahPage({
           ← All Surahs
         </Link>
 
-        <div className="quranSurahArabic">
+        <div
+          className="quranSurahArabic"
+          dir="rtl"
+          lang="ar"
+        >
           {firstAyah.surahNameArabic}
         </div>
 
-        <h1>{firstAyah.surahName}</h1>
+        <h1>{firstAyah.surahNameArabic}</h1>
 
-        <p>Surah {surahNumber}</p>
+        <p>سورة رقم {surahNumber}</p>
 
-        <p>
-          {databaseConnected
-            ? "Arabic Quran with available translations"
-            : "Arabic Quran"}
-        </p>
+        <p>القرآن الكريم</p>
       </section>
 
       <nav
@@ -268,7 +181,7 @@ export default async function SurahPage({
             className="quranAyahCard"
           >
             <div className="quranAyahCardNumber">
-              Ayah {ayah.ayah_number}
+              آية {ayah.ayah_number}
             </div>
 
             <div
@@ -282,26 +195,6 @@ export default async function SurahPage({
                 ﴿{ayah.ayah_number}﴾
               </span>
             </div>
-
-            {urduTranslations.has(ayah.ayah_number) && (
-              <p
-                className="quranUrduTranslation"
-                dir="rtl"
-                lang="ur"
-              >
-                {urduTranslations.get(ayah.ayah_number)}
-              </p>
-            )}
-
-            {englishTranslations.has(ayah.ayah_number) && (
-              <p
-                className="quranEnglishTranslation"
-                dir="ltr"
-                lang="en"
-              >
-                {englishTranslations.get(ayah.ayah_number)}
-              </p>
-            )}
           </article>
         ))}
       </section>
