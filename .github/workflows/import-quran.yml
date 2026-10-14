@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install Supabase
-        run: npm install @supabase/supabase-js
+        run: npm install @supabase/supabase-js ws
 
       - name: Import Quran
         env:
@@ -29,11 +29,14 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import { createClient } from '@supabase/supabase-js';
+          import ws from 'ws';
           import { readFileSync } from 'node:fs';
 
           if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
             throw new Error('SUPABASE_SERVICE_ROLE_KEY secret missing');
           }
+
+          globalThis.WebSocket = ws;
 
           const db = createClient(
             process.env.SUPABASE_URL,
@@ -61,8 +64,9 @@ jobs:
                 name_arabic: a.name,
                 ayah_count: Number(a.ayas),
                 revelation_type:
-                  a.type?.toLowerCase().startsWith('med') ?
-                  'Madani' : 'Makki'
+                  a.type?.toLowerCase().startsWith('med')
+                    ? 'Madani'
+                    : 'Makki'
               };
             });
 
@@ -200,7 +204,9 @@ jobs:
                 throw new Error(`${table}: ${error.message}`);
               }
 
-              console.log(`${table}: ${Math.min(i + 200, rows.length)}/${rows.length}`);
+              console.log(
+                `${table}: ${Math.min(i + 200, rows.length)}/${rows.length}`
+              );
             }
           }
 
@@ -277,5 +283,7 @@ jobs:
             );
           }
 
-          console.log('SUCCESS: Surahs, Arabic, Urdu and English data imported.');
+          console.log(
+            'SUCCESS: Surahs, Arabic, Urdu and English data imported.'
+          );
           NODE
