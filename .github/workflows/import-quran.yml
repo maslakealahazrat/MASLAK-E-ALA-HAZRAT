@@ -14,201 +14,239 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Supabase
+      - name: Install dependencies
         run: npm install @supabase/supabase-js ws
 
-      - name: Import Quran
+      - name: Import Quran data
         env:
           SUPABASE_URL: https://yzzgyqdbekjdtkefyptx.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           node --input-type=module <<'NODE'
+          import fs from 'node:fs';
           import { createClient } from '@supabase/supabase-js';
           import ws from 'ws';
-          import { readFileSync } from 'node:fs';
-
-          if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-            throw new Error('SUPABASE_SERVICE_ROLE_KEY secret missing');
-          }
 
           globalThis.WebSocket = ws;
 
-          const db = createClient(
-            process.env.SUPABASE_URL,
-            process.env.SUPABASE_SERVICE_ROLE_KEY,
-            { auth: { persistSession: false } }
-          );
+          const read = (path) => fs.readFileSync(path, 'utf8');
 
-          const read = path =>
-            readFileSync(path, 'utf8').replace(/^\uFEFF/, '');
+          const url = process.env.SUPABASE_URL;
+          const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-          function attrs(s) {
-            return Object.fromEntries(
-              [...s.matchAll(/([\w]+)="([^"]*)"/g)]
-                .map(m => [m[1], m[2]])
-            );
+          if (!url || !key) {
+            throw new Error('Supabase URL ya secret missing hai.');
           }
 
-          const xml = read('data/quran/quran-data.xml');
-          const surahs = [...xml.matchAll(/<sura\b[^>]*\/>/g)]
-            .map(m => {
-              const a = attrs(m[0]);
+          const db = createClient(url, key, {
+            auth: { persistSession: false }
+          });
+
+          function parsePipeFile(path) {
+            return read(path)
+              .split(/\r?\n/)
+              .map((line, index) => ({
+                line: line.trim(),
+                lineNumber: index + 1
+              }))
+              .filter(x => x.line && !x.line.startsWith('#'))
+              .map(({ line, lineNumber }) => {
+                const parts = line.split('|');
+
+                if (
+                  parts.length < 3 ||
+                  !/^\d+$/.test(parts[0]) ||
+                  !/^\d+$/.test(parts[1])
+                ) {
+                  throw new Error(
+                    `${path}: line ${lineNumber} galat hai`
+                  );
+                }
+
+                const text = parts.slice(2).join('|').trim();
+
+                if (!text) {
+                  throw new Error(`${path}: translation khaali hai`);
+                }
+
+                return {
+                  surah_number: Number(parts[0]),
+                  ayah_number: Number(parts[1]),
+                  text
+                };
+              });
+          }
+
+          function parseArabic(path) {
+            const source = read(path);
+
+            const regex =
+              /"id":\s*"(\d+)-(\d+)",\s*"surahNumber":\s*(\d+),\s*"ayahNumber":\s*(\d+),\s*"arabic":\s*"((?:\\.|[^"\\])*)",\s*"surahName":\s*"((?:\\.|[^"\\])*)",\s*"surahNameArabic":\s*"((?:\\.|[^"\\])*)"/g;
+
+            const rows = [];
+
+            for (const m of source.matchAll(regex)) {
+              rows.push({
+                surah_number: Number(m[3]),
+                ayah_number: Number(m[4]),
+                text: JSON.parse('"' + m[5] + '"')
+              });
+            }
+
+            if (rows.length !== 6236) {
+              throw new Error(
+                `Arabic verses ${rows.length} mile; 6236 chahiye.`
+              );
+            }
+
+            return rows;
+          }
+
+          function parseSurahs(path) {
+            const xml = read(path);
+            const tags = [...xml.matchAll(/<sura\b[^>]*\/>/g)];
+
+            const rows = tags.map(match => {
+              const attrs = Object.fromEntries(
+                [...match[0].matchAll(/([\w]+)="([^"]*)"/g)]
+                  .map(x => [x[1], x[2]])
+              );
+
+              if (
+                !attrs.index ||
+                !attrs.ename ||
+                !attrs.name ||
+                !attrs.ayas ||
+                !attrs.type
+              ) {
+                throw new Error('Surah XML metadata galat hai.');
+              }
+
               return {
-                surah_number: Number(a.index),
-                name_english: a.ename,
-                name_arabic: a.name,
-                ayah_count: Number(a.ayas),
+                surah_number: Number(attrs.index),
+                name_english: attrs.ename,
+                name_arabic: attrs.name,
+                ayah_count: Number(attrs.ayas),
                 revelation_type:
-                  a.type?.toLowerCase().startsWith('med')
+                  attrs.type.toLowerCase().startsWith('med')
                     ? 'Madani'
                     : 'Makki'
               };
             });
 
-          if (
-            surahs.length !== 114 ||
-            surahs.some((s, i) =>
-              s.surah_number !== i + 1 ||
-              !s.name_arabic ||
-              !s.name_english ||
-              !s.ayah_count
-            )
-          ) {
-            throw new Error('Surah XML validation failed');
-          }
-
-          const expectedAyahs =
-            surahs.reduce((n, s) => n + s.ayah_count, 0);
-
-          if (expectedAyahs !== 6236) {
-            throw new Error(`Unexpected ayah total: ${expectedAyahs}`);
-          }
-
-          function readVerses(path) {
-            const lines = read(path)
-              .split(/\r?\n/)
-              .map(s => s.trim())
-              .filter(Boolean);
-
-            const parsed = lines.map(line => {
-              const p = line.split('|');
-
-              if (
-                p.length >= 3 &&
-                /^\d+$/.test(p[0]) &&
-                /^\d+$/.test(p[1])
-              ) {
-                return {
-                  surah_number: Number(p[0]),
-                  ayah_number: Number(p[1]),
-                  text: p.slice(2).join('|').trim()
-                };
-              }
-
-              return null;
-            });
-
-            if (parsed.every(Boolean)) {
-              return parsed;
-            }
-
-            if (lines.length !== expectedAyahs) {
+            if (rows.length !== 114) {
               throw new Error(
-                `${path}: expected ${expectedAyahs} lines, got ${lines.length}. Import stopped.`
+                `Surahs ${rows.length} mile; 114 chahiye.`
               );
             }
 
-            const verses = [];
-            let pos = 0;
+            if (
+              rows.reduce((sum, row) => sum + row.ayah_count, 0) !== 6236
+            ) {
+              throw new Error('Surah ayah counts ka total 6236 nahi hai.');
+            }
 
-            for (const s of surahs) {
-              for (let a = 1; a <= s.ayah_count; a++) {
-                verses.push({
-                  surah_number: s.surah_number,
-                  ayah_number: a,
-                  text: lines[pos++]
-                });
+            return rows;
+          }
+
+          function validateRows(label, rows, expectedRefs) {
+            if (rows.length !== 6236) {
+              throw new Error(
+                `${label}: ${rows.length} rows mile; 6236 chahiye.`
+              );
+            }
+
+            const seen = new Set();
+
+            for (const row of rows) {
+              const ref = `${row.surah_number}:${row.ayah_number}`;
+
+              if (
+                !Number.isInteger(row.surah_number) ||
+                row.surah_number < 1 ||
+                row.surah_number > 114 ||
+                !Number.isInteger(row.ayah_number) ||
+                row.ayah_number < 1 ||
+                !row.text
+              ) {
+                throw new Error(`${label}: galat verse ${ref}`);
+              }
+
+              if (seen.has(ref)) {
+                throw new Error(`${label}: duplicate verse ${ref}`);
+              }
+
+              seen.add(ref);
+
+              if (expectedRefs && !expectedRefs.has(ref)) {
+                throw new Error(`${label}: verse mismatch ${ref}`);
               }
             }
 
-            return verses;
-          }
-
-          const arabic = readVerses('data/quran/quran-uthmani.txt');
-          const urdu = readVerses('data/translations/ur.kanzuliman.txt');
-          const english = readVerses('data/translations/en.ahmedraza.txt');
-
-          function validate(rows, label) {
-            const refs = new Set(
-              rows.map(r => `${r.surah_number}:${r.ayah_number}`)
-            );
-
-            if (
-              rows.length !== 6236 ||
-              refs.size !== 6236 ||
-              rows.some(r => !r.text)
-            ) {
-              throw new Error(`${label} verse validation failed`);
+            if (expectedRefs && seen.size !== expectedRefs.size) {
+              throw new Error(`${label}: verse references match nahi karte.`);
             }
 
-            for (const s of surahs) {
-              const count = rows.filter(
-                r => r.surah_number === s.surah_number
-              ).length;
-
-              if (count !== s.ayah_count) {
-                throw new Error(
-                  `${label}: Surah ${s.surah_number} has ${count} verses`
-                );
-              }
-            }
+            return seen;
           }
 
-          validate(arabic, 'Arabic');
-          validate(urdu, 'Urdu');
-          validate(english, 'English');
+          async function upsertBatches(table, rows, onConflict) {
+            const size = 200;
 
-          const refSet = rows =>
-            new Set(rows.map(r => `${r.surah_number}:${r.ayah_number}`));
+            for (let i = 0; i < rows.length; i += size) {
+              const batch = rows.slice(i, i + size);
 
-          const arabicRefs = refSet(arabic);
-
-          for (const [label, rows] of [
-            ['Urdu', urdu],
-            ['English', english]
-          ]) {
-            const otherRefs = refSet(rows);
-
-            if (
-              otherRefs.size !== arabicRefs.size ||
-              [...arabicRefs].some(r => !otherRefs.has(r))
-            ) {
-              throw new Error(`${label} verse references do not match Arabic`);
-            }
-          }
-
-          async function upsertBatches(table, rows, conflict) {
-            for (let i = 0; i < rows.length; i += 200) {
               const { error } = await db
                 .from(table)
-                .upsert(rows.slice(i, i + 200), {
-                  onConflict: conflict
-                });
+                .upsert(batch, { onConflict });
 
               if (error) {
                 throw new Error(`${table}: ${error.message}`);
               }
 
               console.log(
-                `${table}: ${Math.min(i + 200, rows.length)}/${rows.length}`
+                `${table}: ${Math.min(i + size, rows.length)}/${rows.length}`
               );
             }
           }
+
+          const surahs = parseSurahs('data/quran/quran-data.xml');
+          const arabic = parseArabic('data/quran/ayahs.ts');
+          const urdu = parsePipeFile(
+            'data/translations/ur.kanzuliman.txt'
+          );
+          const english = parsePipeFile(
+            'data/translations/en.ahmedraza.txt'
+          );
+
+          const refs = validateRows('Arabic', arabic);
+
+          validateRows('Urdu', urdu, refs);
+          validateRows('English', english, refs);
+
+          const counts = new Map();
+
+          for (const row of arabic) {
+            counts.set(
+              row.surah_number,
+              (counts.get(row.surah_number) || 0) + 1
+            );
+          }
+
+          for (const surah of surahs) {
+            if (counts.get(surah.surah_number) !== surah.ayah_count) {
+              throw new Error(
+                `Surah ${surah.surah_number} ka ayah count match nahi karta.`
+              );
+            }
+          }
+
+          console.log('Source validation complete.');
 
           await upsertBatches(
             'quran_surahs',
@@ -222,24 +260,26 @@ jobs:
               language_code: 'ur',
               title: 'Kanzul Iman',
               translator: 'Ahmed Raza Khan Barelvi',
-              source_name: 'Repository translation file',
+              source_name: 'Tanzil.net',
               source_reference: 'data/translations/ur.kanzuliman.txt',
-              license_note: 'Confirm redistribution rights before public release.',
+              license_note:
+                'Source metadata: Tanzil.net. Confirm redistribution rights before public release.',
               is_enabled: true
             },
             {
               edition_slug: 'en-ahmed-raza',
               language_code: 'en',
               title: 'English Translation',
-              translator: 'Ahmed Raza',
-              source_name: 'Repository translation file',
+              translator: 'Ahmed Raza Khan',
+              source_name: 'Tanzil.net',
               source_reference: 'data/translations/en.ahmedraza.txt',
-              license_note: 'Confirm redistribution rights before public release.',
+              license_note:
+                'Source metadata: Tanzil.net. Confirm redistribution rights before public release.',
               is_enabled: true
             }
           ];
 
-          const editionIds = {};
+          const editionIds = new Map();
 
           for (const edition of editions) {
             const { data, error } = await db
@@ -249,41 +289,48 @@ jobs:
               .single();
 
             if (error) {
-              throw new Error(`Translation edition: ${error.message}`);
+              throw new Error(
+                `Edition ${edition.edition_slug}: ${error.message}`
+              );
             }
 
-            editionIds[data.edition_slug] = data.id;
+            editionIds.set(data.edition_slug, data.id);
           }
 
           await upsertBatches(
             'quran_ayahs',
-            arabic.map(r => ({
-              surah_number: r.surah_number,
-              ayah_number: r.ayah_number,
-              arabic_text: r.text,
-              search_text: r.text
+            arabic.map(row => ({
+              surah_number: row.surah_number,
+              ayah_number: row.ayah_number,
+              arabic_text: row.text
             })),
             'surah_number,ayah_number'
           );
 
-          for (const [rows, slug] of [
-            [urdu, 'ur-kanzul-iman'],
-            [english, 'en-ahmed-raza']
-          ]) {
-            await upsertBatches(
-              'quran_translations',
-              rows.map(r => ({
-                surah_number: r.surah_number,
-                ayah_number: r.ayah_number,
-                edition_id: editionIds[slug],
-                translation_text: r.text,
-                search_text: r.text
-              })),
-              'surah_number,ayah_number,edition_id'
-            );
-          }
+          const translations = [
+            ...urdu.map(row => ({
+              surah_number: row.surah_number,
+              ayah_number: row.ayah_number,
+              edition_id: editionIds.get('ur-kanzul-iman'),
+              translation_text: row.text,
+              search_text: row.text
+            })),
+            ...english.map(row => ({
+              surah_number: row.surah_number,
+              ayah_number: row.ayah_number,
+              edition_id: editionIds.get('en-ahmed-raza'),
+              translation_text: row.text,
+              search_text: row.text
+            }))
+          ];
+
+          await upsertBatches(
+            'quran_translations',
+            translations,
+            'surah_number,ayah_number,edition_id'
+          );
 
           console.log(
-            'SUCCESS: Surahs, Arabic, Urdu and English data imported.'
+            'SUCCESS: Quran surahs, Arabic, Urdu and English imported.'
           );
           NODE
