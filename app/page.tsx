@@ -1,8 +1,5 @@
 "use client";
 
-// Homepage: navigation, live search, theme, language,
-// Islamic calendar aur Islamic knowledge cards.
-
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { searchIndex } from "@/data/search";
@@ -14,7 +11,6 @@ type MenuItem = {
   children?: MenuItem[];
 };
 
-// Main menu categories aur unki subcategories.
 const navItems: MenuItem[] = [
   { label: "Home", href: "/", children: [] },
   {
@@ -91,7 +87,6 @@ const navItems: MenuItem[] = [
   },
 ];
 
-// Homepage cards: har card ka destination define hai.
 const knowledgeCards = [
   {
     title: "Al-Hadith",
@@ -130,7 +125,6 @@ const knowledgeCards = [
   },
 ];
 
-// Header language icon.
 function GlobeIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -140,7 +134,6 @@ function GlobeIcon() {
   );
 }
 
-// Header theme icon.
 function SunMoonIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -150,15 +143,21 @@ function SunMoonIcon() {
 }
 
 export default function Home() {
-  // Menu navigation state.
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedMenuCategory, setSelectedMenuCategory] =
-    useState("Home");
+  const [selectedMenuCategory, setSelectedMenuCategory] = useState("Home");
   const [selectedMenuSubcategory, setSelectedMenuSubcategory] =
     useState<MenuItem | null>(null);
   const [menuSearchQuery, setMenuSearchQuery] = useState("");
 
-  // Search menu categories and nested subcategories.
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
+  const [language, setLanguage] = useState("auto");
+  const [theme, setTheme] = useState("auto");
+
+  const [date, setDate] = useState({ gregorian: "", hijri: "" });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
   const menuSearchResults = useMemo(() => {
     const query = menuSearchQuery.trim().toLowerCase();
     if (!query) return [];
@@ -183,41 +182,20 @@ export default function Home() {
     return results;
   }, [menuSearchQuery]);
 
-  // Language and theme controls.
-  const [languageOpen, setLanguageOpen] = useState(false);
-  const [themeOpen, setThemeOpen] = useState(false);
-  const [language, setLanguage] = useState("auto");
-  const [theme, setTheme] = useState("auto");
-
-  // Islamic calendar dates.
-  const [date, setDate] = useState({
-    gregorian: "",
-    hijri: "",
-  });
-
-  // Main homepage search.
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
-
   function handleSearch() {
     const query = searchQuery.trim();
     if (!query) return;
-
     window.location.href = "/search?q=" + encodeURIComponent(query);
   }
 
-  // Delay live search slightly to avoid running it on every keystroke.
   useEffect(() => {
-    const query = searchQuery.trim();
     const timer = window.setTimeout(() => {
-      setDebouncedSearchQuery(query);
+      setDebouncedSearchQuery(searchQuery.trim());
     }, 250);
 
     return () => window.clearTimeout(timer);
   }, [searchQuery]);
 
-  // Generate compact live suggestions, avoiding repeated Quran ayahs
-  // from the same Surah in the homepage suggestion list.
   const liveSearchResults = useMemo(() => {
     const query = debouncedSearchQuery;
     if (!query) return [];
@@ -250,7 +228,6 @@ export default function Home() {
     return uniqueResults;
   }, [debouncedSearchQuery]);
 
-  // Restore saved preferences and calculate today's dates.
   useEffect(() => {
     const savedLanguage = localStorage.getItem("site-language") || "auto";
     const savedTheme = localStorage.getItem("site-theme") || "auto";
@@ -286,7 +263,6 @@ export default function Home() {
     setDate({ gregorian, hijri });
   }, []);
 
-  // Apply selected theme while preserving the existing CSS theme classes.
   function applyTheme(value: string) {
     const root = document.documentElement;
 
@@ -316,18 +292,22 @@ export default function Home() {
     setLanguageOpen(false);
   }
 
+  function closeMenu() {
+    setMenuOpen(false);
+    setSelectedMenuSubcategory(null);
+    setMenuSearchQuery("");
+  }
+
   return (
     <main className="site">
-      {/* HEADER: brand, preferences and responsive navigation. */}
       <header className="siteHeader">
         <div className="headerInner">
-          <Link href="/" className="brand">
+          <Link href="/" className="brand" onClick={closeMenu}>
             <span className="brandMark">م</span>
             <span>Maslak-e-Ala Hazrat</span>
           </Link>
 
           <div className="headerActions">
-            {/* Language selector. */}
             <div className="control">
               <button
                 type="button"
@@ -337,6 +317,7 @@ export default function Home() {
                 onClick={() => {
                   setLanguageOpen(!languageOpen);
                   setThemeOpen(false);
+                  setMenuOpen(false);
                 }}
               >
                 <GlobeIcon />
@@ -366,7 +347,6 @@ export default function Home() {
               )}
             </div>
 
-            {/* Light, dark and system theme selector. */}
             <div className="control">
               <button
                 type="button"
@@ -376,6 +356,7 @@ export default function Home() {
                 onClick={() => {
                   setThemeOpen(!themeOpen);
                   setLanguageOpen(false);
+                  setMenuOpen(false);
                 }}
               >
                 <SunMoonIcon />
@@ -404,12 +385,13 @@ export default function Home() {
               )}
             </div>
 
-            {/* Three-line menu button. */}
+            {/* Quran.com-style three-dot menu button */}
             <button
               type="button"
               className="menuButton"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
+              aria-controls="site-navigation"
               onClick={() => {
                 setMenuOpen(!menuOpen);
                 setLanguageOpen(false);
@@ -423,43 +405,66 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Expandable category menu with menu-specific search. */}
+        {/* Side drawer and background overlay */}
         {menuOpen && (
-          <div className="mobileMenu">
-            <div className="menuInner">
-              <input
-                type="search"
-                className="menuSearchInput"
-                placeholder="Search books, Qur’an, Ala Hazrat..."
-                value={menuSearchQuery}
-                onChange={(event) => setMenuSearchQuery(event.target.value)}
-                aria-label="Search website menu"
-              />
+          <>
+            <button
+              type="button"
+              className="menuOverlay"
+              aria-label="Close navigation menu"
+              onClick={closeMenu}
+            />
 
-              {menuSearchQuery.trim() !== "" && (
-                <div className="menuSearchResults">
+            <aside
+              id="site-navigation"
+              className="mobileMenu"
+              aria-label="Main navigation"
+            >
+              <div className="drawerHeader">
+                <Link href="/" className="drawerBrand" onClick={closeMenu}>
+                  <span className="brandMark">م</span>
+                  <span>Maslak-e-Ala Hazrat</span>
+                </Link>
+
+                <button
+                  type="button"
+                  className="drawerClose"
+                  aria-label="Close menu"
+                  onClick={closeMenu}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="drawerSearch">
+                <span aria-hidden="true">⌕</span>
+                <input
+                  type="search"
+                  placeholder="Search menu..."
+                  value={menuSearchQuery}
+                  onChange={(event) => {
+                    setMenuSearchQuery(event.target.value);
+                    setSelectedMenuSubcategory(null);
+                  }}
+                  aria-label="Search menu"
+                />
+              </div>
+
+              {menuSearchQuery.trim() ? (
+                <div className="drawerSearchResults">
                   {menuSearchResults.length > 0 ? (
                     menuSearchResults.map(({ item, path }) => (
                       <button
                         type="button"
+                        className="drawerSearchResult"
                         key={`${path.join("/")}-${item.href}`}
-                        className="menuSearchResult"
                         onClick={() => {
                           if (item.children?.length) {
-                            const topCategory = navItems.find(
-                              (category) => category.label === path[0]
-                            );
-
-                            if (topCategory) {
-                              setSelectedMenuCategory(topCategory.label);
-                            }
-
+                            setSelectedMenuCategory(path[0]);
                             setSelectedMenuSubcategory(item);
                             setMenuSearchQuery("");
                           } else {
                             window.location.href = item.href;
-                            setMenuOpen(false);
-                            setMenuSearchQuery("");
                           }
                         }}
                       >
@@ -468,87 +473,113 @@ export default function Home() {
                       </button>
                     ))
                   ) : (
-                    <div className="menuSearchEmpty">
-                      No menu options found
-                    </div>
+                    <p className="drawerEmpty">No menu options found.</p>
                   )}
                 </div>
-              )}
+              ) : (
+                <>
+                  <div className="drawerSectionLabel">EXPLORE</div>
 
-              {!menuSearchQuery.trim() && (
-                <div className="menuCategoryRow">
-                  {navItems.map((item) => (
-                    <button
-                      type="button"
-                      key={item.label}
-                      className={
-                        selectedMenuCategory === item.label
-                          ? "menuCategory active"
-                          : "menuCategory"
-                      }
-                      onClick={() => {
-                        setSelectedMenuCategory(item.label);
-                        setSelectedMenuSubcategory(null);
-                      }}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {!menuSearchQuery.trim() &&
-                (() => {
-                  const selectedCategory = navItems.find(
-                    (item) => item.label === selectedMenuCategory
-                  );
-
-                  const visibleItems: MenuItem[] = selectedMenuSubcategory
-                    ? selectedMenuSubcategory.children ?? []
-                    : selectedCategory?.children ?? [];
-
-                  return visibleItems.length > 0 ? (
-                    <div className="menuSubcategoryRow">
-                      {visibleItems.map((item) =>
-                        item.children?.length ? (
-                          <button
-                            type="button"
-                            key={`${item.label}-${item.href}`}
-                            className="menuSubcategory"
-                            onClick={() => setSelectedMenuSubcategory(item)}
-                          >
-                            {item.label} <span aria-hidden="true">→</span>
-                          </button>
-                        ) : (
-                          <Link
-                            key={`${item.label}-${item.href}`}
-                            href={item.href}
-                            className="menuSubcategory"
-                            onClick={() => setMenuOpen(false)}
-                          >
-                            {item.label}
-                          </Link>
-                        )
-                      )}
-                    </div>
-                  ) : selectedCategory ? (
-                    <div className="menuSubcategoryRow">
-                      <Link
-                        href={selectedCategory.href}
-                        className="menuSubcategory"
-                        onClick={() => setMenuOpen(false)}
+                  <nav className="drawerCategories">
+                    {navItems.map((item) => (
+                      <button
+                        type="button"
+                        key={item.label}
+                        className={
+                          selectedMenuCategory === item.label &&
+                          !selectedMenuSubcategory
+                            ? "drawerCategory active"
+                            : "drawerCategory"
+                        }
+                        onClick={() => {
+                          setSelectedMenuCategory(item.label);
+                          setSelectedMenuSubcategory(null);
+                        }}
                       >
-                        Open {selectedCategory.label} →
-                      </Link>
-                    </div>
-                  ) : null;
-                })()}
-            </div>
-          </div>
+                        <span>{item.label}</span>
+                        <span className="drawerChevron" aria-hidden="true">
+                          {item.children?.length ? "›" : "→"}
+                        </span>
+                      </button>
+                    ))}
+                  </nav>
+
+                  <div className="drawerSubcategories">
+                    {selectedMenuSubcategory && (
+                      <button
+                        type="button"
+                        className="drawerBack"
+                        onClick={() => setSelectedMenuSubcategory(null)}
+                      >
+                        <span aria-hidden="true">←</span>
+                        {selectedMenuCategory}
+                      </button>
+                    )}
+
+                    {(selectedMenuSubcategory
+                      ? selectedMenuSubcategory.children ?? []
+                      : navItems.find(
+                          (item) => item.label === selectedMenuCategory
+                        )?.children ?? []
+                    ).map((item) =>
+                      item.children?.length ? (
+                        <button
+                          type="button"
+                          key={`${item.label}-${item.href}`}
+                          className="drawerSubcategory"
+                          onClick={() => setSelectedMenuSubcategory(item)}
+                        >
+                          <span>{item.label}</span>
+                          <span aria-hidden="true">›</span>
+                        </button>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          key={`${item.label}-${item.href}`}
+                          className="drawerSubcategory"
+                          onClick={closeMenu}
+                        >
+                          <span>{item.label}</span>
+                          <span aria-hidden="true">→</span>
+                        </Link>
+                      )
+                    )}
+
+                    {!selectedMenuSubcategory &&
+                      !navItems.find(
+                        (item) => item.label === selectedMenuCategory
+                      )?.children?.length && (
+                        <Link
+                          href={
+                            navItems.find(
+                              (item) => item.label === selectedMenuCategory
+                            )?.href ?? "/"
+                          }
+                          className="drawerSubcategory"
+                          onClick={closeMenu}
+                        >
+                          <span>
+                            Open {selectedMenuCategory}
+                          </span>
+                          <span aria-hidden="true">→</span>
+                        </Link>
+                      )}
+                  </div>
+                </>
+              )}
+
+              <div className="drawerFooter">
+                <span className="brandMark">م</span>
+                <div>
+                  <strong>Maslak-e-Ala Hazrat</strong>
+                  <small>Islamic Knowledge • Adab • Tradition</small>
+                </div>
+              </div>
+            </aside>
+          </>
         )}
       </header>
 
-      {/* HERO: Bismillah and the main Islamic knowledge search. */}
       <section className="hero">
         <div className="heroInner">
           <div className="bismillah">
@@ -578,7 +609,6 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Live suggestions from the existing search engine. */}
             {searchQuery.trim() && (
               <div className="liveSearchResults">
                 {liveSearchResults.length > 0 ? (
@@ -626,7 +656,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ISLAMIC CALENDAR: today's Hijri and Gregorian dates. */}
       <section className="calendarSection">
         <Link href="/islamic-calendar" className="calendarCard">
           <div className="calendarIcon">☪</div>
@@ -645,7 +674,6 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* KNOWLEDGE: Quran feature card and category cards. */}
       <section className="knowledgeSection">
         <div className="sectionHeading">
           <span>EXPLORE</span>
@@ -656,7 +684,6 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Dedicated Quran card. */}
         <div className="quranWrap">
           <Link href="/quran" className="knowledgeCard quranCard">
             <div className="cardIcon">﷽</div>
@@ -671,7 +698,6 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* Category cards use their own destination paths instead of "#". */}
         <div className="horizontalCards">
           {knowledgeCards.map((card) => (
             <Link
@@ -693,7 +719,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ABOUT: short introduction to the website. */}
       <section className="aboutSection">
         <div className="aboutBox">
           <span>ABOUT THE WEBSITE</span>
@@ -706,7 +731,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER: website identity and copyright. */}
       <footer className="footer">
         <div className="footerInner">
           <div className="footerBrand">Maslak-e-Ala Hazrat</div>
@@ -718,6 +742,307 @@ export default function Home() {
           </small>
         </div>
       </footer>
+
+      {/* Drawer styling: included here so this file is self-contained. */}
+      <style jsx global>{`
+        .menuButton {
+          position: relative;
+          z-index: 1203;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          width: 42px;
+          height: 42px;
+          padding: 10px;
+          border: 1px solid var(--border-color, #e2e8e5);
+          border-radius: 12px;
+          background: var(--card-bg, #fff);
+          color: var(--text-color, #173c30);
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .menuButton span {
+          display: block;
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: currentColor;
+        }
+
+        .menuOverlay {
+          position: fixed;
+          inset: 0;
+          z-index: 1200;
+          width: 100%;
+          height: 100%;
+          border: 0;
+          background: rgba(9, 22, 17, 0.5);
+          backdrop-filter: blur(2px);
+          animation: drawerFadeIn 0.2s ease;
+        }
+
+        .mobileMenu {
+          position: fixed;
+          z-index: 1202;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          display: flex;
+          flex-direction: column;
+          width: min(390px, 90vw);
+          height: 100dvh;
+          padding: 0;
+          overflow: hidden;
+          overflow-y: auto;
+          background: var(--background, #fff);
+          color: var(--foreground, #183b30);
+          border-left: 1px solid rgba(30, 70, 52, 0.12);
+          box-shadow: -12px 0 40px rgba(0, 0, 0, 0.16);
+          animation: drawerSlideIn 0.25s ease;
+        }
+
+        .drawerHeader {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 20px 18px;
+          border-bottom: 1px solid var(--border-color, #e5ebe7);
+        }
+
+        .drawerBrand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: inherit;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 750;
+        }
+
+        .drawerBrand .brandMark {
+          display: grid;
+          place-items: center;
+          width: 38px;
+          height: 38px;
+          flex-shrink: 0;
+          border-radius: 12px;
+          background: #176849;
+          color: white;
+          font-size: 23px;
+        }
+
+        .drawerClose {
+          display: grid;
+          place-items: center;
+          width: 38px;
+          height: 38px;
+          flex-shrink: 0;
+          border: 1px solid var(--border-color, #e2e8e5);
+          border-radius: 11px;
+          background: var(--card-bg, #fff);
+          color: inherit;
+          font-size: 17px;
+          cursor: pointer;
+        }
+
+        .drawerSearch {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin: 16px 16px 12px;
+          padding: 0 13px;
+          min-height: 46px;
+          border: 1px solid var(--border-color, #dfe8e2);
+          border-radius: 12px;
+          background: var(--card-bg, #fff);
+          color: inherit;
+        }
+
+        .drawerSearch > span {
+          font-size: 24px;
+          line-height: 1;
+          opacity: 0.7;
+        }
+
+        .drawerSearch input {
+          width: 100%;
+          min-width: 0;
+          border: 0;
+          outline: 0;
+          background: transparent;
+          color: inherit;
+          font: inherit;
+          font-size: 14px;
+        }
+
+        .drawerSectionLabel {
+          padding: 12px 20px 8px;
+          color: #74877c;
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 1.5px;
+        }
+
+        .drawerCategories {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          padding: 0 12px 12px;
+        }
+
+        .drawerCategory,
+        .drawerSubcategory,
+        .drawerSearchResult {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          width: 100%;
+          min-height: 45px;
+          padding: 11px 14px;
+          border: 0;
+          border-radius: 10px;
+          background: transparent;
+          color: inherit;
+          text-align: left;
+          text-decoration: none;
+          font: inherit;
+          font-size: 14px;
+          cursor: pointer;
+        }
+
+        .drawerCategory.active {
+          background: rgba(23, 104, 73, 0.11);
+          color: #176849;
+          font-weight: 750;
+        }
+
+        .drawerChevron {
+          font-size: 23px;
+          opacity: 0.65;
+        }
+
+        .drawerSubcategories {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          margin: 0 16px 16px;
+          padding: 10px;
+          border: 1px solid var(--border-color, #e5ebe7);
+          border-radius: 13px;
+          background: var(--card-bg, #fff);
+        }
+
+        .drawerSubcategory {
+          min-height: 41px;
+          padding: 9px 10px;
+          font-size: 13px;
+        }
+
+        .drawerSubcategory:hover,
+        .drawerSearchResult:hover {
+          background: rgba(23, 104, 73, 0.08);
+        }
+
+        .drawerBack {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          padding: 9px 10px 12px;
+          margin-bottom: 5px;
+          border: 0;
+          border-bottom: 1px solid var(--border-color, #e5ebe7);
+          background: transparent;
+          color: #176849;
+          text-align: left;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 750;
+          cursor: pointer;
+        }
+
+        .drawerSearchResults {
+          padding: 0 12px 16px;
+        }
+
+        .drawerSearchResult {
+          min-height: 44px;
+          border-bottom: 1px solid var(--border-color, #e5ebe7);
+          border-radius: 0;
+        }
+
+        .drawerEmpty {
+          padding: 12px;
+          color: #74877c;
+          font-size: 13px;
+        }
+
+        .drawerFooter {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: auto;
+          padding: 18px;
+          border-top: 1px solid var(--border-color, #e5ebe7);
+          background: var(--card-bg, #fff);
+        }
+
+        .drawerFooter .brandMark {
+          display: grid;
+          place-items: center;
+          width: 40px;
+          height: 40px;
+          flex-shrink: 0;
+          border-radius: 12px;
+          background: #176849;
+          color: #fff;
+          font-size: 23px;
+        }
+
+        .drawerFooter div {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .drawerFooter strong {
+          font-size: 12px;
+        }
+
+        .drawerFooter small {
+          color: #74877c;
+          font-size: 10px;
+        }
+
+        @keyframes drawerSlideIn {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes drawerFadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .mobileMenu,
+          .menuOverlay {
+            animation: none;
+          }
+        }
+      `}</style>
     </main>
   );
-                          }
+                }
