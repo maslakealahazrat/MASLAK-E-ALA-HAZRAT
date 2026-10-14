@@ -3623,9 +3623,7 @@ input {
   line-height: 1.7;
 }
 
-.ilmLessonContent {
-  margin-top: 22px;
-}
+
 
 .ilmSectionHeading {
   margin: 28px 4px 10px;
@@ -3757,9 +3755,7 @@ input {
   border-bottom: 1px solid rgba(121, 167, 165, 0.10);
 }
 
-.ilmWordRow:last-child {
-  border-bottom: 0;
-}
+
 
 .ilmWordRow strong {
   flex: 0 0 auto;
