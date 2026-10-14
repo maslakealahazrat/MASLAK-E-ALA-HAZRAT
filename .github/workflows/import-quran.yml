@@ -1,0 +1,190 @@
+name: Import Quran Data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  import-quran:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Supabase client
+        run: npm install @supabase/supabase-js
+
+      - name: Import Quran data
+        env:
+          SUPABASE_URL: https://yzzgyqdbekjdtkefyptx.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { createClient } from '@supabase/supabase-js';
+          import { readFileSync } from 'node:fs';
+
+          const db = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_SERVICE_ROLE_KEY,
+            { auth: { persistSession: false } }
+          );
+
+          if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+            throw new Error('Supabase secret is missing');
+          }
+
+          function readRows(path) {
+            return readFileSync(path, 'utf8')
+              .replace(/^\uFEFF/, '')
+              .split(/\r?\n/)
+              .filter(line => line.trim())
+              .map(line => {
+                const parts = line.split('|');
+                if (parts.length < 3) return null;
+
+                const surah = Number(parts[0]);
+                const ayah = Number(parts[1]);
+                const value = parts.slice(2).join('|').trim();
+
+                if (
+                  !Number.isInteger(surah) ||
+                  !Number.isInteger(ayah) ||
+                  surah < 1 || surah > 114 ||
+                  ayah < 1 || !value
+                ) return null;
+
+                return {
+                  surah_number: surah,
+                  ayah_number: ayah,
+                  text: value
+                };
+              })
+              .filter(Boolean);
+          }
+
+          async function insertBatches(table, rows, conflict) {
+            for (let i = 0; i < rows.length; i += 200) {
+              const { error } = await db
+                .from(table)
+                .upsert(rows.slice(i, i + 200), {
+                  onConflict: conflict
+                });
+
+              if (error) throw error;
+              console.log(`${table}: ${Math.min(i + 200, rows.length)}/${rows.length}`);
+            }
+          }
+
+          const arabic = readRows('data/quran/quran-uthmani.txt');
+          const urdu = readRows('data/translations/ur.kanzuliman.txt');
+          const english = readRows('data/translations/en.ahmedraza.txt');
+
+          function validate(rows, label) {
+            const refs = new Set(
+              rows.map(r => `${r.surah_number}:${r.ayah_number}`)
+            );
+
+            if (rows.length !== 6236 || refs.size !== 6236) {
+              throw new Error(
+                `${label}: expected 6236 unique verses; found ${rows.length} rows and ${refs.size} unique references. Import stopped.`
+              );
+            }
+          }
+
+          validate(arabic, 'Arabic');
+          validate(urdu, 'Urdu');
+          validate(english, 'English');
+
+          const refs = rows =>
+            new Set(rows.map(r => `${r.surah_number}:${r.ayah_number}`));
+
+          const arabicRefs = refs(arabic);
+
+          for (const [label, rows] of [
+            ['Urdu', urdu],
+            ['English', english]
+          ]) {
+            const other = refs(rows);
+
+            if (
+              [...arabicRefs].some(ref => !other.has(ref)) ||
+              [...other].some(ref => !arabicRefs.has(ref))
+            ) {
+              throw new Error(`${label} verse references do not match Arabic.`);
+            }
+          }
+
+          const editionData = [
+            {
+              edition_slug: 'ur-kanzul-iman',
+              language_code: 'ur',
+              title: 'Kanzul Iman',
+              translator: 'Ahmed Raza Khan Barelvi',
+              source_name: 'Repository translation file',
+              source_reference: 'data/translations/ur.kanzuliman.txt',
+              license_note: 'Verify redistribution rights before public release.',
+              is_enabled: true
+            },
+            {
+              edition_slug: 'en-ahmed-raza',
+              language_code: 'en',
+              title: 'English Translation',
+              translator: 'Ahmed Raza',
+              source_name: 'Repository translation file',
+              source_reference: 'data/translations/en.ahmedraza.txt',
+              license_note: 'Verify redistribution rights before public release.',
+              is_enabled: true
+            }
+          ];
+
+          const editionIds = {};
+
+          for (const edition of editionData) {
+            const { data, error } = await db
+              .from('quran_translation_editions')
+              .upsert(edition, { onConflict: 'edition_slug' })
+              .select('id, edition_slug')
+              .single();
+
+            if (error) throw error;
+            editionIds[edition.edition_slug] = data.id;
+          }
+
+          await insertBatches(
+            'quran_ayahs',
+            arabic.map(r => ({
+              surah_number: r.surah_number,
+              ayah_number: r.ayah_number,
+              arabic_text: r.text,
+              search_text: r.text
+            })),
+            'surah_number,ayah_number'
+          );
+
+          for (const [rows, slug] of [
+            [urdu, 'ur-kanzul-iman'],
+            [english, 'en-ahmed-raza']
+          ]) {
+            await insertBatches(
+              'quran_translations',
+              rows.map(r => ({
+                surah_number: r.surah_number,
+                ayah_number: r.ayah_number,
+                edition_id: editionIds[slug],
+                translation_text: r.text,
+                search_text: r.text
+              })),
+              'surah_number,ayah_number,edition_id'
+            );
+          }
+
+          console.log('Quran import completed successfully.');
+          NODE
