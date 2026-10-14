@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { quranAyahs } from "@/data/quran/ayahs";
+import styles from "./FullQuran.module.css";
 
 const PROGRESS_KEY = "maslak-quran-progress";
 
