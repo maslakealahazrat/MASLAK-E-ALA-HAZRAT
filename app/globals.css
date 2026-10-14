@@ -6702,3 +6702,497 @@ html.dark .alaHazratReferenceCard {
     transition: none;
   }
   }
+/* =========================================
+   QURAN.COM STYLE SLIDE-OUT NAVIGATION MENU
+   ========================================= */
+
+.quranMenuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(9, 20, 16, 0.58);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: quranMenuFadeIn 0.2s ease;
+}
+
+.quranMenuDrawer {
+  display: flex;
+  flex-direction: column;
+  width: min(430px, 100%);
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  color: var(--text, #243b33);
+  background: var(--card, #ffffff);
+  box-shadow: -12px 0 45px rgba(0, 0, 0, 0.18);
+  animation: quranMenuSlideIn 0.25s ease-out;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@keyframes quranMenuFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes quranMenuSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* HEADER */
+
+.quranMenuHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 76px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border, #e2eae5);
+}
+
+.quranMenuBrand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.quranMenuBrand > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quranMenuBrand strong {
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.quranMenuBrand small {
+  color: var(--muted, #71847b);
+  font-size: 12px;
+}
+
+.quranMenuLogo {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border: 1px solid #d4e7dc;
+  border-radius: 13px;
+  color: #24664e;
+  background: #edf7f1;
+  font-size: 26px;
+}
+
+.quranMenuClose {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  color: inherit;
+  background: var(--surface, #f2f6f3);
+  font-size: 27px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.quranMenuClose:hover {
+  background: var(--border, #e2eae5);
+  transform: rotate(90deg);
+}
+
+/* MENU SEARCH */
+
+.quranMenuSearch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 16px 10px;
+  padding: 0 13px;
+  min-height: 48px;
+  border: 1px solid var(--border, #dfe8e2);
+  border-radius: 12px;
+  background: var(--surface, #f6f9f7);
+}
+
+.quranMenuSearch > span {
+  flex-shrink: 0;
+  color: var(--muted, #71847b);
+  font-size: 25px;
+  line-height: 1;
+}
+
+.quranMenuSearch input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 0;
+  border: 0;
+  outline: none;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+}
+
+.quranMenuSearch input::placeholder {
+  color: var(--muted, #839188);
+}
+
+.quranMenuSearch input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.quranMenuSearch > button {
+  flex-shrink: 0;
+  width: 27px;
+  height: 27px;
+  border: 0;
+  border-radius: 50%;
+  color: inherit;
+  background: transparent;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+/* SCROLLABLE NAVIGATION */
+
+.quranMenuNavigation {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 5px 13px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border, #dfe8e2) transparent;
+}
+
+.quranMenuEntry {
+  border-bottom: 1px solid var(--border, #edf1ee);
+}
+
+.quranMenuRow {
+  display: flex;
+  align-items: center;
+  min-height: 53px;
+  gap: 5px;
+}
+
+.quranMenuLink {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  align-self: stretch;
+  min-width: 0;
+  padding: 13px 12px;
+  border-radius: 9px;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.45;
+  text-decoration: none;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.quranMenuLink:hover {
+  color: var(--accent, #287451);
+  background: var(--surface, #f3f7f4);
+}
+
+.quranMenuExpand {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-right: 3px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.quranMenuExpand:hover {
+  background: var(--surface, #f0f5f1);
+}
+
+.quranMenuExpand span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-right: 1.8px solid var(--muted, #6d8076);
+  border-bottom: 1.8px solid var(--muted, #6d8076);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.2s ease;
+}
+
+.quranMenuExpand.isExpanded span {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+/* NESTED CATEGORIES */
+
+.quranMenuChildren {
+  margin: 0 0 10px 13px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border, #e3ebe5);
+  animation: quranMenuExpandIn 0.18s ease;
+}
+
+@keyframes quranMenuExpandIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quranMenuChildren .quranMenuEntry {
+  border-bottom: 0;
+}
+
+.quranMenuChildren .quranMenuRow {
+  min-height: 43px;
+}
+
+.quranMenuChildren .quranMenuLink {
+  padding: 10px 11px;
+  color: var(--muted, #52675c);
+  font-size: 14px;
+  font-weight: 450;
+}
+
+.quranMenuChildren .quranMenuChildren .quranMenuLink {
+  font-size: 13px;
+}
+
+/* SEARCH RESULTS */
+
+.quranMenuSearchResult {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--border, #e9efeb);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.quranMenuSearchResult:hover {
+  background: var(--surface, #f2f7f3);
+}
+
+.quranMenuSearchResult > span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.quranMenuSearchResult small {
+  color: var(--muted, #7b8b82);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.quranMenuEmpty {
+  padding: 25px 12px;
+  color: var(--muted, #7b8b82);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* FIXED BOTTOM SETTINGS */
+
+.quranMenuFooter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 13px 16px;
+  padding-bottom: max(13px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border, #e2eae5);
+  background: var(--card, #ffffff);
+}
+
+.quranMenuFooter button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 11px;
+  border: 1px solid var(--border, #dfe8e2);
+  border-radius: 11px;
+  color: inherit;
+  background: var(--surface, #f6f9f7);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.quranMenuFooter button:hover {
+  border-color: #9fc9b0;
+  background: #edf7f0;
+}
+
+.quranMenuFooter button svg {
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.quranMenuFooter button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quranMenuFooter button small {
+  margin-left: auto;
+  color: var(--muted, #71847b);
+  font-size: 10px;
+}
+
+/* DARK THEME */
+
+.dark .quranMenuDrawer {
+  color: var(--text, #edf5f0);
+  background: var(--card, #17241e);
+}
+
+.dark .quranMenuHeader,
+.dark .quranMenuFooter {
+  border-color: var(--border, #304239);
+  background: var(--card, #17241e);
+}
+
+.dark .quranMenuSearch {
+  border-color: var(--border, #304239);
+  background: var(--surface, #202e26);
+}
+
+.dark .quranMenuClose,
+.dark .quranMenuFooter button {
+  border-color: var(--border, #304239);
+  background: var(--surface, #202e26);
+}
+
+.dark .quranMenuFooter button:hover {
+  background: #263b30;
+}
+
+.dark .quranMenuEntry,
+.dark .quranMenuSearchResult {
+  border-color: var(--border, #2a3a31);
+}
+
+.dark .quranMenuChildren {
+  border-color: var(--border, #3b5145);
+}
+
+.dark .quranMenuChildren .quranMenuLink {
+  color: var(--muted, #bdcdc2);
+}
+
+.dark .quranMenuLink:hover,
+.dark .quranMenuSearchResult:hover,
+.dark .quranMenuExpand:hover {
+  background: var(--surface, #24352b);
+}
+
+.dark .quranMenuExpand span {
+  border-color: var(--muted, #bdcdc2);
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+  .quranMenuDrawer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .quranMenuHeader {
+    min-height: 70px;
+    padding: 12px 15px;
+  }
+
+  .quranMenuSearch {
+    margin: 13px 14px 8px;
+  }
+
+  .quranMenuNavigation {
+    padding-right: 11px;
+    padding-left: 11px;
+  }
+
+  .quranMenuFooter {
+    gap: 8px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .quranMenuFooter button {
+    gap: 7px;
+    padding: 9px;
+    font-size: 12px;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  .quranMenuOverlay,
+  .quranMenuDrawer,
+  .quranMenuChildren {
+    animation: none;
+  }
+
+  .quranMenuClose,
+  .quranMenuExpand span,
+  .quranMenuLink,
+  .quranMenuSearchResult {
+    transition: none;
+  }
+}
