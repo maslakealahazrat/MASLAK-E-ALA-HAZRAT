@@ -6865,3 +6865,32 @@ html.dark .alaHazratReferenceCard {
 .drawerDonate { width: 100%; min-height: 54px; display: flex; align-items: center; justify-content: center; padding: 12px 18px; border-radius: 30px; background: #071d43; color: #fff; font-size: 18px; font-weight: 700; text-align: center; text-decoration: none; }
 @keyframes drawerAppear { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
 @media (prefers-reduced-motion: reduce) { .mobileMenu, .drawerExpand span { animation: none; transition: none; } }
+
+
+/* Language and theme options inside the mobile drawer */
+.drawerOptions {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0 14px;
+}
+.drawerOptions button {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  color: var(--text, #10233f);
+  font-size: 15px;
+  cursor: pointer;
+}
+.drawerOptions button.activeOption {
+  border-color: var(--primary, #10264b);
+  background: var(--surface-soft, #f3f5f7);
+  font-weight: 700;
+}
