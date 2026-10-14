@@ -187,6 +187,8 @@ useEffect(() => {
 
   const [languageOpen, setLanguageOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
+  const [drawerLanguageOpen, setDrawerLanguageOpen] = useState(false);
+  const [drawerThemeOpen, setDrawerThemeOpen] = useState(false);
 
   const [language, setLanguage] = useState("auto");
   const [theme, setTheme] = useState("auto");
@@ -526,17 +528,70 @@ if (savedReadingProgress) {
                 <button
                   type="button"
                   className="drawerPill"
-                  onClick={() => { setMenuOpen(false); setLanguageOpen(true); }}
+                  onClick={() => {
+                    setDrawerLanguageOpen((open) => !open);
+                    setDrawerThemeOpen(false);
+                  }}
                 >
                   <GlobeIcon /> Language
                 </button>
                 <button
                   type="button"
                   className="drawerPill"
-                  onClick={() => { setMenuOpen(false); setThemeOpen(true); }}
+                  onClick={() => {
+                    setDrawerThemeOpen((open) => !open);
+                    setDrawerLanguageOpen(false);
+                  }}
                 >
                   <SunMoonIcon /> Change Theme
                 </button>
+                {drawerLanguageOpen && (
+                  <div className="drawerOptions" aria-label="Choose language">
+                    {[
+                      ["auto", "Auto"],
+                      ["en", "English"],
+                      ["hi", "हिन्दी"],
+                      ["ur", "اردو"],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className={language === value ? "activeOption" : ""}
+                        onClick={() => {
+                          changeLanguage(value);
+                          setDrawerLanguageOpen(false);
+                        }}
+                      >
+                        <span>{label}</span>
+                        {language === value && <span>✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {drawerThemeOpen && (
+                  <div className="drawerOptions" aria-label="Choose theme">
+                    {[
+                      ["auto", "Auto"],
+                      ["light", "Light"],
+                      ["dark", "Dark"],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className={theme === value ? "activeOption" : ""}
+                        onClick={() => {
+                          changeTheme(value);
+                          setDrawerThemeOpen(false);
+                        }}
+                      >
+                        <span>{label}</span>
+                        {theme === value && <span>✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 <Link
                   href="/contact"
                   className="drawerDonate"
