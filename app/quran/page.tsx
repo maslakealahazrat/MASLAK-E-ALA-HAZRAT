@@ -125,15 +125,11 @@ export default async function QuranPage() {
               </div>
 
               <div className="surahInfo">
-                <strong>{surah.name}</strong>
+              <strong>{surah.arabicName}</strong>
 
                 <span>
                   {surah.ayahCount} Ayat
                 </span>
-              </div>
-
-              <div className="surahArabic">
-                {surah.arabicName}
               </div>
 
               <div className="surahOpen">
