@@ -159,17 +159,27 @@ input {
 
 .menuButton {
   gap: 4px;
+  border-radius: 10px;
+  align-content: center;
 }
 
+/* Restore the original three-line hamburger button */
 .menuButton span {
   display: block;
-
   width: 18px;
   height: 2px;
-
   border-radius: 5px;
-
   background: var(--text);
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.menuButton[aria-expanded="true"] {
+  background: var(--surface-soft);
+}
+
+.menuButton:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 
@@ -3613,7 +3623,9 @@ input {
   line-height: 1.7;
 }
 
-
+.ilmLessonContent {
+  margin-top: 22px;
+}
 
 .ilmSectionHeading {
   margin: 28px 4px 10px;
@@ -3745,7 +3757,9 @@ input {
   border-bottom: 1px solid rgba(121, 167, 165, 0.10);
 }
 
-
+.ilmWordRow:last-child {
+  border-bottom: 0;
+}
 
 .ilmWordRow strong {
   flex: 0 0 auto;
@@ -6698,3 +6712,185 @@ html.dark .alaHazratReferenceCard {
     transition: none;
   }
   }
+
+/* Quran.com-inspired slide-in navigation drawer */
+.menuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  width: 100%;
+  height: 100dvh;
+  border: 0;
+  background: rgba(8, 18, 17, .48);
+  cursor: pointer;
+  animation: menuFadeIn 160ms ease-out;
+}
+
+.mobileMenu {
+  position: fixed;
+  z-index: 1201;
+  inset: 0 auto 0 0;
+  width: min(360px, 88vw);
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 18px 0 48px rgba(0, 0, 0, .16);
+  animation: menuSlideIn 200ms ease-out;
+}
+
+.drawerHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.drawerBrand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.drawerBrand > span:last-child { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.drawerBrand strong { font-size: 14px; line-height: 1.3; }
+.drawerBrand small { color: var(--muted); font-size: 11px; }
+.drawerClose {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.menuInner {
+  width: 100%;
+  gap: 14px;
+  padding: 14px 14px 24px;
+}
+.menuCategoryRow,
+.menuSubcategoryRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  overflow: visible;
+  padding: 0;
+}
+.menuCategory,
+.menuSubcategory,
+.menuSearchResult {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  white-space: normal;
+}
+.menuCategory.active {
+  background: var(--surface-soft);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+.menuCategory:hover,
+.menuSubcategory:hover,
+.menuSearchResult:hover { background: var(--surface-soft); }
+.menuChevron { color: var(--muted); font-size: 22px; line-height: 1; }
+.menuSubcategoryRow {
+  margin-top: -6px;
+  padding: 8px 0 4px 12px;
+  border-left: 2px solid var(--primary);
+}
+.menuSubcategory { min-height: 40px; font-size: 13px; }
+.menuSearchResults { max-height: none; }
+.menuSearchResult { border-bottom: 1px solid var(--border); border-radius: 0; }
+
+@keyframes menuFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes menuSlideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .menuBackdrop, .mobileMenu { animation: none; }
+}
+
+
+/* ===== Full-screen Quran.com-inspired mobile navigation ===== */
+.menuBackdrop {
+  position: fixed; inset: 0; z-index: 1200; width: 100%; height: 100%; height: 100dvh;
+  border: 0; background: rgba(0,0,0,.35); cursor: pointer;
+}
+.mobileMenu {
+  position: fixed; inset: 0; z-index: 1201; width: 100%; max-width: none; height: 100%; height: 100dvh;
+  display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--surface, #fff); color: var(--text, #10233f); border: 0; box-shadow: none;
+  animation: drawerAppear 180ms ease-out;
+}
+.drawerHeader {
+  position: sticky; top: 0; z-index: 2; min-height: 76px; display: flex; align-items: center;
+  justify-content: space-between; gap: 12px; padding: 14px 22px;
+  border-bottom: 1px solid var(--border, #e5e7eb); background: var(--surface, #fff);
+}
+.drawerBrand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.drawerBrand .brandMark { font-size: 30px; color: var(--primary, #10264b); }
+.drawerBrand strong { font-size: 19px; line-height: 1.3; font-weight: 700; }
+.drawerClose { flex: 0 0 42px; width: 42px; height: 42px; border: 0; border-radius: 50%; background: transparent; color: var(--text, #10233f); font-size: 34px; line-height: 1; cursor: pointer; }
+.drawerNavigation { flex: 1; padding: 12px 22px 20px; }
+.drawerNavGroup { margin: 0; }
+.drawerNavRow { min-height: 76px; display: flex; align-items: center; gap: 18px; }
+.drawerNavIcon { width: 30px; flex: 0 0 30px; color: #c7cdd2; font-size: 26px; text-align: center; }
+.drawerNavLink { flex: 1; min-width: 0; padding: 12px 0; color: var(--text, #10233f); font-size: 21px; font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+.drawerExpand { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 38px; border: 0; background: transparent; color: var(--text, #10233f); cursor: pointer; }
+.drawerExpand span { width: 11px; height: 11px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 150ms ease; }
+.drawerExpand.expanded span { transform: rotate(225deg); }
+.drawerSubmenu { display: flex; flex-direction: column; gap: 4px; padding: 0 0 12px 48px; }
+.drawerSubmenuLink { padding: 12px; border-radius: 8px; color: var(--text, #10233f); font-size: 16px; text-decoration: none; }
+.drawerSubmenuLink:hover { background: var(--surface-soft, #f3f5f7); }
+.drawerBottom { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 20px 18px max(24px, env(safe-area-inset-bottom)); background: var(--surface, #fff); }
+.drawerPill { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 10px 18px; border: 1px solid var(--border, #e5e7eb); border-radius: 28px; background: transparent; color: var(--text, #10233f); font-size: 16px; cursor: pointer; }
+.drawerPill svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.drawerDonate { width: 100%; min-height: 54px; display: flex; align-items: center; justify-content: center; padding: 12px 18px; border-radius: 30px; background: #071d43; color: #fff; font-size: 18px; font-weight: 700; text-align: center; text-decoration: none; }
+@keyframes drawerAppear { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) { .mobileMenu, .drawerExpand span { animation: none; transition: none; } }
+
+
+/* Language and theme options inside the mobile drawer */
+.drawerOptions {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0 14px;
+}
+.drawerOptions button {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  color: var(--text, #10233f);
+  font-size: 15px;
+  cursor: pointer;
+}
+.drawerOptions button.activeOption {
+  border-color: var(--primary, #10264b);
+  background: var(--surface-soft, #f3f5f7);
+  font-weight: 700;
+}
