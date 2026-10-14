@@ -238,17 +238,6 @@ input {
   background: var(--surface-soft);
 }
 
-.mobileMenu {
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.mobileMenu {
-  width: 100%;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-}
-
 .menuInner {
   width: min(1080px, 92%);
   margin: auto;
