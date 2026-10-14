@@ -7204,3 +7204,7 @@ html.dark .alaHazratReferenceCard {
     transition: none;
   }
 }
+/* Temporarily hide Continue Reading card */
+.continueReadingBox {
+  display: none !important;
+}
