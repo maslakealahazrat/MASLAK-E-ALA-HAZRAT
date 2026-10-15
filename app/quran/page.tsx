@@ -60,6 +60,7 @@ export default async function SurahPage({
 }: PageProps) {
   const { surah } = await params;
   const surahNumber = Number(surah);
+
   if (
     !Number.isInteger(surahNumber) ||
     surahNumber < 1 ||
@@ -122,6 +123,7 @@ export default async function SurahPage({
         </div>
 
         <h1>{firstAyah.surahNameArabic}</h1>
+
         <p>سورة رقم {surahNumber}</p>
 
         <p>القرآن الكريم</p>
