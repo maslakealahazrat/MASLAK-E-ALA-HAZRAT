@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+Import type { Metadata } from "next";
 import Link from "next/link";
 import { quranAyahs } from "@/data/quran/ayahs";
 import { supabase } from "@/lib/supabase";
@@ -125,8 +125,7 @@ export default async function QuranPage() {
               </div>
 
               <div className="surahInfo">
-                {/* Yahan humne wapas wahi name rakha hai jo aapke purane code mein tha */}
-                <strong>{surah.name}</strong>
+              <strong>{surah.arabicName}</strong>
 
                 <span>
                   {surah.ayahCount} Ayat
