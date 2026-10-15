@@ -40,20 +40,19 @@ follow: false,
 }
 
 return {
-title: ${firstAyah.surahNameArabic} | Qur’an Majeed,
-description: Read Surah ${firstAyah.surahNameArabic} in original Arabic text.,
-alternates: {
-canonical: /quran/${number},
-},
-openGraph: {
-type: "website",
-title: ${firstAyah.surahNameArabic} | Qur’an Majeed,
-description: Read Surah ${firstAyah.surahNameArabic} in original Arabic text.,
-url: /quran/${number},
-siteName: "Maslak-e-Ala Hazrat",
-},
+  title: `${firstAyah.surahNameArabic} | Qur’an Majeed`,
+  description: `Read Surah ${firstAyah.surahNameArabic} in original Arabic text.`,
+  alternates: {
+    canonical: `/quran/${number}`,
+  },
+  openGraph: {
+    type: "article",
+    title: `${firstAyah.surahNameArabic} | Maslak-e-Ala Hazrat`,
+    description: `Read Surah ${firstAyah.surahNameArabic} in original Arabic text.`,
+    url: `/quran/${number}`,
+    siteName: "Maslak-e-Ala Hazrat",
+  },
 };
-}
 
 export default async function SurahPage({
 params,
