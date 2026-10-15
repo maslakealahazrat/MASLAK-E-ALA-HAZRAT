@@ -1,0 +1,761 @@
+/* =========================================================
+   MASLAK-E-ALA-HAZRAT — HOMEPAGE ONLY
+   File: app/home.css
+   ========================================================= */
+
+.site {
+  --home-bg: #f7faf9;
+  --home-surface: #ffffff;
+  --home-surface-soft: #edf6f4;
+  --home-text: #193330;
+  --home-muted: #657b77;
+  --home-green: #347f73;
+  --home-green-hover: #28675e;
+  --home-gold: #b99253;
+  --home-border: rgba(52, 121, 111, 0.18);
+  min-height: 100vh;
+  color: var(--home-text);
+  background: var(--home-bg);
+}
+
+html.dark .site {
+  --home-bg: #111817;
+  --home-surface: #192321;
+  --home-surface-soft: #22312e;
+  --home-text: #f0f6f4;
+  --home-muted: #afc0bb;
+  --home-green: #78b7aa;
+  --home-green-hover: #9acfc3;
+  --home-gold: #d2b477;
+  --home-border: rgba(143, 194, 180, 0.2);
+  color: var(--home-text);
+  background: var(--home-bg);
+}
+
+/* Header */
+.site .siteHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.site .siteHeader.headerHidden {
+  transform: translateY(-110%);
+  pointer-events: none;
+}
+
+.site .headerInner {
+  min-height: 64px;
+}
+
+.site .brand {
+  color: var(--home-text);
+}
+
+.site .brandMark {
+  background: var(--home-green);
+  color: #fff;
+}
+
+.site .iconButton,
+.site .menuButton {
+  color: var(--home-text);
+  transition: background 0.2s ease;
+}
+
+.site .iconButton:hover,
+.site .menuButton:hover {
+  background: var(--home-surface-soft);
+}
+
+.site .iconButton svg,
+.site .drawerPill svg {
+  fill: none;
+  stroke: currentColor;
+}
+
+/* Hero */
+.site .hero {
+  position: relative;
+  overflow: visible;
+  background: var(--home-bg);
+  color: var(--home-text);
+}
+
+.site .heroInner {
+  width: min(1080px, 92%);
+  margin: 0 auto;
+}
+
+.site .bismillah {
+  padding: 30px 10px 24px;
+  color: var(--home-gold);
+  font-family: "Amiri", serif;
+  font-size: clamp(32px, 6vw, 60px);
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Search */
+.site .searchArea {
+  position: relative;
+  z-index: 1100;
+  width: 100%;
+  margin: 10px auto 24px;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.site .searchArea.searchMode-bottom {
+  position: fixed;
+  left: 50%;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 1200;
+  width: min(680px, calc(100% - 24px));
+  margin: 0;
+  padding: 0;
+  transform: translateX(-50%);
+}
+
+.site .searchArea.searchMode-hidden {
+  position: fixed;
+  left: 50%;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 1200;
+  width: min(680px, calc(100% - 24px));
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 150%);
+}
+
+.site .searchBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  padding: 6px 8px 6px 18px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(22, 65, 57, 0.1);
+}
+
+.site .searchBox > svg {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--home-muted);
+  stroke-width: 1.8;
+}
+
+.site .searchBox input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--home-text);
+  font-size: 16px;
+}
+
+.site .searchBox input::placeholder {
+  color: var(--home-muted);
+  opacity: 1;
+}
+
+.site .searchBox button {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: #347f73;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.site .searchBox button:hover {
+  background: #28675e;
+}
+
+.site .searchBox button:active {
+  transform: scale(0.97);
+}
+
+.site .searchArea.searchMode-bottom .liveSearchResults {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 10px);
+  max-height: min(55vh, 420px);
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--home-border);
+  border-radius: 18px;
+  background: var(--home-surface);
+  color: var(--home-text);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.14);
+}
+
+.site .liveSearchItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--home-border);
+  border-radius: 10px;
+  color: var(--home-text);
+  text-decoration: none;
+}
+
+.site .liveSearchItem:hover {
+  background: var(--home-surface-soft);
+}
+
+.site .liveSearchInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.site .liveSearchInfo strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.site .liveSearchInfo span,
+.site .liveSearchEmpty {
+  color: var(--home-muted);
+  font-size: 12px;
+}
+
+.site .liveSearchArabic {
+  max-width: 45%;
+  color: var(--home-text);
+  font-family: "Amiri", serif;
+  font-size: 20px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.site .viewAllSearch {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--home-surface-soft);
+  color: var(--home-green);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+html.dark .site .searchBox,
+html.dark .site .liveSearchResults {
+  background: var(--home-surface);
+  border-color: var(--home-border);
+  color: var(--home-text);
+}
+
+html.dark .site .searchBox input {
+  color: var(--home-text);
+}
+
+/* Islamic calendar */
+.site .calendarSection {
+  width: min(1080px, 92%);
+  margin: 10px auto 30px;
+}
+
+.site .calendarCard {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 22px;
+  color: var(--home-text);
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(22, 65, 57, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site .calendarCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(22, 65, 57, 0.09);
+}
+
+.site .calendarIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: var(--home-surface-soft);
+  color: var(--home-green);
+  font-size: 28px;
+}
+
+.site .calendarContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.site .calendarLabel,
+.site .calendarArabic {
+  color: var(--home-muted);
+}
+
+.site .hijriDate {
+  font-family: "Amiri", serif;
+  font-size: 24px;
+}
+
+.site .gregorianDate {
+  color: var(--home-muted);
+  font-size: 14px;
+}
+
+.site .calendarArabic {
+  font-family: "Amiri", serif;
+  font-size: 20px;
+}
+
+/* Knowledge cards */
+.site .knowledgeSection {
+  width: min(1080px, 92%);
+  margin: 0 auto;
+  padding: 30px 0 55px;
+}
+
+.site .sectionHeading {
+  max-width: 680px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.site .sectionHeading > span {
+  color: var(--home-green);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.site .sectionHeading h2 {
+  margin: 10px 0;
+  color: var(--home-text);
+  font-size: clamp(27px, 4vw, 38px);
+  letter-spacing: -0.8px;
+}
+
+.site .sectionHeading p {
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.site .quranWrap {
+  margin: 24px 0;
+}
+
+.site .knowledgeCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--home-border);
+  border-radius: 24px;
+  background: var(--home-surface);
+  color: var(--home-text);
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(22, 65, 57, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.site .knowledgeCard:hover {
+  transform: translateY(-3px);
+  border-color: var(--home-green);
+  box-shadow: 0 14px 32px rgba(22, 65, 57, 0.09);
+}
+
+.site .quranCard {
+  min-height: 180px;
+}
+
+.site .cardIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 76px;
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  background: var(--home-surface-soft);
+  color: var(--home-green);
+  font-family: "Amiri", serif;
+  font-size: 34px;
+}
+
+.site .knowledgeCardContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.site .arabicTitle {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--home-gold);
+  font-family: "Amiri", serif;
+  font-size: 24px;
+  line-height: 1.6;
+}
+
+.site .knowledgeCard h3 {
+  margin: 0 0 6px;
+  color: var(--home-text);
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+.site .knowledgeCard p {
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.site .cardArrow {
+  flex-shrink: 0;
+  color: var(--home-green);
+  font-size: 30px;
+}
+
+.site .horizontalCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.site .smallCard {
+  min-height: 180px;
+}
+
+/* About */
+.site .aboutSection {
+  padding: 45px 4%;
+  background: var(--home-surface-soft);
+}
+
+.site .aboutBox {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.site .aboutBox > span {
+  color: var(--home-green);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.site .aboutBox h2 {
+  margin: 12px 0;
+  color: var(--home-text);
+  font-size: clamp(24px, 4vw, 34px);
+}
+
+.site .aboutBox p {
+  color: var(--home-muted);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+/* Footer */
+.site .footer {
+  padding: 38px 5% 24px;
+  background: var(--home-bg);
+  color: var(--home-muted);
+  text-align: center;
+}
+
+.site .footerInner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.site .footerBrand {
+  color: var(--home-text);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.site .footerLine {
+  height: 1px;
+  margin: 22px 0;
+  background: var(--home-border);
+}
+
+.site .footer small {
+  font-size: 12px;
+}
+
+/* Navigation drawer (homepage scoped) */
+.site .menuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(7, 18, 16, 0.52);
+}
+
+.site .mobileMenu {
+  z-index: 1301;
+  background: var(--home-surface);
+  color: var(--home-text);
+}
+
+.site .drawerHeader,
+.site .drawerNavRow,
+.site .drawerBottom {
+  color: var(--home-text);
+}
+
+.site .drawerNavLink,
+.site .drawerSubmenuLink {
+  color: var(--home-text);
+  text-decoration: none;
+}
+
+.site .drawerNavLink:hover,
+.site .drawerSubmenuLink:hover {
+  color: var(--home-green);
+}
+
+.site .drawerPill,
+.site .drawerExpand,
+.site .drawerClose {
+  color: var(--home-text);
+}
+
+.site .drawerDonate {
+  background: var(--home-green);
+  color: #fff;
+}
+
+.site .popup,
+.site .drawerOptions {
+  background: var(--home-surface);
+  color: var(--home-text);
+  border-color: var(--home-border);
+}
+
+.site .popupTitle {
+  color: var(--home-muted);
+}
+
+.site .popup button,
+.site .drawerOptions button {
+  color: var(--home-text);
+}
+
+.site .popup button:hover,
+.site .drawerOptions button:hover,
+.site .activeOption {
+  background: var(--home-surface-soft);
+}
+
+.site .activeOption {
+  color: var(--home-green);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .site .headerInner {
+    width: 92%;
+    min-height: 58px;
+  }
+
+  .site .brand {
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .site .brandMark {
+    width: 30px;
+    height: 30px;
+    font-size: 19px;
+  }
+
+  .site .heroInner {
+    width: 94%;
+  }
+
+  .site .bismillah {
+    padding: 22px 4px 18px;
+    font-size: clamp(30px, 9vw, 46px);
+  }
+
+  .site .searchArea.searchMode-bottom {
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    width: calc(100% - 20px);
+  }
+
+  .site .searchBox {
+    min-height: 52px;
+    gap: 8px;
+    padding: 5px 6px 5px 13px;
+    border-radius: 16px;
+  }
+
+  .site .searchBox > svg {
+    flex-basis: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .site .searchBox input {
+    font-size: 14px;
+  }
+
+  .site .searchBox button {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+
+  .site .searchArea.searchMode-bottom .liveSearchResults {
+    max-height: min(42vh, 320px);
+    border-radius: 15px;
+  }
+
+  .site .liveSearchItem {
+    gap: 8px;
+    padding: 12px 9px;
+  }
+
+  .site .liveSearchArabic {
+    font-size: 17px;
+  }
+
+  .site .calendarSection,
+  .site .knowledgeSection {
+    width: 92%;
+  }
+
+  .site .calendarCard {
+    gap: 12px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .site .calendarIcon {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+    font-size: 23px;
+  }
+
+  .site .hijriDate {
+    font-size: 20px;
+  }
+
+  .site .calendarArabic {
+    display: none;
+  }
+
+  .site .knowledgeSection {
+    padding-top: 25px;
+  }
+
+  .site .sectionHeading {
+    margin-bottom: 22px;
+  }
+
+  .site .sectionHeading p {
+    font-size: 14px;
+  }
+
+  .site .knowledgeCard {
+    gap: 13px;
+    padding: 17px;
+    border-radius: 19px;
+  }
+
+  .site .quranCard {
+    min-height: 145px;
+  }
+
+  .site .cardIcon {
+    flex-basis: 56px;
+    width: 56px;
+    height: 56px;
+    border-radius: 15px;
+    font-size: 27px;
+  }
+
+  .site .arabicTitle {
+    font-size: 20px;
+  }
+
+  .site .knowledgeCard h3 {
+    font-size: 18px;
+  }
+
+  .site .knowledgeCard p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .site .cardArrow {
+    font-size: 24px;
+  }
+
+  .site .horizontalCards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .site .smallCard {
+    min-height: 140px;
+  }
+
+  .site .aboutSection {
+    padding: 35px 5%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site .siteHeader,
+  .site .searchArea,
+  .site .knowledgeCard,
+  .site .calendarCard,
+  .site .searchBox button {
+    transition: none;
+  }
+}
