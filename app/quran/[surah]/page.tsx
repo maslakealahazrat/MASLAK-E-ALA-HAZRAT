@@ -53,7 +53,7 @@ return {
     siteName: "Maslak-e-Ala Hazrat",
   },
 };
-
+}
 export default async function SurahPage({
 params,
 }: PageProps) {
