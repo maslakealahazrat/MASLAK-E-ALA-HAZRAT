@@ -709,38 +709,6 @@ if (savedReadingProgress) {
         </div>
       </section>
 
-{/* CONTINUE READING */}
-
-{readingProgress && (
-  <section className="continueReadingSection">
-
-    <Link
-      href={readingProgress.url}
-      className="continueReadingCircle"
-      aria-label={`Continue reading ${readingProgress.title}`}
-    >
-
-      <div className="continueReadingCircleInner">
-
-        <span className="continueReadingLabel">
-          CONTINUE
-        </span>
-
-        <strong>
-          {readingProgress.title}
-        </strong>
-
-        <span>
-          {readingProgress.subtitle}
-        </span>
-
-      </div>
-
-    </Link>
-
-  </section>
-)}
-
 {/* ISLAMIC CALENDAR */}
 
 <section className="calendarSection">
