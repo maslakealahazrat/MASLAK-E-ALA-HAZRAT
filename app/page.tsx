@@ -88,6 +88,13 @@ const navItems: MenuItem[] = [
 
 const knowledgeCards = [
   {
+    title: "Islamic Books",
+    href: "/islamic-books",
+    arabic: "اسلامی کتب",
+    text: "Islamic books, literature and valuable works.",
+    icon: "▤",
+  },
+  {
     title: "Al-Hadith",
     href: "/hadith",
     arabic: "الحديث",
@@ -102,13 +109,6 @@ const knowledgeCards = [
     icon: "♡",
   },
   {
-    title: "Islamic Books",
-    href: "/islamic-books",
-    arabic: "اسلامی کتب",
-    text: "Islamic books, literature and valuable works.",
-    icon: "▤",
-  },
-  {
     title: "Seerat-un-Nabi ﷺ",
     href: "/seerat-un-nabi",
     arabic: "سیرت النبی ﷺ",
@@ -121,7 +121,7 @@ const knowledgeCards = [
     arabic: "اعلیٰ حضرت",
     text: "Knowledge, writings and works of Ala Hazrat.",
     icon: "✦",
-  },
+  }
 ];
 
 function GlobeIcon() {
@@ -337,8 +337,7 @@ export default function Home() {
     <main className="site">
       <header className={`siteHeader ${headerHidden ? "headerHidden" : ""}`}>
         <div className="headerInner">
-          <a href="/" className="brand">
-            <span className="brandMark">م</span>
+          <a href="/" className="brand brandCentered">
             <span>Maslak-e-Ala Hazrat</span>
           </a>
 
@@ -603,7 +602,11 @@ export default function Home() {
 
       <section className="hero">
         <div className="heroInner">
-          <div className="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+          <div className="heroCalligraphy" aria-label="لا إله إلا الله محمد رسول الله">
+            لا إله إلا الله محمد رسول الله
+          </div>
+          <div className="heroBrandTitle">Maslak-e-Ala Hazrat</div>
+          <p className="heroTagline">Islamic Knowledge • Naat • Books • Hadith</p>
 
           <div className={`searchArea searchMode-${searchMode}`}>
             <div className="searchBox">
@@ -680,17 +683,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="calendarSection">
-        <Link href="/islamic-calendar" className="calendarCard">
-          <div className="calendarIcon">☪</div>
-          <div className="calendarContent">
-            <span className="calendarLabel">آج کی تاریخ</span>
-            <strong className="hijriDate">{date.hijri || "اسلامی تاریخ"}</strong>
-            <span className="gregorianDate">{date.gregorian || "Loading..."}</span>
-          </div>
-          <div className="calendarArabic">اسلامی کیلنڈر</div>
-        </Link>
-      </section>
+
 
       <section className="knowledgeSection">
         <div className="sectionHeading">
@@ -704,7 +697,7 @@ export default function Home() {
 
         <div className="quranWrap">
           <Link href="/quran" className="knowledgeCard quranCard">
-            <div className="cardIcon">﷽</div>
+            <div className="cardIcon quranIcon" aria-hidden="true">▤</div>
             <div className="knowledgeCardContent">
               <span className="arabicTitle">القرآن الكريم</span>
               <h3>Quran</h3>
@@ -743,6 +736,18 @@ export default function Home() {
             biographies of Islamic personalities.
           </p>
         </div>
+      </section>
+
+      <section className="calendarSection">
+        <Link href="/islamic-calendar" className="calendarCard">
+          <div className="calendarIcon">☪</div>
+          <div className="calendarContent">
+            <span className="calendarLabel">آج کی تاریخ</span>
+            <strong className="hijriDate">{date.hijri || "اسلامی تاریخ"}</strong>
+            <span className="gregorianDate">{date.gregorian || "Loading..."}</span>
+          </div>
+          <div className="calendarArabic">اسلامی کیلنڈر</div>
+        </Link>
       </section>
 
       <footer className="footer">
