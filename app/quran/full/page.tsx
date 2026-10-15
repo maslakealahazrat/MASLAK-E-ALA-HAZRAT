@@ -50,8 +50,8 @@ export default async function FullQuranPage() {
 
       ayahsList = ayahRes.data.map((a) => ({
         id: `${a.surah_number}-${a.ayah_number}`,
-        surahNumber: a.surah_number,
-        ayahNumber: a.ayah_number,
+        surahNumber: Number(a.surah_number),
+        ayahNumber: Number(a.ayah_number),
         arabic: a.arabic_text,
         surahName: surahNameMap.get(a.surah_number) || `Surah ${a.surah_number}`,
       }));
@@ -70,7 +70,10 @@ export default async function FullQuranPage() {
 
       <section className={styles.fullQuranContent}>
         {surahs.map((surah) => {
-          const ayahs = ayahsList.filter((ayah) => ayah.surahNumber === surah.number);
+          // Yahan exact matching ensure ki gayi hai taaki 0 Ayahs ki problem na aaye
+          const ayahs = ayahsList.filter(
+            (ayah) => ayah.surahNumber === Number(surah.number)
+          );
 
           return (
             <section key={surah.number} id={"surah-" + surah.number} className={styles.fullQuranSurah}>
