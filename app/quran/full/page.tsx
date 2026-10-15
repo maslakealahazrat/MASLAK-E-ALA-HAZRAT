@@ -195,7 +195,7 @@ export default function FullQuranPage() {
   const handleAyahScroll = () => {
     const ayahElements =
       document.querySelectorAll<HTMLElement>(
-        ".fullQuranAyah"
+        "." + styles.fullQuranAyah
       );
 
     if (!ayahElements.length) {
@@ -315,24 +315,24 @@ export default function FullQuranPage() {
   }, []);
 
   return (
-    <main className={styles.page}>
+    <main className={styles.fullQuranPage}>
 
       {/* HERO */}
 
-      <section className={styles.hero}>
+      <section className={styles.fullQuranHero}>
 
         <Link
           href="/quran"
-          className={styles.back}
+          className={styles.quranBack}
         >
           ← All Surahs
         </Link>
 
-        <div className={styles.arabicTitle}>
+        <div className={styles.fullQuranArabicTitle}>
           القرآن الكريم
         </div>
 
-        <div className={styles.eyebrow}>
+        <div className={styles.fullQuranEyebrow}>
           THE NOBLE QUR’AN
         </div>
 
@@ -348,199 +348,13 @@ export default function FullQuranPage() {
       </section>
 
 
-      {/* TOAST */}
+      {/* FIXED QURAN SEARCH */}
 
-      {message && (
-        <div className={styles.toast}>
-          {message}
-        </div>
-      )}
+      <div className={styles.fullQuranFixedSearch}>
 
+        <div className={styles.fullQuranSearchBox}>
 
-      {/* FULL QURAN */}
-
-      <section className={styles.content}>
-
-        {surahs.map(
-          (surah) => {
-
-            const ayahs =
-              quranAyahs.filter(
-                (ayah) =>
-                  ayah.surahNumber ===
-                  surah.number
-              );
-
-            return (
-              <section
-                key={
-                  surah.number
-                }
-                id={
-                  "surah-" +
-                  surah.number
-                }
-                className={styles.surah}
-              >
-
-                {/* SURAH HEADING */}
-
-                <header className={styles.surahHeader}>
-
-                  <div className={styles.surahHeading}>
-
-                    <div className={styles.surahArabic}>
-                      {
-                        surah.arabicName
-                      }
-                    </div>
-
-                    <h2>
-                      {
-                        surah.name
-                      }
-                    </h2>
-
-                    <span>
-                      Surah{" "}
-                      {
-                        surah.number
-                      }
-                    </span>
-
-                  </div>
-
-                  <button
-                    type="button"
-                    className={styles.shareButton}
-                    aria-label={
-                      "Share Surah " +
-                      surah.name
-                    }
-                    title="Share"
-                    onClick={() =>
-                      shareSurah(
-                        surah.name,
-                        surah.number
-                      )
-                    }
-                  >
-                    ↗ <span>Share Surah</span>
-                  </button>
-
-                </header>
-
-
-                {/* TANZIL SOURCE */}
-
-                <div className={styles.sourceLine}>
-
-                  <span>
-                    Qur’an text:
-                  </span>
-
-                  <a
-                    href="https://tanzil.net/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Tanzil Project
-                  </a>
-
-                </div>
-
-
-                {/* CONTINUOUS MUSHAF TEXT */}
-
-                <div
-                  className={styles.ayahs}
-                  dir="rtl"
-                >
-
-                  {ayahs.map(
-                    (ayah) => (
-
-                      <span
-                        key={
-                          ayah.id
-                        }
-                        id={
-                          "ayah-" +
-                          ayah.surahNumber +
-                          "-" +
-                          ayah.ayahNumber
-                        }
-                        className={`${styles.ayah} ${progress?.surahNumber === ayah.surahNumber && progress?.ayahNumber === ayah.ayahNumber ? styles.currentReadingAyah : ""}`}
-                        onClick={() =>
-                          saveProgress(
-                            ayah.surahNumber,
-                            ayah.ayahNumber
-                          )
-                        }
-                      >
-
-                        <span className={styles.ayahText}>
-                          {
-                            ayah.arabic
-                          }
-                        </span>
-
-                        <span
-                          className={styles.ayahMarker}
-                          aria-label={
-                            "Ayah " +
-                            ayah.ayahNumber
-                          }
-                        >
-                          ۝
-                          {
-                            ayah.ayahNumber
-                          }
-                        </span>
-
-                      </span>
-
-                    )
-                  )}
-
-                </div>
-
-
-                {/* SMALL SURAH FOOTER */}
-
-                <div className={styles.surahFooter}>
-
-                  <span>
-                    Surah{" "}
-                    {
-                      surah.number
-                    }
-                    {" · "}
-                    {
-                      ayahs.length
-                    }{" "}
-                    Ayahs
-                  </span>
-
-
-
-                </div>
-
-              </section>
-            );
-          }
-        )}
-
-      </section>
-
-
-      {/* SEARCH — placed after Surah content, not fixed */}
-
-      <div className={styles.searchArea}>
-
-        <div className={styles.searchBox}>
-
-          <span className={styles.searchIcon}>
+          <span className={styles.fullQuranSearchIcon}>
             🔎
           </span>
 
@@ -559,7 +373,7 @@ export default function FullQuranPage() {
           {quranSearch && (
             <button
               type="button"
-              className={styles.searchClear}
+              className={styles.fullQuranSearchClear}
               onClick={() =>
                 setQuranSearch("")
               }
@@ -574,7 +388,7 @@ export default function FullQuranPage() {
         {quranSearchResults.length >
           0 && (
 
-          <div className={styles.searchResults}>
+          <div className={styles.fullQuranSearchResults}>
 
             {quranSearchResults.map(
               (ayah) => (
@@ -582,7 +396,7 @@ export default function FullQuranPage() {
                 <button
                   key={ayah.id}
                   type="button"
-                  className={styles.searchResult}
+                  className={styles.fullQuranSearchResult}
                   onClick={() => {
 
                     const element =
@@ -613,7 +427,7 @@ export default function FullQuranPage() {
                   }}
                 >
 
-                  <div className={styles.searchResultTop}>
+                  <div className={styles.fullQuranSearchResultTop}>
 
                     <strong>
                       {ayah.surahName}
@@ -642,11 +456,206 @@ export default function FullQuranPage() {
       </div>
 
 
+      {/* TOAST */}
+
+      {message && (
+        <div className={styles.quranToast}>
+          {message}
+        </div>
+      )}
+
+
+      {/* FULL QURAN */}
+
+      <section className={styles.fullQuranContent}>
+
+        {surahs.map(
+          (surah) => {
+
+            const ayahs =
+              quranAyahs.filter(
+                (ayah) =>
+                  ayah.surahNumber ===
+                  surah.number
+              );
+
+            return (
+              <section
+                key={
+                  surah.number
+                }
+                id={
+                  "surah-" +
+                  surah.number
+                }
+                className={styles.fullQuranSurah}
+              >
+
+                {/* SURAH HEADING */}
+
+                <header className={styles.fullQuranSurahHeader}>
+
+                  <div className={styles.fullQuranSurahHeading}>
+
+                    <div className={styles.fullQuranSurahArabic}>
+                      {
+                        surah.arabicName
+                      }
+                    </div>
+
+                    <h2>
+                      {
+                        surah.name
+                      }
+                    </h2>
+
+                    <span>
+                      Surah{" "}
+                      {
+                        surah.number
+                      }
+                    </span>
+
+                  </div>
+
+                  {/* Share button is placed on its own horizontal row below the Surah title. */}
+
+                </header>
+
+                <div className={styles.fullQuranShareRow}>
+                  <span className={styles.fullQuranShareLabel}>
+                    Surah {surah.number} · {ayahs.length} Ayahs
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.fullQuranSurahShare}
+                    aria-label={"Share Surah " + surah.name}
+                    title={"Share Surah " + surah.name}
+                    onClick={() => shareSurah(surah.name, surah.number)}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 16V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
+                    </svg>
+                    <span>Share Surah</span>
+                  </button>
+                </div>
+
+                {/* TANZIL SOURCE */}
+
+                <div className={styles.fullQuranSourceLine}>
+
+                  <span>
+                    Qur’an text:
+                  </span>
+
+                  <a
+                    href="https://tanzil.net/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Tanzil Project
+                  </a>
+
+                </div>
+
+
+                {/* CONTINUOUS MUSHAF TEXT */}
+
+                <div
+                  className={styles.fullQuranAyahs}
+                  dir="rtl"
+                >
+
+                  {ayahs.map(
+                    (ayah) => (
+
+                      <span
+                        key={
+                          ayah.id
+                        }
+                        id={
+                          "ayah-" +
+                          ayah.surahNumber +
+                          "-" +
+                          ayah.ayahNumber
+                        }
+                        className={
+                          styles.fullQuranAyah +
+                          (
+                            progress?.surahNumber ===
+                              ayah.surahNumber &&
+                            progress?.ayahNumber ===
+                              ayah.ayahNumber
+                              ? " " + styles.currentReadingAyah
+                              : ""
+                          )
+                        }
+                        onClick={() =>
+                          saveProgress(
+                            ayah.surahNumber,
+                            ayah.ayahNumber
+                          )
+                        }
+                      >
+
+                        <span className={styles.fullQuranAyahText}>
+                          {
+                            ayah.arabic
+                          }
+                        </span>
+
+                        <span
+                          className={styles.fullQuranAyahMarker}
+                          aria-label={
+                            "Ayah " +
+                            ayah.ayahNumber
+                          }
+                        >
+                          ۝
+                          {
+                            ayah.ayahNumber
+                          }
+                        </span>
+
+                      </span>
+
+                    )
+                  )}
+
+                </div>
+
+
+                {/* SMALL SURAH FOOTER */}
+
+                <div className={styles.fullQuranSurahFooter}>
+
+                  <span>
+                    Surah{" "}
+                    {
+                      surah.number
+                    }
+                    {" · "}
+                    {
+                      ayahs.length
+                    }{" "}
+                    Ayahs
+                  </span>
+
+
+
+                </div>
+
+              </section>
+            );
+          }
+        )}
+
+      </section>
 
 
       {/* SOURCE */}
 
-      <section className={styles.source}>
+      <section className={styles.quranSource}>
 
         <p>
           Arabic Qur’an text sourced
