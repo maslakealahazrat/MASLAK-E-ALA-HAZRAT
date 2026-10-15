@@ -1,11 +1,11 @@
-/* Full Qur'an page — styles matched to page.tsx class names */
+/* Full Qur'an page — scoped styles for app/quran/full/page.tsx */
 
 .fullQuranPage {
   position: relative;
   min-height: 100vh;
+  box-sizing: border-box;
   padding: 18px 16px 120px;
   color: var(--foreground, #1f2937);
-  box-sizing: border-box;
 }
 
 .fullQuranHero {
@@ -18,7 +18,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   min-height: 32px;
   padding: 6px 10px;
   margin: 0 auto 14px;
@@ -37,10 +36,10 @@
 }
 
 .fullQuranArabicTitle {
-  font-size: clamp(34px, 6vw, 48px);
-  line-height: 1.7;
   margin: 4px 0 0;
   font-family: "Amiri", "Noto Naskh Arabic", serif;
+  font-size: clamp(34px, 6vw, 48px);
+  line-height: 1.7;
 }
 
 .fullQuranEyebrow {
@@ -91,9 +90,9 @@
 }
 
 .fullQuranSurahArabic {
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
   font-size: clamp(25px, 4vw, 34px);
   line-height: 1.65;
-  font-family: "Amiri", "Noto Naskh Arabic", serif;
 }
 
 .fullQuranSurahHeading h2 {
@@ -374,17 +373,6 @@
   margin: 0 0 5px;
 }
 
-/* Dark theme: retain the site's inherited text color and use dark surfaces. */
-.dark .fullQuranSurah,
-.dark .fullQuranFixedSearch,
-.dark .fullQuranSearchResults {
-  background: var(--card-bg, #171717);
-}
-
-.dark .fullQuranSearchBox {
-  background: var(--background, #111);
-}
-
 @media (max-width: 600px) {
   .fullQuranPage {
     padding: 12px 10px 112px;
@@ -418,3 +406,6 @@
     max-height: 46vh;
   }
 }
+
+/* Keep the page content clear of the fixed search bar. */
+.content { padding-bottom: 100px; }
