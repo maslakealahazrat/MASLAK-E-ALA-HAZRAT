@@ -258,4 +258,4 @@ export default async function SurahPage({
       </section>
     </main>
   );
-}
+    }
