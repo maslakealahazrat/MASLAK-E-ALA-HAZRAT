@@ -814,3 +814,13 @@
     display: none;
   }
 }
+/* Juz picker responsive display */
+.quranJuzPickerDesktop {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .quranJuzPickerDesktop {
+    display: flex;
+  }
+}
