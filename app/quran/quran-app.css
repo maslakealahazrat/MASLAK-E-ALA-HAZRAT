@@ -1,0 +1,816 @@
+/* =========================================================
+   QURAN ULTRA-PREMIUM APPLICATION STYLES
+   ========================================================= */
+
+.quranContainer {
+  min-height: 100vh;
+  background-color: var(--q-bg, #0b1a18);
+  color: var(--q-text, #f0f7f5);
+  font-family: "Inter", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding-bottom: 120px;
+}
+
+/* TOP STICKY BAR */
+.quranStickyNav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background-color: color-mix(in srgb, var(--q-bg, #0b1a18) 88%, transparent);
+  border-bottom: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  padding: 10px 16px;
+}
+
+.quranStickyNavInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.quranNavLeft,
+.quranNavRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quranIconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  color: var(--q-text, #f0f7f5);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quranIconButton:hover {
+  background: var(--q-card-hover, #16322e);
+  border-color: var(--q-accent, #d4af37);
+  transform: translateY(-1px);
+}
+
+.quranIconButton.active {
+  background: var(--q-accent, #d4af37);
+  color: #0b1a18;
+  font-weight: 600;
+  border-color: var(--q-accent, #d4af37);
+}
+
+.quranViewSelector {
+  display: flex;
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.quranViewBtn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--q-text, #f0f7f5);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quranViewBtn.active {
+  background: var(--q-accent, #d4af37);
+  color: #0b1a18;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* HERO BANNER */
+.surahHeroBanner {
+  max-width: 1000px;
+  margin: 24px auto 32px;
+  padding: 36px 24px;
+  background: radial-gradient(circle at top, var(--q-card-hover, #16322e) 0%, var(--q-card, #122825) 100%);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.25));
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+.surahHeroBanner::before {
+  content: "۞";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-size: 120px;
+  color: var(--q-accent, #d4af37);
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.surahHeroBanner::after {
+  content: "۞";
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+  font-size: 140px;
+  color: var(--q-accent, #d4af37);
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.surahArabicTitleHero {
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  font-size: clamp(38px, 6vw, 64px);
+  color: var(--q-arabic, #fffdf7);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.surahEnglishTitleHero {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--q-accent, #d4af37);
+  margin: 0 0 4px 0;
+}
+
+.surahMeaningHero {
+  font-size: 15px;
+  color: var(--q-translation, #c2dcd8);
+  margin: 0 0 18px 0;
+}
+
+.surahBadgesHero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.surahBadgeItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--q-badge-bg, #1e3f3a);
+  color: var(--q-badge-text, #e8d085);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+}
+
+.surahQuickActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* BISMILLAH BANNER */
+.bismillahContainer {
+  text-align: center;
+  margin: 30px auto;
+  padding: 20px 10px;
+}
+
+.bismillahArabic {
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  font-size: clamp(28px, 4vw, 42px);
+  color: var(--q-accent, #d4af37);
+  letter-spacing: 1px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* AYAH LIST (TRANSLATION VIEW) */
+.ayahsContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ayahCard {
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.ayahCard:hover {
+  border-color: var(--q-accent, #d4af37);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.ayahCard.activeAyah {
+  background: color-mix(in srgb, var(--q-card, #122825) 85%, var(--q-accent, #d4af37));
+  border: 2px solid var(--q-accent, #d4af37);
+  box-shadow: 0 0 25px var(--q-highlight, rgba(212, 175, 55, 0.35));
+}
+
+.ayahTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px dashed var(--q-card-border, rgba(212, 175, 55, 0.15));
+}
+
+.ayahReference {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ayahNumberBadge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--q-badge-bg, #1e3f3a);
+  color: var(--q-badge-text, #e8d085);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+}
+
+.ayahMetaTag {
+  font-size: 12px;
+  color: var(--q-translation, #c2dcd8);
+  background: rgba(0, 0, 0, 0.15);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.ayahActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ayahActionBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--q-text, #f0f7f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ayahActionBtn:hover {
+  background: var(--q-card-hover, #16322e);
+  color: var(--q-accent, #d4af37);
+  border-color: var(--q-card-border, rgba(212, 175, 55, 0.2));
+}
+
+.ayahActionBtn.bookmarked {
+  color: var(--q-accent, #d4af37);
+  background: var(--q-accent-soft, rgba(212, 175, 55, 0.15));
+}
+
+/* ARABIC TEXT */
+.ayahArabicSection {
+  text-align: right;
+  direction: rtl;
+  margin-bottom: 24px;
+}
+
+.ayahArabicText {
+  color: var(--q-arabic, #fffdf7);
+  line-height: 2.2;
+  word-spacing: 4px;
+  margin: 0;
+}
+
+.ayahArabicUthmani {
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+}
+
+.ayahArabicIndoPak {
+  font-family: var(--font-arabic-indopak, "Scheherazade New", serif);
+}
+
+.ayahEndSymbol {
+  display: inline-block;
+  margin: 0 6px;
+  color: var(--q-accent, #d4af37);
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+/* TRANSLATIONS SECTION */
+.ayahTranslationsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.translationBox {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--q-card, #122825) 94%, black);
+  border-left: 3px solid var(--q-accent, #d4af37);
+}
+
+.translationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--q-accent, #d4af37);
+  font-weight: 700;
+}
+
+.translationUrduText {
+  font-family: var(--font-urdu, "Noto Nastaliq Urdu", serif);
+  direction: rtl;
+  text-align: right;
+  line-height: 2.1;
+  color: var(--q-translation, #c2dcd8);
+  margin: 0;
+}
+
+.translationEnglishText {
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  color: var(--q-translation, #c2dcd8);
+  margin: 0;
+}
+
+/* HIFZ BLUR MODE */
+.hifzBlurred {
+  filter: blur(8px);
+  user-select: none;
+  cursor: pointer;
+  transition: filter 0.25s ease;
+}
+
+.hifzBlurred:hover,
+.hifzBlurred:active {
+  filter: blur(0px);
+}
+
+/* MUSHAF CONTINUOUS VIEW */
+.mushafReadingSheet {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 32px;
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.25));
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  direction: rtl;
+  text-align: justify;
+}
+
+.mushafFlowingAyah {
+  display: inline;
+  color: var(--q-arabic, #fffdf7);
+  line-height: 2.5;
+  cursor: pointer;
+  padding: 3px 2px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.mushafFlowingAyah:hover {
+  background: var(--q-accent-soft, rgba(212, 175, 55, 0.15));
+}
+
+.mushafFlowingAyah.activeAyah {
+  background: var(--q-highlight, rgba(212, 175, 55, 0.3));
+  color: #fff;
+  border-bottom: 2px solid var(--q-accent, #d4af37);
+}
+
+.mushafAyahBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--q-accent, #d4af37);
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  font-size: 0.9em;
+  margin: 0 4px;
+}
+
+/* FLOATING AUDIO CONTROLLER DOCK */
+.quranAudioDock {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(95%, 860px);
+  background: color-mix(in srgb, var(--q-card, #122825) 95%, black);
+  border: 1px solid var(--q-accent, #d4af37);
+  border-radius: 18px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), 0 0 15px var(--q-accent-soft, rgba(212, 175, 55, 0.2));
+  z-index: 100;
+  padding: 12px 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.audioDockContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.audioDockInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 180px;
+}
+
+.audioDockSurahName {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--q-text, #f0f7f5);
+}
+
+.audioDockAyahInfo {
+  font-size: 12px;
+  color: var(--q-accent, #d4af37);
+}
+
+.audioDockControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.audioPlayBtnMain {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--q-accent, #d4af37);
+  color: #0b1a18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+}
+
+.audioPlayBtnMain:hover {
+  transform: scale(1.08);
+}
+
+.audioDockNavBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--q-text, #f0f7f5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audioDockNavBtn:hover {
+  background: var(--q-card-hover, #16322e);
+  color: var(--q-accent, #d4af37);
+}
+
+.audioDockSelect {
+  background: var(--q-bg, #0b1a18);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  color: var(--q-text, #f0f7f5);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.audioDockProgressBar {
+  width: 100%;
+  height: 4px;
+  background: var(--q-card-border, rgba(212, 175, 55, 0.2));
+  border-radius: 4px;
+  margin-top: 8px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.audioDockProgressFill {
+  height: 100%;
+  background: var(--q-accent, #d4af37);
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+/* SETTINGS MODAL / DRAWER */
+.quranModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.quranModalWindow {
+  width: min(96%, 540px);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.3));
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--q-accent, #d4af37);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settingGroup {
+  margin-bottom: 22px;
+}
+
+.settingLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--q-text, #f0f7f5);
+}
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sliderInput {
+  flex: 1;
+  accent-color: var(--q-accent, #d4af37);
+  height: 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.sliderValBadge {
+  min-width: 45px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--q-accent, #d4af37);
+}
+
+.themeSelectorGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.themeCardOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  background: var(--q-bg, #0b1a18);
+  color: var(--q-text, #f0f7f5);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.themeCardOption:hover {
+  border-color: var(--q-accent, #d4af37);
+}
+
+.themeCardOption.active {
+  border-color: var(--q-accent, #d4af37);
+  background: var(--q-accent-soft, rgba(212, 175, 55, 0.15));
+  font-weight: 700;
+}
+
+.themeColorCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* JUMP MODAL & SEARCH */
+.jumpInputRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.jumpTextInput {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.25));
+  background: var(--q-bg, #0b1a18);
+  color: var(--q-text, #f0f7f5);
+  font-size: 14px;
+  outline: none;
+}
+
+.jumpTextInput:focus {
+  border-color: var(--q-accent, #d4af37);
+}
+
+/* SURAH LIST INDEX PAGE (Better than Quran.com) */
+.surahIndexGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.surahIndexCard {
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: var(--q-text, #f0f7f5);
+  transition: all 0.25s ease;
+}
+
+.surahIndexCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--q-accent, #d4af37);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  background: var(--q-card-hover, #16322e);
+}
+
+.surahIndexLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.surahIndexNumber {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--q-badge-bg, #1e3f3a);
+  color: var(--q-badge-text, #e8d085);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+}
+
+.surahIndexTitles strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 2px;
+  color: var(--q-text, #f0f7f5);
+}
+
+.surahIndexTitles span {
+  display: block;
+  font-size: 13px;
+  color: var(--q-translation, #c2dcd8);
+}
+
+.surahIndexRight {
+  text-align: right;
+}
+
+.surahIndexArabic {
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  font-size: 26px;
+  color: var(--q-arabic, #fffdf7);
+  display: block;
+  line-height: 1.2;
+}
+
+.surahIndexMeta {
+  font-size: 12px;
+  color: var(--q-accent, #d4af37);
+  font-weight: 600;
+}
+
+/* JUZ TAB & INDEX */
+.juzIndexGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.juzIndexCard {
+  background: var(--q-card, #122825);
+  border: 1px solid var(--q-card-border, rgba(212, 175, 55, 0.2));
+  border-radius: 14px;
+  padding: 16px;
+  text-decoration: none;
+  color: var(--q-text, #f0f7f5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.juzIndexCard:hover {
+  border-color: var(--q-accent, #d4af37);
+  transform: translateY(-2px);
+  background: var(--q-card-hover, #16322e);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .surahHeroBanner {
+    padding: 24px 16px;
+    margin: 16px auto 24px;
+  }
+  
+  .ayahCard {
+    padding: 16px;
+  }
+  
+  .audioDockContent {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .audioDockInfo {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .quranViewSelector {
+    display: none;
+  }
+}
