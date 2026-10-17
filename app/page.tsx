@@ -1,764 +1,1521 @@
 "use client";
 
 import "./home.css";
-
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import Link from "next/link";
-import { searchIndex } from "@/data/search";
 import {
-  searchContent,
-  findExactAyahReference,
-} from "@/data/search/engine";
+  Search,
+  BookOpen,
+  Play,
+  Pause,
+  ArrowRight,
+  Calendar,
+  Volume2,
+  X,
+  Menu,
+  Sun,
+  Moon,
+  Clock,
+} from "lucide-react";
+import { ALL_SURAHS } from "@/data/quran/surahs-meta";
 
-type MenuItem = {
-  label: string;
-  href: string;
-  children?: MenuItem[];
-};
+const POPULAR_SURAHS = [
+  { number: 36, name: "Ya-Seen", arabic: "يس", title: "Heart of Qur’an", desc: "Forgiveness & peace" },
+  { number: 55, name: "Ar-Rahman", arabic: "الرحمن", title: "The Beneficent", desc: "Beauty & gratitude" },
+  { number: 67, name: "Al-Mulk", arabic: "الملك", title: "Sovereignty", desc: "Protection in the grave" },
+  { number: 18, name: "Al-Kahf", arabic: "الكهف", title: "The Cave", desc: "Friday illumination" },
+  { number: 56, name: "Al-Waqi'ah", arabic: "الواقعة", title: "The Inevitable", desc: "Barakah in sustenance" },
+  { number: 1, name: "Al-Fatihah", arabic: "الفاتحة", title: "The Opening", desc: "The Mother of Qur’an" },
+  { number: 2, name: "Al-Baqarah", arabic: "البقرة", title: "The Cow", desc: "Ayat al-Kursi" },
+  { number: 112, name: "Al-Ikhlas", arabic: "الإخلاص", title: "Purity of Faith", desc: "1/3 of the Qur’an" },
+];
 
-const navItems: MenuItem[] = [
-  { label: "Home", href: "/", children: [] },
+const FOUR_TOP_QARIS = [
   {
-    label: "Ala Hazrat",
-    href: "/ala-hazrat",
-    children: [
-      {
-        label: "Seerat",
-        href: "/ala-hazrat/seerat",
-        children: [
-          { label: "Birth & Family", href: "/seerat/birth-and-family" },
-          { label: "Seerat", href: "/ala-hazrat/seerat" },
-          { label: "Introduction", href: "/ala-hazrat/seerat/introduction" },
-        ],
-      },
-      { label: "Books", href: "/islamic-books" },
-      { label: "Fatawa Razawiyya", href: "/fatawa-razawiyya" },
-      { label: "Hadaiq-e-Bakhshish", href: "/hadaiq-e-bakhshish" },
-      { label: "Kanz-ul-Iman", href: "/kanz-ul-iman" },
-      { label: "Teachers", href: "/ala-hazrat/teachers" },
-      { label: "Students", href: "/ala-hazrat/students" },
-      { label: "Family", href: "/ala-hazrat/family" },
-      { label: "Research", href: "/ala-hazrat/research" },
-    ],
+    id: "Alafasy_128kbps",
+    name: "Mishary Rashid Alafasy",
+    arabic: "الشيخ مشاري راشد العفاسي",
+    style: "Heartfelt, Melodious & Clear",
+    origin: "Kuwait",
+    initial: "M",
   },
   {
-    label: "Qur’an",
-    href: "/quran",
-    children: [
-      { label: "Read Qur’an", href: "/quran" },
-      { label: "Qur’an Samajhne Ka Safar", href: "/quran-samajhne-ka-safar" },
-    ],
+    id: "Abdul_Basit_Murattal_192kbps",
+    name: "Qari Abdul Basit Abdul Samad",
+    arabic: "القارئ عبد الباسط عبد الصمد",
+    style: "Legendary Classical Egyptian Murattal",
+    origin: "Egypt",
+    initial: "A",
   },
   {
-    label: "Gulzar-e-Millat",
-    href: "/gulzar-e-millat",
-    children: [{ label: "Biography", href: "/gulzar-e-millat" }],
-  },
-  { label: "Hadith", href: "/hadith", children: [] },
-  { label: "Seerat-un-Nabi ﷺ", href: "/seerat-un-nabi", children: [] },
-  {
-    label: "Poet",
-    href: "/artist-biography",
-    children: [
-      { label: "Artist Biography", href: "/artist-biography" },
-      { label: "Naat / Manqabat", href: "/naat-manqabat" },
-    ],
+    id: "Husary_128kbps",
+    name: "Sheikh Mahmoud Khalil Al-Husary",
+    arabic: "الشيخ محمود خليل الحصري",
+    style: "The Golden Standard of Tajweed Precision",
+    origin: "Al-Azhar, Egypt",
+    initial: "H",
   },
   {
-    label: "Books",
-    href: "/islamic-books",
-    children: [
-      { label: "Islamic Books", href: "/islamic-books" },
-      { label: "Fatawa Razawiyya", href: "/fatawa-razawiyya" },
-      { label: "Hadaiq-e-Bakhshish", href: "/hadaiq-e-bakhshish" },
-      { label: "Kanz-ul-Iman", href: "/kanz-ul-iman" },
-    ],
-  },
-  { label: "Ilm Ka Safar", href: "/ilm-ka-safar", children: [] },
-  {
-    label: "More",
-    href: "/about",
-    children: [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
-      { label: "Disclaimer", href: "/disclaimer" },
-    ],
+    id: "Abu_Bakr_Ash-Shaatree_128kbps",
+    name: "Sheikh Abu Bakr Al-Shatri",
+    arabic: "الشيخ أبو بكر الشاطري",
+    style: "Deep, Resonant & Soulful Recitation",
+    origin: "Jeddah, Saudi Arabia",
+    initial: "S",
   },
 ];
 
-const knowledgeCards = [
+const BLESSED_AYAH_TRACKS = [
   {
-    title: "Islamic Books",
-    href: "/islamic-books",
-    arabic: "اسلامی کتب",
-    text: "Islamic books, literature and valuable works.",
-    icon: "▤",
+    id: "ayatul-kursi",
+    title: "Ayat al-Kursi (The Throne Verse)",
+    surahNumber: 2,
+    ayahNumber: 255,
+    arabic:
+      "اللَّهُ لَا إِلٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",
+    urdu:
+      "اللہ ہے جس کے سوا کسی کی بندگی نہیں وہ آپ زندہ اوروں کا قائم رکھنے والا، اسے نہ اونگھ آئے نہ نیند۔ (کنز الایمان)",
+    english:
+      "Allah! There is no deity except Him, the Ever-Living, the Sustainer of all existence.",
   },
   {
-    title: "Al-Hadith",
-    href: "/hadith",
-    arabic: "الحديث",
-    text: "Authentic Ahadith and Islamic teachings.",
-    icon: "ﷺ",
+    id: "fatihah",
+    title: "Surah Al-Fatihah (Ayah 1-2)",
+    surahNumber: 1,
+    ayahNumber: 1,
+    arabic:
+      "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+    urdu:
+      "اللہ کے نام سے شروع جو نہایت مہربان رحمت والا، سب تعریفیں اللہ ہی کے لیے ہیں جو تمام جہانوں کا پالنے والا ہے۔ (کنز الایمان)",
+    english:
+      "In the name of Allah, the Entirely Merciful, the Especially Merciful. All praise is due to Allah, Lord of the worlds.",
   },
   {
-    title: "Naat & Manqabat",
-    href: "/naat-manqabat",
-    arabic: "نعت و منقبت",
-    text: "Beautiful Naat, Manqabat and Islamic poetry.",
-    icon: "♡",
+    id: "rahman",
+    title: "Surah Ar-Rahman (Ayah 1-4)",
+    surahNumber: 55,
+    ayahNumber: 1,
+    arabic:
+      "الرَّحْمَٰنُ ۝ عَلَّمَ الْقُرْآنَ ۝ خَلَقَ الْإِنسَانَ ۝ عَلَّمَهُ الْبَيَانَ",
+    urdu:
+      "رحمان نے قرآن سکھایا، انسان کو پیدا کیا، اسے بولنا سکھایا۔ (کنز الایمان)",
+    english:
+      "The Most Merciful, taught the Qur’an, created man, and taught him articulate speech.",
   },
   {
-    title: "Seerat-un-Nabi ﷺ",
-    href: "/seerat-un-nabi",
-    arabic: "سیرت النبی ﷺ",
-    text: "Life and teachings of the Beloved Prophet ﷺ.",
-    icon: "ﷴ",
+    id: "ikhlas",
+    title: "Surah Al-Ikhlas (Ayah 1-4)",
+    surahNumber: 112,
+    ayahNumber: 1,
+    arabic:
+      "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ",
+    urdu:
+      "تم فرماؤ: وہ اللہ ہے ایک، اللہ بے نیاز ہے، نہ اس کی کوئی اولاد اور نہ وہ کسی سے پیدا ہوا۔ (کنز الایمان)",
+    english:
+      "Say, 'He is Allah, [who is] One. Allah, the Eternal Refuge. He neither begets nor is born.'",
   },
-  {
-    title: "Ala Hazrat",
-    href: "/ala-hazrat",
-    arabic: "اعلیٰ حضرت",
-    text: "Knowledge, writings and works of Ala Hazrat.",
-    icon: "✦",
-  }
 ];
 
-function GlobeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18M12 3c2.2 2.4 3.3 5.4 3.3 9S14.2 18.6 12 21M12 3C9.8 5.4 8.7 8.4 8.7 12s1.1 6.6 3.3 9" />
-    </svg>
-  );
-}
-
-function SunMoonIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" />
-    </svg>
-  );
+function pad3(num: number): string {
+  return String(num).padStart(3, "0");
 }
 
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedMenuCategory, setSelectedMenuCategory] = useState("Home");
-  const [selectedMenuSubcategory, setSelectedMenuSubcategory] =
-    useState<MenuItem | null>(null);
-
-  const [languageOpen, setLanguageOpen] = useState(false);
-  const [themeOpen, setThemeOpen] = useState(false);
-  const [drawerLanguageOpen, setDrawerLanguageOpen] = useState(false);
-  const [drawerThemeOpen, setDrawerThemeOpen] = useState(false);
-
-  const [language, setLanguage] = useState("auto");
-  const [theme, setTheme] = useState("auto");
-
-  const [date, setDate] = useState({ gregorian: "", hijri: "" });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [readingProgress, setReadingProgress] = useState<{
-    type: string;
+  const [lastRead, setLastRead] = useState<{
+    surahNumber: number;
     title: string;
-    subtitle: string;
-    url: string;
   } | null>(null);
 
-  const [searchMode, setSearchMode] = useState<"top" | "bottom" | "hidden">("top");
-  const [headerHidden, setHeaderHidden] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [selectedQari, setSelectedQari] =
+    useState<string>("Alafasy_128kbps");
+  const [selectedAyahIndex, setSelectedAyahIndex] = useState<number>(0);
+  const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
+  const [audioError, setAudioError] = useState<string>("");
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
 
-  function handleSearch() {
-    const query = searchQuery.trim();
-    if (!query) return;
-    window.location.href = "/search?q=" + encodeURIComponent(query);
-  }
-
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    const query = searchQuery.trim();
-    const timer = setTimeout(() => setDebouncedSearchQuery(query), 250);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  const liveSearchResults = useMemo(() => {
-    const query = debouncedSearchQuery;
-    if (!query) return [];
-
-    const results = searchContent(searchIndex, query);
-    const uniqueResults: typeof results = [];
-    const seen = new Set<string>();
-
-    for (const result of results) {
-      const document = result.document;
-      const key =
-        document.type === "quran"
-          ? `quran-surah:${document.surahNumber ?? document.title}`
-          : `${document.type}:${document.href
-              .split("#")[0]
-              .split("?")[0]
-              .replace(/\/+$/, "")}`;
-
-      if (seen.has(key)) continue;
-      seen.add(key);
-      uniqueResults.push(result);
-      if (uniqueResults.length === 6) break;
-    }
-
-    return uniqueResults;
-  }, [debouncedSearchQuery]);
-
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("site-language") || "auto";
-    const savedReadingProgress = localStorage.getItem("maslak-reading-progress");
-
-    if (savedReadingProgress) {
-      try {
-        setReadingProgress(JSON.parse(savedReadingProgress));
-      } catch {
-        setReadingProgress(null);
-      }
-    }
-
-    const savedTheme = localStorage.getItem("site-theme") || "auto";
-    setLanguage(savedLanguage);
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-
-    const today = new Date();
-    const gregorian = new Intl.DateTimeFormat("en-IN", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(today);
-
-    let hijri = "";
     try {
-      hijri = new Intl.DateTimeFormat("ur-SA-u-ca-islamic-umalqura", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(today);
-    } catch {
-      hijri = new Intl.DateTimeFormat("en-u-ca-islamic", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(today);
+      const savedTheme = localStorage.getItem("site-theme");
+
+      if (savedTheme === "light") {
+        setIsDark(false);
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      } else {
+        setIsDark(true);
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      }
+
+      const savedProgress = localStorage.getItem(
+        "maslak-reading-progress"
+      );
+
+      if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+
+        if (progress.url) {
+          const match = progress.url.match(/\/quran\/(\d+)/);
+
+          if (match) {
+            setLastRead({
+              surahNumber: Number(match[1]),
+              title: progress.subtitle || `Surah ${match[1]}`,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.warn("Unable to restore saved site preferences:", error);
     }
-    setDate({ gregorian, hijri });
   }, []);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-    const previousBodyOverflow = document.body.style.overflow;
-    const previousHtmlOverflow = document.documentElement.style.overflow;
+  const toggleTheme = () => {
+    const nextDark = !isDark;
+    setIsDark(nextDark);
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousBodyOverflow;
-      document.documentElement.style.overflow = previousHtmlOverflow;
-    };
-  }, [menuOpen]);
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    const updateScrollState = () => {
-      const currentY = window.scrollY;
-      const difference = currentY - lastScrollY;
-
-      if (searchFocused) {
-        setSearchMode("bottom");
-        setHeaderHidden(true);
-      } else if (currentY < 100) {
-        setSearchMode("top");
-        setHeaderHidden(false);
-      } else if (difference > 5) {
-        setSearchMode("bottom");
-        setHeaderHidden(true);
-      } else if (difference < -5) {
-        setSearchMode("hidden");
-        setHeaderHidden(false);
+    try {
+      if (nextDark) {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+        localStorage.setItem("site-theme", "dark");
+      } else {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("site-theme", "light");
       }
-
-      lastScrollY = currentY;
-      ticking = false;
-    };
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(updateScrollState);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [searchFocused]);
-
-  function applyTheme(value: string) {
-    const root = document.documentElement;
-    if (value === "dark") {
-      root.classList.add("dark");
-    } else if (value === "light") {
-      root.classList.remove("dark");
-    } else {
-      const dark =
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-      root.classList.toggle("dark", dark);
+    } catch (error) {
+      console.warn("Unable to save theme preference:", error);
     }
-  }
+  };
 
-  function changeTheme(value: string) {
-    setTheme(value);
-    localStorage.setItem("site-theme", value);
-    applyTheme(value);
-    setThemeOpen(false);
-  }
+  const activeTrack =
+    BLESSED_AYAH_TRACKS[selectedAyahIndex] || BLESSED_AYAH_TRACKS[0];
 
-  function changeLanguage(value: string) {
-    setLanguage(value);
-    localStorage.setItem("site-language", value);
-    setLanguageOpen(false);
-  }
+  const activeQariObj =
+    FOUR_TOP_QARIS.find((q) => q.id === selectedQari) ||
+    FOUR_TOP_QARIS[0];
+
+  const getTrackUrl = (
+    reciterId: string,
+    surahNum: number,
+    ayahNum: number
+  ) => {
+    return `https://everyayah.com/data/${reciterId}/${pad3(
+      surahNum
+    )}${pad3(ayahNum)}.mp3`;
+  };
+
+  const handleToggleQariAudio = (
+    overrideQari?: string,
+    overrideIndex?: number
+  ) => {
+    const audio = audioPlayerRef.current;
+    if (!audio) return;
+
+    const targetQari = overrideQari || selectedQari;
+    const targetIdx =
+      overrideIndex !== undefined ? overrideIndex : selectedAyahIndex;
+    const track = BLESSED_AYAH_TRACKS[targetIdx];
+
+    if (!track) {
+      setAudioError("Please select a valid recitation passage.");
+      return;
+    }
+
+    if (
+      !overrideQari &&
+      overrideIndex === undefined &&
+      isAudioPlaying
+    ) {
+      audio.pause();
+      setIsAudioPlaying(false);
+      return;
+    }
+
+    setAudioError("");
+
+    const playAudio = (url: string) => {
+      audio.src = url;
+      audio.load();
+
+      audio
+        .play()
+        .then(() => {
+          setIsAudioPlaying(true);
+          setAudioError("");
+        })
+        .catch((error: unknown) => {
+          console.warn("Audio playback failed:", error);
+
+          if (targetQari !== "Alafasy_128kbps") {
+            audio.src = getTrackUrl(
+              "Alafasy_128kbps",
+              track.surahNumber,
+              track.ayahNumber
+            );
+            audio.load();
+
+            audio
+              .play()
+              .then(() => {
+                setIsAudioPlaying(true);
+                setAudioError("");
+              })
+              .catch(() => {
+                setIsAudioPlaying(false);
+                setAudioError(
+                  "Unable to play audio. Please check your internet connection and try again."
+                );
+              });
+          } else {
+            setIsAudioPlaying(false);
+            setAudioError(
+              "Unable to play audio. Please check your internet connection and try again."
+            );
+          }
+        });
+    };
+
+    playAudio(
+      getTrackUrl(targetQari, track.surahNumber, track.ayahNumber)
+    );
+  };
+
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+
+    return ALL_SURAHS.filter((surah) => {
+      return (
+        String(surah.number) === q ||
+        surah.nameEnglish.toLowerCase().includes(q) ||
+        surah.nameArabic.includes(q) ||
+        surah.nameUrdu.includes(q) ||
+        surah.meaningEnglish.toLowerCase().includes(q)
+      );
+    }).slice(0, 8);
+  }, [searchQuery]);
 
   return (
     <main className="site">
-      <header className={`siteHeader ${headerHidden ? "headerHidden" : ""}`}>
+      <audio
+        ref={audioPlayerRef}
+        onPlay={() => setIsAudioPlaying(true)}
+        onPause={() => setIsAudioPlaying(false)}
+        onEnded={() => setIsAudioPlaying(false)}
+        onError={() => {
+          if (audioPlayerRef.current?.src) {
+            setIsAudioPlaying(false);
+          }
+        }}
+      />
+
+      {/* TOP HIJRI DATE & BISMILLAH TICKER */}
+      <div className="headerTopTicker">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          <span>🗓️</span>
+          <strong style={{ color: "var(--home-gold)" }}>
+            ۲۵ صفر الخیر ۱۴۴۸ھ
+          </strong>
+          <span>&bull;</span>
+          <span>Maslak-e-Ahle Sunnat Wal Jama&apos;at</span>
+        </div>
+
+        <div
+          style={{
+            fontFamily: "var(--font-arabic-uthmani)",
+            color: "var(--home-gold)",
+            fontSize: "14px",
+            direction: "rtl",
+          }}
+        >
+          بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+        </div>
+      </div>
+
+      {/* ROYAL HEADER NAVIGATION */}
+      <header className="siteHeader">
         <div className="headerInner">
-          <a href="/" className="brand brandCentered">
-            <span>Maslak-e-Ala Hazrat</span>
-          </a>
+          <Link href="/" className="brandWrap">
+            <div className="brandLogoCircle">م</div>
 
-          <div className="headerActions">
-            <div className="control">
-              <button
-                className="iconButton"
-                aria-label="Language"
-                aria-expanded={languageOpen}
-                onClick={() => {
-                  setLanguageOpen(!languageOpen);
-                  setThemeOpen(false);
+            <div className="brandTexts">
+              <span className="brandTitle">Maslak-e-Ala Hazrat</span>
+              <span className="brandArabicSubtitle">
+                مَسْلَكُ أَهْلِ السُّنَّةِ وَالْجَمَاعَة
+              </span>
+            </div>
+          </Link>
+
+          {/* DESKTOP NAV LINKS */}
+          <nav className="desktopNavLinks">
+            <Link href="/quran" className="desktopNavLink highlight">
+              <BookOpen size={15} />
+              <span>Qur’an Majeed</span>
+            </Link>
+
+            <Link href="/kanz-ul-iman" className="desktopNavLink">
+              <span>Kanz-ul-Iman</span>
+            </Link>
+
+            <Link href="/fatawa-razawiyya" className="desktopNavLink">
+              <span>Fatawa Razawiyya</span>
+            </Link>
+
+            <Link href="/hadaiq-e-bakhshish" className="desktopNavLink">
+              <span>Hadaiq-e-Bakhshish</span>
+            </Link>
+
+            <Link href="/hadith" className="desktopNavLink">
+              <span>Al-Hadith</span>
+            </Link>
+
+            <Link href="/islamic-calendar" className="desktopNavLink">
+              <span>Islamic Calendar</span>
+            </Link>
+
+            <Link href="/ilm-ka-safar" className="desktopNavLink">
+              <span>Ilm Ka Safar</span>
+            </Link>
+
+            <Link href="/ala-hazrat" className="desktopNavLink">
+              <span>Ala Hazrat</span>
+            </Link>
+          </nav>
+
+          {/* HEADER ACTIONS */}
+          <div className="headerActionsGroup">
+            {isAudioPlaying && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  background: "var(--home-gold-soft)",
+                  border: "1px solid var(--home-gold)",
+                  padding: "4px 10px",
+                  borderRadius: "999px",
+                  fontSize: "11px",
+                  color: "var(--home-gold)",
+                  fontWeight: 700,
                 }}
               >
-                <GlobeIcon />
-              </button>
-
-              {languageOpen && (
-                <div className="popup languagePopup">
-                  <div className="popupTitle">Language</div>
-                  {[
-                    ["auto", "Auto"],
-                    ["en", "English"],
-                    ["hi", "हिन्दी"],
-                    ["ur", "اردو"],
-                  ].map(([value, label]) => (
-                    <button
-                      key={value}
-                      className={language === value ? "activeOption" : ""}
-                      onClick={() => changeLanguage(value)}
-                    >
-                      <span>{label}</span>
-                      {language === value && <span>✓</span>}
-                    </button>
-                  ))}
+                <div className="qariWaveform">
+                  <div className="qariWaveBar" />
+                  <div className="qariWaveBar" />
+                  <div className="qariWaveBar" />
                 </div>
-              )}
-            </div>
-
-            <div className="control">
-              <button
-                className="iconButton"
-                aria-label="Theme"
-                aria-expanded={themeOpen}
-                onClick={() => {
-                  setThemeOpen(!themeOpen);
-                  setLanguageOpen(false);
-                }}
-              >
-                <SunMoonIcon />
-              </button>
-
-              {themeOpen && (
-                <div className="popup themePopup">
-                  <div className="popupTitle">Theme</div>
-                  {[
-                    ["auto", "Auto"],
-                    ["light", "Light"],
-                    ["dark", "Dark"],
-                  ].map(([value, label]) => (
-                    <button
-                      key={value}
-                      className={theme === value ? "activeOption" : ""}
-                      onClick={() => changeTheme(value)}
-                    >
-                      <span>{label}</span>
-                      {theme === value && <span>✓</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                <span>Playing</span>
+              </div>
+            )}
 
             <button
-              className="menuButton"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              aria-controls="site-navigation"
-              aria-haspopup="true"
-              onClick={() => setMenuOpen(!menuOpen)}
+              type="button"
+              className="headerIconBtn"
+              onClick={toggleTheme}
+              title="Toggle Light / Dark Mode"
+              aria-label="Toggle light or dark mode"
             >
-              <span />
-              <span />
-              <span />
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <button
+              type="button"
+              className="headerIconBtn"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              title="Open Navigation Menu"
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {menuOpen && (
-          <>
-            <button
-              type="button"
-              className="menuBackdrop"
-              aria-label="Close navigation menu"
-              onClick={() => setMenuOpen(false)}
-            />
-            <aside
-              className="mobileMenu"
-              id="site-navigation"
-              aria-label="Main navigation"
+        {/* MOBILE NAVIGATION DRAWER */}
+        {mobileMenuOpen && (
+          <div
+            style={{
+              background: "var(--home-surface)",
+              borderBottom: "1px solid var(--home-border)",
+              padding: "24px 20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "14px",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+            }}
+          >
+            <Link
+              href="/quran"
+              className="desktopNavLink highlight"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                justifyContent: "center",
+                padding: "14px",
+              }}
             >
-              <div className="drawerHeader">
-                <div className="drawerBrand">
-                  <span className="brandMark">م</span>
-                  <strong>Maslak-e-Ala Hazrat</strong>
-                </div>
-                <button
-                  type="button"
-                  className="drawerClose"
-                  aria-label="Close menu"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  ×
-                </button>
-              </div>
+              <BookOpen size={18} />
+              <strong>
+                Qur’an Majeed (114 Surahs, Full Mushaf &amp; Audio)
+              </strong>
+            </Link>
 
-              <nav className="drawerNavigation" aria-label="Website sections">
-                {navItems.map((item) => {
-                  const hasChildren = Boolean(item.children?.length);
-                  const expanded = selectedMenuCategory === item.label;
-                  const icon =
-                    item.label === "Home"
-                      ? "⌂"
-                      : item.label.includes("Qur")
-                        ? "▤"
-                        : item.label.includes("Hadith")
-                          ? "▣"
-                          : item.label.includes("Books")
-                            ? "▤"
-                            : item.label.includes("Ala Hazrat")
-                              ? "✦"
-                              : "◈";
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "10px",
+              }}
+            >
+              <Link
+                href="/kanz-ul-iman"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Kanz-ul-Iman
+              </Link>
 
-                  return (
-                    <div className="drawerNavGroup" key={item.href + item.label}>
-                      <div className="drawerNavRow">
-                        <span className="drawerNavIcon" aria-hidden="true">
-                          {icon}
-                        </span>
-                        <Link
-                          href={item.href}
-                          className="drawerNavLink"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          {item.label}
-                        </Link>
-                        {hasChildren && (
-                          <button
-                            type="button"
-                            className={`drawerExpand ${expanded ? "expanded" : ""}`}
-                            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
-                            aria-expanded={expanded}
-                            onClick={() =>
-                              setSelectedMenuCategory(expanded ? "" : item.label)
-                            }
-                          >
-                            <span />
-                          </button>
-                        )}
-                      </div>
+              <Link
+                href="/fatawa-razawiyya"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Fatawa Razawiyya
+              </Link>
 
-                      {hasChildren && expanded && (
-                        <div className="drawerSubmenu">
-                          {item.children!.map((child) => (
-                            <Link
-                              key={child.href + child.label}
-                              href={child.href}
-                              className="drawerSubmenuLink"
-                              onClick={() => setMenuOpen(false)}
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </nav>
+              <Link
+                href="/hadaiq-e-bakhshish"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Hadaiq-e-Bakhshish
+              </Link>
 
-              <div className="drawerBottom">
-                <button
-                  type="button"
-                  className="drawerPill"
-                  onClick={() => {
-                    setDrawerLanguageOpen((open) => !open);
-                    setDrawerThemeOpen(false);
-                  }}
-                >
-                  <GlobeIcon /> Language
-                </button>
-                <button
-                  type="button"
-                  className="drawerPill"
-                  onClick={() => {
-                    setDrawerThemeOpen((open) => !open);
-                    setDrawerLanguageOpen(false);
-                  }}
-                >
-                  <SunMoonIcon /> Change Theme
-                </button>
+              <Link
+                href="/hadith"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Al-Hadith Gateway
+              </Link>
 
-                {drawerLanguageOpen && (
-                  <div className="drawerOptions" aria-label="Choose language">
-                    {[
-                      ["auto", "Auto"],
-                      ["en", "English"],
-                      ["hi", "हिन्दी"],
-                      ["ur", "اردو"],
-                    ].map(([value, label]) => (
-                      <button
-                        key={value}
-                        type="button"
-                        className={language === value ? "activeOption" : ""}
-                        onClick={() => {
-                          changeLanguage(value);
-                          setDrawerLanguageOpen(false);
-                        }}
-                      >
-                        <span>{label}</span>
-                        {language === value && <span>✓</span>}
-                      </button>
-                    ))}
-                  </div>
-                )}
+              <Link
+                href="/islamic-calendar"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Islamic Calendar
+              </Link>
 
-                {drawerThemeOpen && (
-                  <div className="drawerOptions" aria-label="Choose theme">
-                    {[
-                      ["auto", "Auto"],
-                      ["light", "Light"],
-                      ["dark", "Dark"],
-                    ].map(([value, label]) => (
-                      <button
-                        key={value}
-                        type="button"
-                        className={theme === value ? "activeOption" : ""}
-                        onClick={() => {
-                          changeTheme(value);
-                          setDrawerThemeOpen(false);
-                        }}
-                      >
-                        <span>{label}</span>
-                        {theme === value && <span>✓</span>}
-                      </button>
-                    ))}
-                  </div>
-                )}
+              <Link
+                href="/ilm-ka-safar"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Ilm Ka Safar (30 Days)
+              </Link>
 
-                <Link
-                  href="/contact"
-                  className="drawerDonate"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  ✦ Support Our Work
-                </Link>
-              </div>
-            </aside>
-          </>
+              <Link
+                href="/seerat-un-nabi"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Seerat-un-Nabi ﷺ
+              </Link>
+
+              <Link
+                href="/ala-hazrat"
+                className="desktopNavLink"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ background: "var(--home-surface-soft)" }}
+              >
+                Ala Hazrat Legacy
+              </Link>
+            </div>
+          </div>
         )}
       </header>
 
-      <section className="hero">
-        <div className="heroInner">
-          <div className="heroCalligraphy" aria-label="لا إله إلا الله محمد رسول الله">
-            لا إله إلا الله محمد رسول الله
+      {/* ROYAL HERO SECTION */}
+      <section className="supremeHero">
+        <div className="heroContentWrapper">
+          <div className="sacredBismillah" dir="rtl" lang="ar">
+            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
           </div>
-          <div className="heroBrandTitle">Maslak-e-Ala Hazrat</div>
-          <p className="heroTagline">Islamic Knowledge • Naat • Books • Hadith</p>
 
-          <div className={`searchArea searchMode-${searchMode}`}>
-            <div className="searchBox">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="7" />
-                <path d="m16.5 16.5 4 4" />
-              </svg>
+          <div className="sacredKalimaBadge">
+            <span>
+              لَا إِلٰهَ إِلَّا اللّٰهُ مُحَمَّدٌ رَسُولُ اللّٰهِ ﷺ
+            </span>
+          </div>
 
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") handleSearch();
+          <h1 className="supremeHeroTitle">
+            The Sovereign Gateway to the{" "}
+            <span>Holy Qur’an &amp; Islamic Sciences</span>
+          </h1>
+
+          <p className="supremeHeroSubtitle">
+            Immerse yourself in the divine revelation of the Holy Qur’an with
+            4 world-renowned reciters, Ala Hazrat&apos;s celebrated
+            translation <strong>Kanz-ul-Iman</strong>, the jurisprudential
+            ocean of <strong>Fatawa Razawiyya</strong>, and authentic Sunni
+            heritage.
+          </p>
+
+          {/* SEARCH CARD */}
+          <div className="heroSearchCard">
+            <Search size={20} color="var(--home-gold)" />
+
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search Surah by name (e.g. Yaseen, Rahman, 55, الفاتحة), or topic..."
+              className="heroSearchInput"
+              aria-label="Search Surahs"
+            />
+
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--home-text-muted)",
+                  cursor: "pointer",
                 }}
-                onFocus={() => {
-                  setSearchFocused(true);
-                  setSearchMode("bottom");
-                  setHeaderHidden(true);
-                }}
-                onBlur={() => setSearchFocused(false)}
-                placeholder="Search Islamic knowledge..."
-                aria-label="Search Islamic knowledge"
-              />
-
-              <button type="button" onClick={handleSearch}>
-                Search
+                aria-label="Clear search"
+              >
+                ✕
               </button>
-            </div>
+            )}
 
-            {searchQuery.trim() && (
-              <div className="liveSearchResults">
-                {liveSearchResults.length > 0 ? (
-                  liveSearchResults.map(({ document }) => (
-                    <Link
-                      key={document.id}
-                      href={document.href}
-                      className="liveSearchItem"
-                    >
-                      <div className="liveSearchInfo">
-                        <strong>{document.title}</strong>
-                        <span>
-                          {document.type === "quran"
-                            ? "Qur’an"
-                            : document.type === "ilm-ka-safar"
-                              ? "Ilm Ka Safar"
-                              : "Islamic Knowledge"}
-                        </span>
-                      </div>
-                      <div className="liveSearchArabic">
-                        {document.arabic ||
-                          document.urdu ||
-                          document.hindi ||
-                          document.text}
-                      </div>
-                    </Link>
-                  ))
-                ) : (
-                  <div className="liveSearchEmpty">No results found</div>
-                )}
+            <Link href="/quran" className="heroSearchBtn">
+              <span>Explore All</span>
+              <ArrowRight size={15} />
+            </Link>
 
-                {liveSearchResults.length > 0 && (
-                  <button
-                    type="button"
-                    className="viewAllSearch"
-                    onClick={handleSearch}
+            {/* LIVE SEARCH RESULTS */}
+            {searchResults.length > 0 && (
+              <div className="heroSearchResultsMenu">
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    color: "var(--home-gold)",
+                    padding: "4px 12px 8px",
+                  }}
+                >
+                  MATCHING SURAHS ({searchResults.length})
+                </div>
+
+                {searchResults.map((surah) => (
+                  <Link
+                    key={surah.number}
+                    href={`/quran/${surah.number}`}
+                    className="heroSearchItem"
+                    onClick={() => setSearchQuery("")}
                   >
-                    View all results →
-                  </button>
-                )}
+                    <div>
+                      <strong style={{ fontSize: "15px" }}>
+                        {surah.number}. {surah.nameEnglish}
+                      </strong>
+
+                      <span
+                        style={{
+                          fontSize: "12px",
+                          color: "var(--home-text-muted)",
+                          marginLeft: "8px",
+                        }}
+                      >
+                        {surah.meaningEnglish} &bull; {surah.ayahCount} Ayahs
+                      </span>
+                    </div>
+
+                    <span
+                      style={{
+                        fontFamily: "Amiri Quran",
+                        fontSize: "20px",
+                        color: "var(--home-gold)",
+                      }}
+                      dir="rtl"
+                      lang="ar"
+                    >
+                      {surah.nameArabic}
+                    </span>
+                  </Link>
+                ))}
               </div>
             )}
           </div>
+
+          {/* QUICK SURAH CHIPS */}
+          <div className="quickSurahCarousel">
+            {POPULAR_SURAHS.map((surah) => (
+              <Link
+                key={surah.number}
+                href={`/quran/${surah.number}`}
+                className="quickSurahChip"
+              >
+                <span>{surah.arabic}</span>
+                <strong>{surah.name}</strong>
+              </Link>
+            ))}
+          </div>
+
+          {/* LAST READ RESUME BAR */}
+          {lastRead && (
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                margin: "14px auto 0",
+              }}
+            >
+              <Link
+                href={`/quran/${lastRead.surahNumber}`}
+                className="quickSurahChip"
+                style={{
+                  borderColor: "var(--home-gold)",
+                  background: "var(--home-gold-soft)",
+                }}
+              >
+                <Clock size={15} color="var(--home-gold)" />
+                <span>Resume Reading: Surah {lastRead.surahNumber}</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+            {/* 4-QARI LIVE AUDIO SANCTUARY */}
+      <section style={{ padding: "0 20px" }}>
+        <div className="qariStationCard">
+          <div className="qariStationHeader">
+            <div className="qariBadgeGroup">
+              <span className="qariStationTag">
+                <Volume2 size={14} />
+                <span>SAUT-UL-QUR’AN &bull; 4 RENOWNED QARIS</span>
+              </span>
+
+              <span
+                style={{
+                  fontSize: "13px",
+                  color: "var(--home-text-muted)",
+                }}
+              >
+                Click any Qari to listen to sacred recitation
+              </span>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "12px",
+                  color: "var(--home-gold)",
+                  fontWeight: 700,
+                }}
+              >
+                Passage:
+              </span>
+
+              <select
+                value={selectedAyahIndex}
+                onChange={(event) => {
+                  const newIndex = Number(event.target.value);
+                  setSelectedAyahIndex(newIndex);
+
+                  if (isAudioPlaying) {
+                    handleToggleQariAudio(selectedQari, newIndex);
+                  }
+                }}
+                className="qariAyahSelect"
+                aria-label="Select Quran recitation passage"
+              >
+                {BLESSED_AYAH_TRACKS.map((track, index) => (
+                  <option key={track.id} value={index}>
+                    {track.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* 4 QARI BUTTON TABS */}
+          <div className="qariTabsGrid">
+            {FOUR_TOP_QARIS.map((qari) => {
+              const isActive = selectedQari === qari.id;
+
+              return (
+                <button
+                  key={qari.id}
+                  type="button"
+                  className={`qariTabBtn ${isActive ? "active" : ""}`}
+                  onClick={() => {
+                    setSelectedQari(qari.id);
+                    handleToggleQariAudio(qari.id);
+                  }}
+                  title={`Listen to ${qari.name}`}
+                >
+                  <div className="qariAvatarCircle">
+                    {isActive && isAudioPlaying ? (
+                      <div className="qariWaveform">
+                        <div className="qariWaveBar" />
+                        <div className="qariWaveBar" />
+                        <div className="qariWaveBar" />
+                      </div>
+                    ) : (
+                      qari.initial
+                    )}
+                  </div>
+
+                  <div className="qariTabInfo">
+                    <strong>{qari.name}</strong>
+                    <small>{qari.arabic}</small>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* AUDIO PLAYER CONTROLS & AYAH DISPLAY */}
+          <div className="qariPlayerRow">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+              }}
+            >
+              <button
+                type="button"
+                className="qariPlayBtnLarge"
+                onClick={() => handleToggleQariAudio()}
+                title={
+                  isAudioPlaying
+                    ? "Pause Recitation"
+                    : `Listen to ${activeQariObj.name}`
+                }
+                aria-label={
+                  isAudioPlaying ? "Pause recitation" : "Play recitation"
+                }
+              >
+                {isAudioPlaying ? (
+                  <Pause size={24} />
+                ) : (
+                  <Play size={24} style={{ marginLeft: "2px" }} />
+                )}
+              </button>
+
+              <div>
+                <strong
+                  style={{
+                    fontSize: "16px",
+                    color: "var(--home-text)",
+                    display: "block",
+                  }}
+                >
+                  {activeTrack.title}
+                </strong>
+
+                <span
+                  style={{
+                    fontSize: "13px",
+                    color: "var(--home-gold)",
+                  }}
+                >
+                  Reciter: {activeQariObj.name} ({activeQariObj.style})
+                </span>
+              </div>
+            </div>
+
+            <div style={{ textAlign: "right" }}>
+              <Link
+                href={`/quran/${activeTrack.surahNumber}#ayah-${activeTrack.ayahNumber}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  color: "var(--home-gold)",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                }}
+              >
+                <span>Read Full Context in Quran App</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+
+          {audioError && (
+            <div
+              role="status"
+              style={{
+                color: "#ef4444",
+                fontSize: "13px",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
+            >
+              {audioError}
+            </div>
+          )}
+
+          {/* SCRIPT DISPLAY */}
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "18px",
+              background: "var(--home-surface)",
+              borderRadius: "14px",
+              border: "1px solid var(--home-border)",
+            }}
+          >
+            <p
+              className="dailyAyahArabicText"
+              dir="rtl"
+              lang="ar"
+              style={{ margin: "0 0 12px 0", fontSize: "28px" }}
+            >
+              {activeTrack.arabic}
+            </p>
+
+            <p className="dailyAyahUrdu" style={{ margin: "0 0 8px 0" }}>
+              {activeTrack.urdu}
+            </p>
+
+            <p className="dailyAyahEnglish" style={{ margin: 0 }}>
+              &ldquo;{activeTrack.english}&rdquo;
+            </p>
+          </div>
         </div>
       </section>
 
+      {/* THE SIX PILLARS OF ISLAMIC SCHOLARSHIP */}
+      <section className="heritageSection">
+        <div className="heritageHeader">
+          <div className="heritageEyebrow">
+            ACADEMIC &amp; SPIRITUAL SANCTUARY
+          </div>
 
+          <h2 className="heritageHeading">
+            The Pillars of Maslak-e-Ala Hazrat
+          </h2>
 
-      <section className="knowledgeSection">
-        <div className="sectionHeading">
-          <span>EXPLORE</span>
-          <h2>Islamic Knowledge</h2>
-          <p>
-            Explore authentic Islamic knowledge, literature, Hadith, Naat and
-            works of our scholars.
+          <p
+            style={{
+              maxWidth: "700px",
+              margin: "0 auto",
+              color: "var(--home-text-muted)",
+              fontSize: "15px",
+            }}
+          >
+            A comprehensive, verified digital library unifying the Holy
+            Qur’an, the Prophetic Sunnah, Hanafi jurisprudence, and the
+            literary contributions of Imam Ahmad Raza Khan.
           </p>
         </div>
 
-        <div className="quranWrap">
-          <Link href="/quran" className="knowledgeCard quranCard">
-            <div className="cardIcon quranIcon" aria-hidden="true">▤</div>
-            <div className="knowledgeCardContent">
-              <span className="arabicTitle">القرآن الكريم</span>
-              <h3>Quran</h3>
-              <p>Read and explore the Holy Quran with ease.</p>
+        <div className="heritagePortalsGrid">
+          {/* PORTAL 1: HOLY QURAN */}
+          <Link href="/quran" className="heritagePortalCard">
+            <div className="portalTop">
+              <div className="portalIconBadge">📖</div>
+              <span className="portalArabic">القرآن الكريم</span>
+              <h3 className="portalTitle">Qur’an Majeed</h3>
+
+              <p className="portalDesc">
+                All 114 Surahs and 30 Juz with 6 world-renowned Qaris, full
+                Mushaf reading, Hifz memorization mode, and Kanz-ul-Iman
+                translation.
+              </p>
             </div>
-            <span className="cardArrow">→</span>
+
+            <div className="portalFooterLink">
+              <span>Launch Quran Reader</span>
+              <ArrowRight size={14} />
+            </div>
+          </Link>
+
+          {/* PORTAL 2: KANZ UL IMAN */}
+          <Link href="/kanz-ul-iman" className="heritagePortalCard">
+            <div className="portalTop">
+              <div className="portalIconBadge">💎</div>
+              <span className="portalArabic">
+                کنز الایمان فی ترجمۃ القرآن
+              </span>
+              <h3 className="portalTitle">Kanz-ul-Iman</h3>
+
+              <p className="portalDesc">
+                The treasure of faith — Ala Hazrat’s celebrated Urdu Qur’an
+                translation dictated extemporaneously, famous for its
+                doctrinal accuracy.
+              </p>
+            </div>
+
+            <div className="portalFooterLink">
+              <span>Read Translation &amp; History</span>
+              <ArrowRight size={14} />
+            </div>
+          </Link>
+
+          {/* PORTAL 3: FATAWA RAZAWIYYA */}
+          <Link href="/fatawa-razawiyya" className="heritagePortalCard">
+            <div className="portalTop">
+              <div className="portalIconBadge">⚖️</div>
+              <span className="portalArabic">فتاویٰ رضویہ</span>
+              <h3 className="portalTitle">Fatawa Razawiyya</h3>
+
+              <p className="portalDesc">
+                The 30-volume jurisprudential encyclopedia encompassing over
+                21,000 pages of comprehensive Hanafi legal rulings and
+                citations.
+              </p>
+            </div>
+
+            <div className="portalFooterLink">
+              <span>Explore 30 Volumes</span>
+              <ArrowRight size={14} />
+            </div>
+          </Link>
+
+          {/* PORTAL 4: HADAIQ E BAKHSHISH */}
+          <Link href="/hadaiq-e-bakhshish" className="heritagePortalCard">
+            <div className="portalTop">
+              <div className="portalIconBadge">🌹</div>
+              <span className="portalArabic">حدائقِ بخشش</span>
+              <h3 className="portalTitle">Hadaiq-e-Bakhshish</h3>
+
+              <p className="portalDesc">
+                The gardens of forgiveness — devotional Naat poetry including
+                the universal &ldquo;Mustafa Jane Rahmat Pe Lakho Salam&rdquo;.
+              </p>
+            </div>
+
+            <div className="portalFooterLink">
+              <span>Read Devotional Kalaam</span>
+              <ArrowRight size={14} />
+            </div>
+          </Link>
+
+          {/* PORTAL 5: AL-HADITH */}
+          <Link href="/hadith" className="heritagePortalCard">
+            <div className="portalTop">
+              <div className="portalIconBadge">📜</div>
+              <span className="portalArabic">الحديث النبوي</span>
+              <h3 className="portalTitle">Al-Hadith Gateway</h3>
+
+              <p className="portalDesc">
+                Authentic traditions from Bukhari, Muslim, Tirmidhi, Abu
+                Dawud, Nasai, and Ibn Majah with thematic categories and Urdu
+                &amp; English.
+              </p>
+            </div>
+
+            <div className="portalFooterLink">
+              <span>Explore Ahadith</span>
+              <ArrowRight size={14} />
+            </div>
+          </Link>
+
+          {/* PORTAL 6: ILM KA SAFAR */}
+          <Link href="/ilm-ka-safar" className="heritagePortalCard">
+            <div className="portalTop">
+              <div className="portalIconBadge">🧭</div>
+              <span className="portalArabic">عِلْمٌ كَا سَفَر</span>
+              <h3 className="portalTitle">Ilm Ka Safar (30 Days)</h3>
+
+              <p className="portalDesc">
+                A structured 30-day curriculum covering Aqaid, Taharah,
+                Salah, Quranic reflections, and Islamic ethics with daily
+                action checklists.
+              </p>
+            </div>
+
+            <div className="portalFooterLink">
+              <span>Start 30-Day Course</span>
+              <ArrowRight size={14} />
+            </div>
           </Link>
         </div>
+      </section>
 
-        <div className="horizontalCards">
-          {knowledgeCards.map((card) => (
+      {/* THE SCHOLAR & POLYMATH: 54 BRANCHES OF SCIENCES */}
+      <section
+        style={{
+          maxWidth: "1280px",
+          margin: "0 auto",
+          padding: "40px 20px",
+        }}
+      >
+        <div
+          style={{
+            background: "var(--home-surface)",
+            border: "1.5px solid var(--home-border)",
+            borderRadius: "24px",
+            padding: "36px",
+            position: "relative",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "16px",
+              marginBottom: "20px",
+            }}
+          >
+            <div>
+              <span className="qariStationTag">POLYHISTORIC GENIUS</span>
+
+              <h2
+                style={{
+                  fontSize: "28px",
+                  margin: "8px 0 4px",
+                  color: "var(--home-text)",
+                }}
+              >
+                The Intellectual Mastery of Ala Hazrat
+              </h2>
+
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  color: "var(--home-text-muted)",
+                  maxWidth: "600px",
+                }}
+              >
+                Authored over 1,000 treatises across 54 distinct branches of
+                Islamic and rational sciences, acclaimed by scholars of
+                Makkah and Madinah.
+              </p>
+            </div>
+
             <Link
-              href={card.href}
-              className="knowledgeCard smallCard"
-              key={card.title}
+              href="/ala-hazrat"
+              className="quranIconButton active"
+              style={{ padding: "10px 22px" }}
             >
-              <div className="cardIcon">{card.icon}</div>
-              <div className="knowledgeCardContent">
-                <span className="arabicTitle">{card.arabic}</span>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
-              </div>
-              <span className="cardArrow">→</span>
+              <span>View Full Biography &amp; Legacy</span>
+              <ArrowRight size={15} />
             </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="aboutSection">
-        <div className="aboutBox">
-          <span>ABOUT THE WEBSITE</span>
-          <h2>Knowledge • Adab • Tradition</h2>
-          <p>
-            Maslak-e-Ala Hazrat is being developed as a peaceful and organized
-            platform for Islamic knowledge, books, Hadith, Naat, Manqabat and
-            biographies of Islamic personalities.
-          </p>
-        </div>
-      </section>
-
-      <section className="calendarSection">
-        <Link href="/islamic-calendar" className="calendarCard">
-          <div className="calendarIcon">☪</div>
-          <div className="calendarContent">
-            <span className="calendarLabel">آج کی تاریخ</span>
-            <strong className="hijriDate">{date.hijri || "اسلامی تاریخ"}</strong>
-            <span className="gregorianDate">{date.gregorian || "Loading..."}</span>
           </div>
-          <div className="calendarArabic">اسلامی کیلنڈر</div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "14px",
+              marginTop: "24px",
+            }}
+          >
+            <Link
+              href="/ala-hazrat/seerat"
+              className="toolsCard"
+              style={{ margin: 0, textDecoration: "none" }}
+            >
+              <div>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--home-gold)",
+                    fontWeight: 700,
+                  }}
+                >
+                  26 CHAPTERS
+                </span>
+
+                <strong
+                  style={{
+                    display: "block",
+                    fontSize: "16px",
+                    margin: "4px 0",
+                  }}
+                >
+                  Seerat-e-Ala Hazrat
+                </strong>
+
+                <small style={{ color: "var(--home-text-muted)" }}>
+                  Verified life &amp; education
+                </small>
+              </div>
+            </Link>
+
+            <Link
+              href="/ala-hazrat/books"
+              className="toolsCard"
+              style={{ margin: 0, textDecoration: "none" }}
+            >
+              <div>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--home-gold)",
+                    fontWeight: 700,
+                  }}
+                >
+                  CATALOGUE
+                </span>
+
+                <strong
+                  style={{
+                    display: "block",
+                    fontSize: "16px",
+                    margin: "4px 0",
+                  }}
+                >
+                  Books &amp; Treatises
+                </strong>
+
+                <small style={{ color: "var(--home-text-muted)" }}>
+                  Independent works registry
+                </small>
+              </div>
+            </Link>
+
+            <Link
+              href="/ala-hazrat/teachers"
+              className="toolsCard"
+              style={{ margin: 0, textDecoration: "none" }}
+            >
+              <div>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--home-gold)",
+                    fontWeight: 700,
+                  }}
+                >
+                  SANAD &amp; IJAZAT
+                </span>
+
+                <strong
+                  style={{
+                    display: "block",
+                    fontSize: "16px",
+                    margin: "4px 0",
+                  }}
+                >
+                  Asatizah &amp; Teachers
+                </strong>
+
+                <small style={{ color: "var(--home-text-muted)" }}>
+                  Traditional authorities
+                </small>
+              </div>
+            </Link>
+
+            <Link
+              href="/ala-hazrat/students"
+              className="toolsCard"
+              style={{ margin: 0, textDecoration: "none" }}
+            >
+              <div>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--home-gold)",
+                    fontWeight: 700,
+                  }}
+                >
+                  CONTINUITY
+                </span>
+
+                <strong
+                  style={{
+                    display: "block",
+                    fontSize: "16px",
+                    margin: "4px 0",
+                  }}
+                >
+                  Students &amp; Khulafa
+                </strong>
+
+                <small style={{ color: "var(--home-text-muted)" }}>
+                  Scholarly transmission
+                </small>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+            {/* ISLAMIC LIFE & CALENDAR BANNER */}
+      <section className="toolsGridSection">
+        <Link href="/islamic-calendar" className="toolsCard">
+          <div>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "var(--home-gold)",
+              }}
+            >
+              LUNAR CALENDAR
+            </span>
+
+            <h3 style={{ margin: "4px 0", fontSize: "18px" }}>
+              Islamic Calendar &amp; Urs Dates
+            </h3>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "13px",
+                color: "var(--home-text-muted)",
+              }}
+            >
+              Sacred months, Ramadan, Urs-e-Razawi (25 Safar), Gyarween
+              Shareef, and fasting milestones.
+            </p>
+          </div>
+
+          <div style={{ fontSize: "28px", color: "var(--home-gold)" }}>
+            ☪
+          </div>
+        </Link>
+
+        <Link href="/seerat-un-nabi" className="toolsCard">
+          <div>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "var(--home-gold)",
+              }}
+            >
+              BLESSED BIOGRAPHY
+            </span>
+
+            <h3 style={{ margin: "4px 0", fontSize: "18px" }}>
+              Seerat-un-Nabi ﷺ
+            </h3>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "13px",
+                color: "var(--home-text-muted)",
+              }}
+            >
+              The life, miracles, and universal mercy of the Master of the
+              Universe, Sayyiduna Muhammad ﷺ.
+            </p>
+          </div>
+
+          <div
+            style={{
+              fontFamily: "Amiri Quran",
+              fontSize: "28px",
+              color: "var(--home-gold)",
+            }}
+          >
+            ﷴ
+          </div>
+        </Link>
+
+        <Link href="/quran/full" className="toolsCard">
+          <div>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 700,
+                color: "var(--home-gold)",
+              }}
+            >
+              HOLY BOOK
+            </span>
+
+            <h3 style={{ margin: "4px 0", fontSize: "18px" }}>
+              Full Mushaf Reader
+            </h3>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "13px",
+                color: "var(--home-text-muted)",
+              }}
+            >
+              Read the entire Holy Qur’an in authentic continuous Arabic
+              calligraphy with Juz selector.
+            </p>
+          </div>
+
+          <div style={{ fontSize: "28px", color: "var(--home-gold)" }}>
+            📖
+          </div>
         </Link>
       </section>
 
-      <footer className="footer">
-        <div className="footerInner">
-          <div className="footerBrand">Maslak-e-Ala Hazrat</div>
-          <p>Islamic Knowledge • Naat • Books • Hadith</p>
-          <div className="footerLine" />
-          <small>
-            © {new Date().getFullYear()} Maslak-e-Ala Hazrat. All rights
-            reserved.
-          </small>
+      {/* SUPREME ROYAL FOOTER */}
+      <footer className="supremeFooter">
+        <div className="footerInnerGrid">
+          <div>
+            <div className="brandWrap" style={{ marginBottom: "14px" }}>
+              <div className="brandLogoCircle">م</div>
+              <span className="brandTitle">Maslak-e-Ala Hazrat</span>
+            </div>
+
+            <p
+              style={{
+                color: "var(--home-text-muted)",
+                fontSize: "14px",
+                lineHeight: 1.6,
+                maxWidth: "340px",
+                margin: "0 0 16px 0",
+              }}
+            >
+              Dedicated to serving the global Muslim community with authentic
+              Islamic knowledge, Qur’anic tilawat, and preserving the
+              scholarly heritage of Ahle Sunnat wal Jama&apos;at.
+            </p>
+
+            <div
+              style={{
+                fontFamily: "Amiri Quran",
+                color: "var(--home-gold)",
+                fontSize: "16px",
+              }}
+            >
+              صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ
+            </div>
+          </div>
+
+          <div>
+            <div className="footerColTitle">Qur’an Majeed</div>
+
+            <ul className="footerLinksList">
+              <li>
+                <Link href="/quran">All 114 Surahs</Link>
+              </li>
+              <li>
+                <Link href="/quran/full">Read Full Mushaf</Link>
+              </li>
+              <li>
+                <Link href="/quran-samajhne-ka-safar">
+                  Qur’an Samajhne Ka Safar
+                </Link>
+              </li>
+              <li>
+                <Link href="/quran/36">Surah Ya-Seen</Link>
+              </li>
+              <li>
+                <Link href="/quran/55">Surah Ar-Rahman</Link>
+              </li>
+              <li>
+                <Link href="/quran/67">Surah Al-Mulk</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="footerColTitle">Scholarly Works</div>
+
+            <ul className="footerLinksList">
+              <li>
+                <Link href="/kanz-ul-iman">Kanz-ul-Iman</Link>
+              </li>
+              <li>
+                <Link href="/fatawa-razawiyya">Fatawa Razawiyya</Link>
+              </li>
+              <li>
+                <Link href="/hadaiq-e-bakhshish">
+                  Hadaiq-e-Bakhshish
+                </Link>
+              </li>
+              <li>
+                <Link href="/ala-hazrat/seerat">Seerat-e-Ala Hazrat</Link>
+              </li>
+              <li>
+                <Link href="/ala-hazrat/teachers">
+                  Teachers &amp; Asatizah
+                </Link>
+              </li>
+              <li>
+                <Link href="/ala-hazrat/research">
+                  Academic Research
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="footerColTitle">Spiritual &amp; Learning</div>
+
+            <ul className="footerLinksList">
+              <li>
+                <Link href="/hadith">Al-Hadith Collections</Link>
+              </li>
+              <li>
+                <Link href="/seerat-un-nabi">Seerat-un-Nabi ﷺ</Link>
+              </li>
+              <li>
+                <Link href="/naat-manqabat">Naat &amp; Manqabat</Link>
+              </li>
+              <li>
+                <Link href="/ilm-ka-safar">Ilm Ka Safar</Link>
+              </li>
+              <li>
+                <Link href="/islamic-calendar">Islamic Calendar</Link>
+              </li>
+              <li>
+                <Link href="/about">About &amp; Mission</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="footerBottomBar">
+          <div>
+            &copy; {new Date().getFullYear()} Maslak-e-Ala Hazrat. Built with
+            Adab, Reverence, and Scholarly Precision.
+          </div>
+
+          <div style={{ display: "flex", gap: "16px" }}>
+            <Link
+              href="/disclaimer"
+              style={{ color: "var(--home-text-muted)" }}
+            >
+              Disclaimer
+            </Link>
+
+            <Link
+              href="/contact"
+              style={{ color: "var(--home-text-muted)" }}
+            >
+              Contact
+            </Link>
+          </div>
         </div>
       </footer>
     </main>
