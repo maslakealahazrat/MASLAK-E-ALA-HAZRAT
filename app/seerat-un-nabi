@@ -1,0 +1,153 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import { Heart, Sparkles, Compass, BookOpen, ArrowRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Seerat-un-Nabi ﷺ — Life & Character of Prophet Muhammad ﷺ",
+  description: "Comprehensive study of the life, teachings, blessed miracles, and immaculate character of the Final Messenger of Allah, Prophet Muhammad ﷺ.",
+  alternates: {
+    canonical: "/seerat-un-nabi",
+  },
+};
+
+const SEERAT_CHAPTERS = [
+  {
+    number: "01",
+    title: "Blessed Birth & Childhood (ولادتِ باسعادت)",
+    arabic: "مولد النبي ﷺ",
+    desc: "Born in Makkah on 12 Rabi al-Awwal in the Year of the Elephant. Known throughout his youth as As-Sadiq (the Truthful) and Al-Amin (the Trustworthy).",
+  },
+  {
+    number: "02",
+    title: "The First Revelation at Cave Hira (بعثت و وحی)",
+    arabic: "نزول الوحي بغار حراء",
+    desc: "At age 40, Archangel Jibril (Gabriel) descended with the first verses of Surah Al-Alaq: 'Iqra bi-ismi rabbikallazi khalaq' (Read in the name of your Lord who created).",
+  },
+  {
+    number: "03",
+    title: "The Call in Makkah & Steadfastness (دعوت و استقامت)",
+    arabic: "الدعوة المكية والصبر",
+    desc: "Thirteen years of calling mankind to pure monotheism, facing boycotts in Shib Abi Talib and persecution with unmatched patience and forgiveness.",
+  },
+  {
+    number: "04",
+    title: "The Heavenly Ascension (معراج النبی ﷺ)",
+    arabic: "الإسراء والمعراج",
+    desc: "The miraculous physical journey from Makkah to Al-Quds (Jerusalem) and the celestial ascents through the seven heavens into the divine presence, gifting the five daily prayers.",
+  },
+  {
+    number: "05",
+    title: "The Migration to Madinah (ہجرتِ مدینہ)",
+    arabic: "الهجرة المباركة",
+    desc: "The monumental Hijrah in 622 CE, establishing the first Islamic society of brotherhood (Muwakhat) and the building of Masjid an-Nabawi.",
+  },
+  {
+    number: "06",
+    title: "Universal Mercy & The Conquest of Makkah (فتحِ مکہ)",
+    arabic: "فتح مكة والعفو العام",
+    desc: "Entering his birthplace Makkah victorious without bloodshed, proclaiming universal amnesty to those who had persecuted him: 'Go, for you are free.'",
+  },
+  {
+    number: "07",
+    title: "The Farewell Pilgrimage (حجۃ الوداع)",
+    arabic: "خطبة حجة الوداع",
+    desc: "The monumental human rights declaration declaring the sanctity of life, property, honor, racial equality, and women's rights.",
+  },
+  {
+    number: "08",
+    title: "Immaculate Character & Akhlaq (شمائل و اخلاق)",
+    arabic: "الشمائل المحمدية",
+    desc: "Allah Ta'ala declared: 'And indeed, you are of a great moral character' (68:4) and 'We have not sent you except as a mercy to the worlds' (21:107).",
+  },
+];
+
+export default function SeeratUnNabiPage() {
+  return (
+    <main className="quranContainer quran-theme-emerald">
+      <section className="surahHeroBanner">
+        <Link href="/" className="quranIconButton" style={{ display: "inline-flex", marginBottom: "16px" }}>
+          ← Home
+        </Link>
+
+        <div className="surahArabicTitleHero" dir="rtl" lang="ar">
+          سيرتُ خاتمِ النبيين ﷺ
+        </div>
+
+        <h1 className="surahEnglishTitleHero" style={{ fontSize: "32px" }}>
+          Seerat-un-Nabi ﷺ
+        </h1>
+
+        <p className="surahMeaningHero" style={{ maxWidth: "700px", margin: "0 auto 20px" }}>
+          The life, pristine character, sublime teachings, and mercy of the Master of the Universe, Sayyiduna Muhammad Mustafa ﷺ.
+        </p>
+
+        <div className="surahBadgesHero">
+          <span className="surahBadgeItem">Rahmatul-lil-Alameen ﷺ</span>
+          <span className="surahBadgeItem">Pristine Morality</span>
+          <span className="surahBadgeItem">Living Example of the Qur’an</span>
+          <span className="surahBadgeItem">Universal Guidance</span>
+        </div>
+      </section>
+
+      <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 16px" }}>
+        <div style={{ background: "var(--q-card)", border: "1px solid var(--q-card-border)", borderRadius: "18px", padding: "28px", marginBottom: "32px" }}>
+          <h2 style={{ color: "var(--q-accent)", fontSize: "22px", margin: "0 0 12px 0" }}>
+            The Qur’an in Action
+          </h2>
+          <p style={{ lineHeight: 1.8, color: "var(--q-translation)", margin: 0, fontSize: "15px" }}>
+            When the Mother of the Believers, Sayyidatuna Aisha Siddiqa (RA), was asked about the character of the Holy Prophet ﷺ, she replied: &ldquo;His character was the Qur’an.&rdquo; To study the Seerat of the Beloved Messenger is to witness every commandment, virtue, and pearl of wisdom of the Holy Qur’an manifested in the perfection of human life.
+          </p>
+        </div>
+
+        <h3 style={{ fontSize: "20px", color: "var(--q-accent)", marginBottom: "18px", display: "flex", alignItems: "center", gap: "8px" }}>
+          <Compass size={20} />
+          <span>Epochs of the Blessed Life</span>
+        </h3>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: "16px", marginBottom: "40px" }}>
+          {SEERAT_CHAPTERS.map((ch) => (
+            <div
+              key={ch.number}
+              style={{
+                background: "var(--q-card)",
+                border: "1px solid var(--q-card-border)",
+                borderRadius: "16px",
+                padding: "22px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                <span className="ayahNumberBadge" style={{ width: "36px", height: "36px", fontSize: "12px" }}>
+                  {ch.number}
+                </span>
+                <span style={{ fontFamily: "var(--font-arabic-uthmani)", fontSize: "16px", color: "var(--q-accent)" }} dir="rtl" lang="ar">
+                  {ch.arabic}
+                </span>
+              </div>
+              <strong style={{ display: "block", fontSize: "16px", color: "var(--q-text)", marginBottom: "8px" }}>
+                {ch.title}
+              </strong>
+              <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--q-translation)", margin: 0 }}>
+                {ch.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: "center", padding: "30px", background: "var(--q-card)", borderRadius: "18px", border: "1px solid var(--q-accent)", marginBottom: "40px" }}>
+          <h3 style={{ color: "var(--q-accent)", margin: "0 0 10px 0" }}>Recite Darood &amp; Salawat</h3>
+          <p style={{ color: "var(--q-translation)", fontSize: "14px", margin: "0 0 20px" }}>
+            &ldquo;Indeed, Allah and His angels confer blessings upon the Prophet. O you who have believed, ask [Allah to confer] blessing upon him and ask [Allah to grant him] peace.&rdquo; (Surah Al-Ahzab 33:56)
+          </p>
+          <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
+            <Link href="/hadaiq-e-bakhshish" className="quranIconButton active" style={{ padding: "10px 24px" }}>
+              Read Hadaiq-e-Bakhshish (Salam-e-Raza)
+            </Link>
+            <Link href="/quran/33" className="quranIconButton" style={{ padding: "10px 24px" }}>
+              Read Surah Al-Ahzab
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
