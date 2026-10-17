@@ -1,953 +1,1161 @@
 /* =========================================================
-   MASLAK-E-ALA-HAZRAT — HOMEPAGE ONLY
-   File: app/home.css
+   MASLAK-E-ALA-HAZRAT — SUPREME HOMEPAGE DESIGN
+   Better than Quran.com: Spiritual, Luxurious, Modern
    ========================================================= */
 
 .site {
-  --home-bg: #f7faf9;
-  --home-surface: #ffffff;
-  --home-surface-soft: #edf6f4;
-  --home-text: #193330;
-  --home-muted: #657b77;
-  --home-green: #347f73;
-  --home-green-hover: #28675e;
-  --home-gold: #b99253;
-  --home-border: rgba(52, 121, 111, 0.18);
+  --home-bg: #071311;
+  --home-surface: #0e201d;
+  --home-surface-soft: #142a26;
+  --home-surface-card: #102421;
+  --home-text: #f3f7f5;
+  --home-text-muted: #8ea39e;
+  --home-gold: #d4af37;
+  --home-gold-light: #f3df93;
+  --home-gold-soft: rgba(212, 175, 55, 0.15);
+  --home-emerald: #10b981;
+  --home-border: rgba(212, 175, 55, 0.22);
+  --home-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
   min-height: 100vh;
   color: var(--home-text);
   background: var(--home-bg);
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
 }
 
-html.dark .site {
-  --home-bg: #111817;
-  --home-surface: #192321;
-  --home-surface-soft: #22312e;
-  --home-text: #f0f6f4;
-  --home-muted: #afc0bb;
-  --home-green: #78b7aa;
-  --home-green-hover: #9acfc3;
-  --home-gold: #d2b477;
-  --home-border: rgba(143, 194, 180, 0.2);
-  color: var(--home-text);
-  background: var(--home-bg);
+html.light .site {
+  --home-bg: #f5f9f8;
+  --home-surface: #ffffff;
+  --home-surface-soft: #edf5f3;
+  --home-surface-card: #ffffff;
+  --home-text: #0e201d;
+  --home-text-muted: #4e6561;
+  --home-gold: #b08a28;
+  --home-gold-light: #8c6a17;
+  --home-gold-soft: rgba(176, 138, 40, 0.12);
+  --home-emerald: #059669;
+  --home-border: rgba(176, 138, 40, 0.22);
+  --home-shadow: 0 16px 35px rgba(14, 32, 29, 0.08);
 }
 
-/* Header */
-.site .siteHeader {
+/* ================= HEADER NAVIGATION ================= */
+
+.siteHeader {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  box-shadow: none;
-  transition: transform 0.25s ease, background 0.25s ease;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: color-mix(in srgb, var(--home-bg) 88%, transparent);
+  border-bottom: 1px solid var(--home-border);
+  transition: all 0.3s ease;
 }
 
-.site .siteHeader.headerHidden {
-  transform: translateY(-110%);
-  pointer-events: none;
+.siteHeader.headerHidden {
+  transform: translateY(-100%);
 }
 
-.site .headerInner {
-  min-height: 64px;
-}
-
-.site .brand {
-  color: var(--home-text);
-}
-
-.site .brandMark {
-  background: var(--home-green);
-  color: #fff;
-}
-
-.site .iconButton,
-.site .menuButton {
-  color: var(--home-text);
-  transition: background 0.2s ease;
-}
-
-.site .iconButton:hover,
-.site .menuButton:hover {
-  background: var(--home-surface-soft);
-}
-
-.site .iconButton svg,
-.site .drawerPill svg {
-  fill: none;
-  stroke: currentColor;
-}
-
-/* Hero */
-.site .hero {
-  position: relative;
-  overflow: visible;
-  background: var(--home-bg);
-  color: var(--home-text);
-}
-
-.site .heroInner {
-  width: min(1080px, 92%);
+.headerInner {
+  max-width: 1280px;
   margin: 0 auto;
-}
-
-.site .bismillah {
-  padding: 30px 10px 24px;
-  color: var(--home-gold);
-  font-family: "Amiri", serif;
-  font-size: clamp(32px, 6vw, 60px);
-  line-height: 1.8;
-  text-align: center;
-}
-
-/* Search */
-.site .searchArea {
-  position: relative;
-  z-index: 1100;
-  width: 100%;
-  margin: 10px auto 24px;
-  transition: opacity 0.22s ease, transform 0.22s ease;
-}
-
-.site .searchArea.searchMode-bottom {
-  position: fixed;
-  left: 50%;
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  z-index: 1200;
-  width: min(680px, calc(100% - 24px));
-  margin: 0;
-  padding: 0;
-  transform: translateX(-50%);
-}
-
-.site .searchArea.searchMode-hidden {
-  position: fixed;
-  left: 50%;
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  z-index: 1200;
-  width: min(680px, calc(100% - 24px));
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 150%);
-}
-
-.site .searchBox {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 58px;
-  padding: 6px 8px 6px 18px;
-  background: var(--home-surface);
-  border: 1px solid var(--home-border);
-  border-radius: 999px;
-  box-shadow: 0 8px 28px rgba(22, 65, 57, 0.1);
-}
-
-.site .searchBox > svg {
-  flex: 0 0 22px;
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: var(--home-muted);
-  stroke-width: 1.8;
-}
-
-.site .searchBox input {
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: var(--home-text);
-  font-size: 16px;
-}
-
-.site .searchBox input::placeholder {
-  color: var(--home-muted);
-  opacity: 1;
-}
-
-.site .searchBox button {
-  flex-shrink: 0;
-  min-height: 44px;
-  padding: 0 22px;
-  border: 0;
-  border-radius: 999px;
-  background: #347f73;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.site .searchBox button:hover {
-  background: #28675e;
-}
-
-.site .searchBox button:active {
-  transform: scale(0.97);
-}
-
-.site .searchArea.searchMode-bottom .liveSearchResults {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(100% + 10px);
-  max-height: min(55vh, 420px);
-  margin: 0;
-  padding: 6px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  border: 1px solid var(--home-border);
-  border-radius: 18px;
-  background: var(--home-surface);
-  color: var(--home-text);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.14);
-}
-
-.site .liveSearchItem {
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 14px 12px;
-  border-bottom: 1px solid var(--home-border);
-  border-radius: 10px;
-  color: var(--home-text);
-  text-decoration: none;
+  gap: 16px;
 }
 
-.site .liveSearchItem:hover {
-  background: var(--home-surface-soft);
-}
-
-.site .liveSearchInfo {
+.brandWrap {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
-}
-
-.site .liveSearchInfo strong {
-  font-size: 14px;
-  overflow-wrap: anywhere;
-}
-
-.site .liveSearchInfo span,
-.site .liveSearchEmpty {
-  color: var(--home-muted);
-  font-size: 12px;
-}
-
-.site .liveSearchArabic {
-  max-width: 45%;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
   color: var(--home-text);
-  font-family: "Amiri", serif;
-  font-size: 20px;
-  text-align: right;
-  overflow-wrap: anywhere;
 }
 
-.site .viewAllSearch {
-  display: block;
-  width: 100%;
-  padding: 13px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--home-surface-soft);
-  color: var(--home-green);
+.brandLogoCircle {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--home-gold), #8f721a);
+  color: #071311;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: 24px;
   font-weight: 700;
-  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-html.dark .site .searchBox,
-html.dark .site .liveSearchResults {
-  background: var(--home-surface);
-  border-color: var(--home-border);
-  color: var(--home-text);
-}
-
-html.dark .site .searchBox input {
-  color: var(--home-text);
-}
-
-/* Islamic calendar */
-.site .calendarSection {
-  width: min(1080px, 92%);
-  margin: 10px auto 30px;
-}
-
-.site .calendarCard {
+.brandTexts {
   display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 22px;
-  background: var(--home-surface);
-  border: 1px solid var(--home-border);
-  border-radius: 22px;
-  color: var(--home-text);
-  text-decoration: none;
-  box-shadow: 0 8px 28px rgba(22, 65, 57, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.site .calendarCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(22, 65, 57, 0.09);
-}
-
-.site .calendarIcon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 54px;
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  background: var(--home-surface-soft);
-  color: var(--home-green);
-  font-size: 28px;
-}
-
-.site .calendarContent {
-  display: flex;
-  flex: 1;
   flex-direction: column;
-  gap: 5px;
-  min-width: 0;
 }
 
-.site .calendarLabel,
-.site .calendarArabic {
-  color: var(--home-muted);
-}
-
-.site .hijriDate {
-  font-family: "Amiri", serif;
-  font-size: 24px;
-}
-
-.site .gregorianDate {
-  color: var(--home-muted);
-  font-size: 14px;
-}
-
-.site .calendarArabic {
-  font-family: "Amiri", serif;
-  font-size: 20px;
-}
-
-/* Knowledge cards */
-.site .knowledgeSection {
-  width: min(1080px, 92%);
-  margin: 0 auto;
-  padding: 30px 0 55px;
-}
-
-.site .sectionHeading {
-  max-width: 680px;
-  margin: 0 auto 30px;
-  text-align: center;
-}
-
-.site .sectionHeading > span {
-  color: var(--home-green);
-  font-size: 12px;
+.brandTitle {
+  font-size: 17px;
   font-weight: 800;
-  letter-spacing: 3px;
-}
-
-.site .sectionHeading h2 {
-  margin: 10px 0;
+  letter-spacing: -0.4px;
   color: var(--home-text);
-  font-size: clamp(27px, 4vw, 38px);
-  letter-spacing: -0.8px;
+  line-height: 1.2;
 }
 
-.site .sectionHeading p {
-  margin: 0;
-  color: var(--home-muted);
-  font-size: 16px;
-  line-height: 1.8;
+.brandArabicSubtitle {
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: 13px;
+  color: var(--home-gold);
+  line-height: 1.2;
 }
 
-.site .quranWrap {
-  margin: 24px 0;
-}
+/* DESKTOP NAV LINKS */
 
-.site .knowledgeCard {
+.desktopNavLinks {
   display: flex;
   align-items: center;
-  gap: 20px;
-  min-width: 0;
-  padding: 24px;
-  border: 1px solid var(--home-border);
-  border-radius: 24px;
-  background: var(--home-surface);
+  gap: 6px;
+}
+
+.desktopNavLink {
+  padding: 8px 12px;
+  border-radius: 8px;
   color: var(--home-text);
   text-decoration: none;
-  box-shadow: 0 8px 28px rgba(22, 65, 57, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.site .knowledgeCard:hover {
-  transform: translateY(-3px);
-  border-color: var(--home-green);
-  box-shadow: 0 14px 32px rgba(22, 65, 57, 0.09);
-}
-
-.site .quranCard {
-  min-height: 180px;
-}
-
-.site .cardIcon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 76px;
-  width: 76px;
-  height: 76px;
-  border-radius: 20px;
+.desktopNavLink:hover {
   background: var(--home-surface-soft);
-  color: var(--home-green);
-  font-family: "Amiri", serif;
-  font-size: 34px;
-}
-
-.site .knowledgeCardContent {
-  flex: 1;
-  min-width: 0;
-}
-
-.site .arabicTitle {
-  display: block;
-  margin-bottom: 5px;
   color: var(--home-gold);
-  font-family: "Amiri", serif;
-  font-size: 24px;
-  line-height: 1.6;
 }
 
-.site .knowledgeCard h3 {
-  margin: 0 0 6px;
+.desktopNavLink.highlight {
+  background: var(--home-gold-soft);
+  border: 1px solid var(--home-border);
+  color: var(--home-gold);
+  font-weight: 700;
+}
+
+.desktopNavLink.highlight:hover {
+  background: var(--home-gold);
+  color: #071311;
+}
+
+.headerActionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerIconBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--home-surface-soft);
+  border: 1px solid var(--home-border);
   color: var(--home-text);
-  font-size: 22px;
-  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.site .knowledgeCard p {
+.headerIconBtn:hover {
+  border-color: var(--home-gold);
+  color: var(--home-gold);
+}
+
+/* ================= GRAND HERO SECTION ================= */
+
+.supremeHero {
+  position: relative;
+  padding: 60px 20px 40px;
+  text-align: center;
+  background: radial-gradient(
+    circle at 50% 20%,
+    rgba(212, 175, 55, 0.12) 0%,
+    rgba(7, 19, 17, 0) 70%
+  );
+  overflow: hidden;
+}
+
+.supremeHero::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 350px;
+  background: radial-gradient(
+    ellipse,
+    rgba(212, 175, 55, 0.15),
+    transparent 70%
+  );
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroContentWrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.sacredBismillah {
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: clamp(34px, 6.5vw, 54px);
+  color: var(--home-gold);
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+  text-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.sacredKalimaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: var(--home-gold-soft);
+  border: 1px solid var(--home-border);
+  color: var(--home-gold-light);
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.supremeHeroTitle {
+  font-size: clamp(32px, 5.5vw, 54px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 16px 0;
+  letter-spacing: -1px;
+  color: var(--home-text);
+}
+
+.supremeHeroTitle span {
+  background: linear-gradient(
+    135deg,
+    var(--home-text) 0%,
+    var(--home-gold-light) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.supremeHeroSubtitle {
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 1.6;
+  color: var(--home-text-muted);
+  max-width: 760px;
+  margin: 0 auto 36px;
+}
+
+/* ================= UNIVERSAL SEARCH BOX ================= */
+
+.heroSearchCard {
+  max-width: 760px;
+  margin: 0 auto 28px;
+  background: var(--home-surface);
+  border: 1.5px solid var(--home-border);
+  border-radius: 18px;
+  padding: 8px 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.heroSearchCard:focus-within {
+  border-color: var(--home-gold);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+.heroSearchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: var(--home-text);
+  padding: 10px 4px;
+}
+
+.heroSearchInput::placeholder {
+  color: var(--home-text-muted);
+}
+
+.heroSearchBtn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--home-gold), #9e7534);
+  color: #071311;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.heroSearchBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+}
+
+/* SEARCH DROPDOWN RESULTS */
+
+.heroSearchResultsMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  max-height: 380px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.heroSearchItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--home-text);
+  transition: all 0.15s ease;
+}
+
+.heroSearchItem:hover {
+  background: var(--home-surface-soft);
+  color: var(--home-gold);
+}
+
+/* QUICK SURAH CHIPS */
+
+.quickSurahCarousel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.quickSurahChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  background: var(--home-surface-card);
+  border: 1px solid var(--home-border);
+  color: var(--home-text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.quickSurahChip:hover {
+  border-color: var(--home-gold);
+  background: var(--home-surface-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.quickSurahChip span {
+  font-family: "Amiri Quran", "Amiri", serif;
+  color: var(--home-gold);
+  font-size: 17px;
+}
+/* ================= AYAH OF THE DAY & RESUME BAR ================= */
+
+.dailyAyahWidget {
+  max-width: 960px;
+  margin: 0 auto 50px;
+  padding: 26px 30px;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    var(--home-surface) 0%,
+    var(--home-surface-soft) 100%
+  );
+  border: 1px solid var(--home-border);
+  box-shadow: var(--home-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+  position: relative;
+}
+
+.dailyAyahTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dailyAyahTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--home-gold-soft);
+  color: var(--home-gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.dailyAyahArabicText {
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: clamp(24px, 4vw, 34px);
+  color: var(--home-text);
+  line-height: 2;
+  text-align: right;
+  direction: rtl;
   margin: 0;
-  color: var(--home-muted);
-  font-size: 15px;
-  line-height: 1.7;
 }
 
-.site .cardArrow {
-  flex-shrink: 0;
-  color: var(--home-green);
-  font-size: 30px;
+.dailyAyahUrdu {
+  font-family: "Noto Nastaliq Urdu", serif;
+  font-size: 17px;
+  line-height: 2.1;
+  text-align: right;
+  direction: rtl;
+  color: var(--home-text-muted);
+  margin: 0;
 }
 
-.site .horizontalCards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+.dailyAyahEnglish {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--home-text-muted);
+  font-style: italic;
+  margin: 0;
 }
 
-.site .smallCard {
-  min-height: 180px;
+.dailyAyahActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px dashed var(--home-border);
 }
 
-/* About */
-.site .aboutSection {
-  padding: 45px 4%;
+/* ================= TABS QURAN EXPLORER ================= */
+
+.explorerSection {
+  max-width: 1280px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+}
+
+.explorerHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.explorerSectionTitle {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--home-text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.explorerSectionTitle span {
+  color: var(--home-gold);
+}
+
+.explorerTabsRow {
+  display: flex;
+  gap: 6px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.explorerTabBtn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--home-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.explorerTabBtn.active {
+  background: var(--home-gold);
+  color: #071311;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+}
+
+/* SURAH DIRECTORY GRID */
+
+.surahCardModern {
+  background: var(--home-surface-card);
+  border: 1px solid var(--home-border);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: var(--home-text);
+  transition: all 0.2s ease;
+}
+
+.surahCardModern:hover {
+  transform: translateY(-2px);
+  border-color: var(--home-gold);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   background: var(--home-surface-soft);
 }
 
-.site .aboutBox {
-  max-width: 760px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.site .aboutBox > span {
-  color: var(--home-green);
-  font-size: 12px;
+.surahNumberCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--home-gold-soft);
+  border: 1px solid var(--home-border);
+  color: var(--home-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 800;
-  letter-spacing: 2px;
-}
-
-.site .aboutBox h2 {
-  margin: 12px 0;
-  color: var(--home-text);
-  font-size: clamp(24px, 4vw, 34px);
-}
-
-.site .aboutBox p {
-  color: var(--home-muted);
   font-size: 15px;
-  line-height: 1.9;
 }
 
-/* Footer */
-.site .footer {
-  padding: 38px 5% 24px;
-  background: var(--home-bg);
-  color: var(--home-muted);
-  text-align: center;
+.surahTitlesCol strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 2px;
 }
 
-.site .footerInner {
-  max-width: 1080px;
-  margin: 0 auto;
+.surahTitlesCol span {
+  font-size: 13px;
+  color: var(--home-text-muted);
 }
 
-.site .footerBrand {
+.surahArabicCol {
+  text-align: right;
+}
+
+.surahArabicName {
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: 24px;
   color: var(--home-text);
+  display: block;
+  line-height: 1.2;
+}
+
+.surahMetaSmall {
+  font-size: 12px;
+  color: var(--home-gold);
+  font-weight: 600;
+}
+
+/* ================= 4 SCHOLAR ROYAL PORTALS ================= */
+
+.heritageSection {
+  max-width: 1280px;
+  margin: 0 auto 70px;
+  padding: 0 20px;
+}
+
+.heritageHeader {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.heritageEyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--home-gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.heritageHeading {
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+  color: var(--home-text);
+  margin: 0 0 12px 0;
+}
+
+.heritagePortalsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.heritagePortalCard {
+  background: var(--home-surface-card);
+  border: 1.5px solid var(--home-border);
+  border-radius: 20px;
+  padding: 28px 24px;
+  text-decoration: none;
+  color: var(--home-text);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.heritagePortalCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--home-gold);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.portalTop {
+  margin-bottom: 20px;
+}
+
+.portalIconBadge {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: var(--home-gold-soft);
+  color: var(--home-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+  border: 1px solid var(--home-border);
+}
+
+.portalArabic {
+  font-family: "Amiri Quran", "Amiri", serif;
+  font-size: 22px;
+  color: var(--home-gold);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.portalTitle {
   font-size: 20px;
   font-weight: 800;
-}
-
-.site .footerLine {
-  height: 1px;
-  margin: 22px 0;
-  background: var(--home-border);
-}
-
-.site .footer small {
-  font-size: 12px;
-}
-
-/* Navigation drawer (homepage scoped) */
-.site .menuBackdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1300;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: rgba(7, 18, 16, 0.52);
-}
-
-.site .mobileMenu {
-  z-index: 1301;
-  background: var(--home-surface);
+  margin: 0 0 8px 0;
   color: var(--home-text);
 }
 
-.site .drawerHeader,
-.site .drawerNavRow,
-.site .drawerBottom {
-  color: var(--home-text);
+.portalDesc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--home-text-muted);
+  margin: 0;
 }
 
-.site .drawerNavLink,
-.site .drawerSubmenuLink {
-  color: var(--home-text);
+.portalFooterLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--home-gold);
+  font-weight: 700;
+  font-size: 13px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--home-border);
+}
+
+/* ================= ISLAMIC LIFE & CALENDAR ================= */
+
+.toolsGridSection {
+  max-width: 1280px;
+  margin: 0 auto 70px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.toolsCard {
+  background: var(--home-surface-card);
+  border: 1px solid var(--home-border);
+  border-radius: 20px;
+  padding: 26px;
   text-decoration: none;
-}
-
-.site .drawerNavLink:hover,
-.site .drawerSubmenuLink:hover {
-  color: var(--home-green);
-}
-
-.site .drawerPill,
-.site .drawerExpand,
-.site .drawerClose {
   color: var(--home-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all 0.2s ease;
 }
 
-.site .drawerDonate {
-  background: var(--home-green);
-  color: #fff;
-}
-
-.site .popup,
-.site .drawerOptions {
-  background: var(--home-surface);
-  color: var(--home-text);
-  border-color: var(--home-border);
-}
-
-.site .popupTitle {
-  color: var(--home-muted);
-}
-
-.site .popup button,
-.site .drawerOptions button {
-  color: var(--home-text);
-}
-
-.site .popup button:hover,
-.site .drawerOptions button:hover,
-.site .activeOption {
+.toolsCard:hover {
+  border-color: var(--home-gold);
+  transform: translateY(-2px);
   background: var(--home-surface-soft);
 }
+/* ================= FOOTER ================= */
 
-.site .activeOption {
-  color: var(--home-green);
+.supremeFooter {
+  background: color-mix(in srgb, var(--home-surface) 60%, black);
+  border-top: 1px solid var(--home-border);
+  padding: 60px 20px 30px;
 }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .site .headerInner {
-    width: 92%;
-    min-height: 58px;
-  }
+.footerInnerGrid {
+  max-width: 1280px;
+  margin: 0 auto 40px;
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 40px;
+}
 
-  .site .brand {
-    gap: 8px;
-    font-size: 14px;
-  }
+.footerColTitle {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--home-gold);
+  margin-bottom: 16px;
+}
 
-  .site .brandMark {
-    width: 30px;
-    height: 30px;
-    font-size: 19px;
-  }
+.footerLinksList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-  .site .heroInner {
-    width: 94%;
-  }
+.footerLinksList a {
+  color: var(--home-text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.15s ease;
+}
 
-  .site .bismillah {
-    padding: 22px 4px 18px;
-    font-size: clamp(30px, 9vw, 46px);
-  }
+.footerLinksList a:hover {
+  color: var(--home-gold);
+}
 
-  .site .searchArea.searchMode-bottom {
-    bottom: calc(8px + env(safe-area-inset-bottom));
-    width: calc(100% - 20px);
-  }
+.footerBottomBar {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--home-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--home-text-muted);
+}
 
-  .site .searchBox {
-    min-height: 52px;
-    gap: 8px;
-    padding: 5px 6px 5px 13px;
-    border-radius: 16px;
-  }
+/* RESPONSIVE */
 
-  .site .searchBox > svg {
-    flex-basis: 20px;
-    width: 20px;
-    height: 20px;
-  }
-
-  .site .searchBox input {
-    font-size: 14px;
-  }
-
-  .site .searchBox button {
-    min-height: 40px;
-    padding: 0 14px;
-    border-radius: 12px;
-    font-size: 13px;
-  }
-
-  .site .searchArea.searchMode-bottom .liveSearchResults {
-    max-height: min(42vh, 320px);
-    border-radius: 15px;
-  }
-
-  .site .liveSearchItem {
-    gap: 8px;
-    padding: 12px 9px;
-  }
-
-  .site .liveSearchArabic {
-    font-size: 17px;
-  }
-
-  .site .calendarSection,
-  .site .knowledgeSection {
-    width: 92%;
-  }
-
-  .site .calendarCard {
-    gap: 12px;
-    padding: 16px;
-    border-radius: 18px;
-  }
-
-  .site .calendarIcon {
-    flex-basis: 44px;
-    width: 44px;
-    height: 44px;
-    font-size: 23px;
-  }
-
-  .site .hijriDate {
-    font-size: 20px;
-  }
-
-  .site .calendarArabic {
+@media (max-width: 900px) {
+  .desktopNavLinks {
     display: none;
   }
 
-  .site .knowledgeSection {
-    padding-top: 25px;
+  .footerInnerGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .footerInnerGrid {
+    grid-template-columns: 1fr;
   }
 
-  .site .sectionHeading {
-    margin-bottom: 22px;
+  .supremeHero {
+    padding: 40px 16px 20px;
   }
 
-  .site .sectionHeading p {
+  .heroSearchCard {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+  }
+
+  .heroSearchBtn {
+    justify-content: center;
+  }
+}
+
+/* ================= 4-QARI LIVE AUDIO SANCTUARY ================= */
+
+.qariStationCard {
+  background: radial-gradient(
+    circle at 20% 20%,
+    var(--home-surface-soft),
+    var(--home-surface-card)
+  );
+  border: 1.5px solid var(--home-border);
+  border-radius: 22px;
+  padding: 30px;
+  margin: 30px auto;
+  max-width: 980px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.qariStationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--home-border);
+}
+
+.qariBadgeGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qariStationTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--home-gold-soft);
+  color: var(--home-gold);
+  border: 1px solid var(--home-gold);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.qariTabsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.qariTabBtn {
+  background: var(--home-surface);
+  border: 1.5px solid var(--home-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  color: var(--home-text);
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.qariTabBtn:hover {
+  border-color: var(--home-gold);
+  background: var(--home-surface-soft);
+  transform: translateY(-2px);
+}
+
+.qariTabBtn.active {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.2),
+    rgba(16, 185, 129, 0.15)
+  );
+  border-color: var(--home-gold);
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.25);
+}
+
+.qariAvatarCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--home-gold-soft);
+  color: var(--home-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  border: 1.5px solid var(--home-gold);
+  flex-shrink: 0;
+}
+
+.qariTabInfo strong {
+  display: block;
+  font-size: 14px;
+  color: var(--home-text);
+  line-height: 1.2;
+}
+
+.qariTabInfo small {
+  display: block;
+  font-size: 11px;
+  color: var(--home-text-muted);
+  margin-top: 3px;
+  font-family: "Amiri Quran", serif;
+}
+
+.qariPlayerRow {
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.qariPlayBtnLarge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--home-gold), #8f721a);
+  color: #071311;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.qariPlayBtnLarge:hover {
+  transform: scale(1.05);
+}
+
+.qariAyahSelect {
+  background: var(--home-surface-soft);
+  border: 1px solid var(--home-border);
+  color: var(--home-text);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Sound Wave Animation */
+
+.qariWaveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+}
+
+.qariWaveBar {
+  width: 3px;
+  background: var(--home-gold);
+  border-radius: 999px;
+  animation: wavePulse 1s ease-in-out infinite;
+}
+
+.qariWaveBar:nth-child(2) {
+  animation-delay: 0.2s;
+  height: 16px;
+}
+
+.qariWaveBar:nth-child(3) {
+  animation-delay: 0.4s;
+  height: 22px;
+}
+
+.qariWaveBar:nth-child(4) {
+  animation-delay: 0.1s;
+  height: 12px;
+}
+
+.qariWaveBar:nth-child(5) {
+  animation-delay: 0.3s;
+  height: 18px;
+}
+
+@keyframes wavePulse {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+/* ================= HEADER TOP TICKER ================= */
+
+.headerTopTicker {
+  background: rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  padding: 6px 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--home-text-muted);
+}
+
+/* ================= GENERAL HOMEPAGE SAFEGUARDS ================= */
+
+.site *,
+.site *::before,
+.site *::after {
+  box-sizing: border-box;
+}
+
+.site a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.site button,
+.site input,
+.site select {
+  font: inherit;
+}
+
+.site button:focus-visible,
+.site a:focus-visible,
+.site input:focus-visible,
+.site select:focus-visible {
+  outline: 2px solid var(--home-gold);
+  outline-offset: 3px;
+}
+
+.site img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Improve Arabic and Urdu readability */
+
+.site [lang="ar"],
+.site [dir="rtl"] {
+  text-rendering: optimizeLegibility;
+}
+
+/* Mobile layout refinements */
+
+@media (max-width: 600px) {
+  .headerTopTicker {
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 10px;
+  }
+
+  .headerInner {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .brandWrap {
+    gap: 8px;
+  }
+
+  .brandLogoCircle {
+    width: 36px;
+    height: 36px;
+    font-size: 21px;
+  }
+
+  .brandTitle {
     font-size: 14px;
   }
 
-  .site .knowledgeCard {
-    gap: 13px;
-    padding: 17px;
-    border-radius: 19px;
+  .brandArabicSubtitle {
+    font-size: 11px;
   }
 
-  .site .quranCard {
-    min-height: 145px;
+  .qariStationCard {
+    padding: 18px 14px;
+    border-radius: 16px;
   }
 
-  .site .cardIcon {
-    flex-basis: 56px;
-    width: 56px;
-    height: 56px;
-    border-radius: 15px;
-    font-size: 27px;
+  .qariBadgeGroup {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
-  .site .arabicTitle {
-    font-size: 20px;
+  .qariStationHeader {
+    align-items: stretch;
   }
 
-  .site .knowledgeCard h3 {
-    font-size: 18px;
+  .qariPlayerRow {
+    padding: 16px;
   }
 
-  .site .knowledgeCard p {
-    font-size: 13px;
-    line-height: 1.6;
+  .qariPlayerRow > div {
+    max-width: 100%;
   }
 
-  .site .cardArrow {
-    font-size: 24px;
+  .qariAyahSelect {
+    max-width: 100%;
   }
 
-  .site .horizontalCards {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
+  .heritagePortalsGrid {
+    grid-template-columns: 1fr;
   }
 
-  .site .smallCard {
-    min-height: 140px;
+  .toolsGridSection {
+    grid-template-columns: 1fr;
   }
 
-  .site .aboutSection {
-    padding: 35px 5%;
+  .toolsCard {
+    padding: 20px;
+  }
+
+  .footerBottomBar {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site .siteHeader,
-  .site .searchArea,
-  .site .knowledgeCard,
-  .site .calendarCard,
-  .site .searchBox button {
-    transition: none;
+  .site *,
+  .site *::before,
+  .site *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-
-/* Approved homepage layout refresh — keeps the existing site palette */
-.site {
-  --home-bg: #f7faf9;
-  --home-surface: #ffffff;
-  --home-surface-soft: #edf6f4;
-  --home-text: #193330;
-  --home-muted: #657b77;
-  --home-green: #347f73;
-  --home-green-hover: #28675e;
-  --home-border: rgba(52, 121, 111, 0.18);
-  padding-bottom: 100px;
-}
-html.dark .site {
-  --home-bg: #111817;
-  --home-surface: #192321;
-  --home-surface-soft: #22312e;
-  --home-text: #f0f6f4;
-  --home-muted: #afc0bb;
-  --home-green: #78b7aa;
-  --home-green-hover: #9acfc3;
-  --home-border: rgba(143, 194, 180, .2);
-}
-.site .siteHeader {
-  position: sticky;
-  top: 0;
-  background: var(--home-bg);
-  border-bottom: 1px solid var(--home-border);
-  box-shadow: 0 2px 10px rgba(27, 74, 66, .04);
-}
-.site .headerInner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: min(1180px, 94%);
-  min-height: 76px;
-}
-.site .brand.brandCentered {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: block;
-  width: max-content;
-  max-width: 54%;
-  text-align: center;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(17px, 2vw, 25px);
-  font-weight: 700;
-  color: var(--home-text);
-}
-.site .brand.brandCentered .brandMark { display: none; }
-.site .headerActions { margin-left: auto; gap: 14px; }
-.site .hero {
-  background: linear-gradient(180deg, var(--home-surface-soft), var(--home-bg));
-  border-bottom: 1px solid var(--home-border);
-  text-align: center;
-  padding: 24px 0 30px;
-}
-.site .heroInner { width: min(1180px, 94%); }
-.site .heroCalligraphy {
-  max-width: 100%;
-  margin: 0 auto;
-  color: #101514;
-  font-family: "Amiri", "Noto Naskh Arabic", serif;
-  font-size: clamp(42px, 7.8vw, 86px);
-  font-weight: 700;
-  line-height: 1.55;
-  text-align: center;
-  direction: rtl;
-  overflow-wrap: anywhere;
-}
-html.dark .site .heroCalligraphy { color: #f3f4f1; }
-.site .heroBrandTitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 4px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(19px, 2.8vw, 27px);
-  font-weight: 700;
-  color: var(--home-text);
-}
-.site .heroBrandTitle::before,
-.site .heroBrandTitle::after {
-  content: "";
-  width: clamp(35px, 10vw, 100px);
-  height: 1px;
-  background: var(--home-green);
-}
-.site .heroTagline {
-  margin: 8px 0 0;
-  color: var(--home-muted);
-  font-size: clamp(13px, 1.8vw, 17px);
-}
-.site .searchArea {
-  position: fixed !important;
-  left: 50% !important;
-  bottom: calc(10px + env(safe-area-inset-bottom)) !important;
-  z-index: 1200;
-  width: min(950px, calc(100% - 32px)) !important;
-  margin: 0 !important;
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) !important;
-  padding: 7px;
-  border-radius: 999px;
-  background: rgba(190, 222, 214, .8);
-  box-shadow: 0 6px 25px rgba(40, 102, 91, .13);
-}
-.site .searchArea.searchMode-hidden { opacity: 1; pointer-events: auto; transform: translateX(-50%) !important; }
-.site .searchArea.searchMode-bottom { transform: translateX(-50%) !important; }
-.site .searchBox {
-  min-height: 66px;
-  padding: 7px 8px 7px 22px;
-  border-radius: 999px;
-  box-shadow: none;
-}
-.site .searchBox button {
-  min-height: 50px;
-  padding: 0 28px;
-  border-radius: 999px;
-  background: var(--home-green);
-}
-.site .calendarSection {
-  width: min(1180px, 92%);
-  margin: 28px auto 24px;
-}
-.site .knowledgeSection {
-  width: min(1180px, 92%);
-  padding: 30px 0 35px;
-}
-.site .sectionHeading { display: none; }
-.site .knowledgeSection { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
-.site .quranWrap { display: contents; }
-.site .quranCard, .site .smallCard { min-height: 190px; }
-.site .quranCard { grid-column: span 3; }
-.site .horizontalCards { display: contents; }
-.site .smallCard:nth-child(1) { grid-column: span 3; }
-.site .smallCard:nth-child(2),
-.site .smallCard:nth-child(3),
-.site .smallCard:nth-child(4) { grid-column: span 2; }
-.site .smallCard:nth-child(n+4) { display: none; }
-.site .knowledgeCard { height: 100%; border-radius: 20px; }
-.site .cardIcon { background: var(--home-surface-soft); color: var(--home-text); }
-html.dark .site .cardIcon { background: var(--home-surface-soft); color: var(--home-green); }
-.site .arabicTitle { color: var(--home-text); }
-.site .aboutSection { padding: 30px 4%; background: transparent; }
-.site .aboutBox {
-  max-width: 1180px;
-  padding: 32px 5%;
-  text-align: left;
-  border: 1px solid var(--home-border);
-  border-radius: 24px;
-  background: linear-gradient(110deg, var(--home-surface-soft), var(--home-surface));
-}
-.site .aboutBox h2 { color: var(--home-text); }
-.site .calendarCard { min-height: 120px; }
-.site .calendarArabic { font-family: "Amiri", serif; }
-@media (max-width: 650px) {
-  .site .headerInner { min-height: 62px; width: 94%; }
-  .site .brand.brandCentered { max-width: 47%; font-size: 15px; }
-  .site .headerActions { gap: 5px; }
-  .site .iconButton, .site .menuButton { width: 38px; height: 38px; }
-  .site .hero { padding: 20px 0 24px; }
-  .site .heroCalligraphy { font-size: clamp(37px, 9vw, 58px); line-height: 1.7; }
-  .site .heroBrandTitle { gap: 8px; font-size: 20px; }
-  .site .heroTagline { font-size: 12px; }
-  .site .knowledgeSection { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .site .quranCard { grid-column: span 1; }
-  .site .smallCard:nth-child(1) { grid-column: span 1; }
-  .site .smallCard:nth-child(2),
-  .site .smallCard:nth-child(3) { grid-column: span 1; }
-  .site .quranCard, .site .smallCard { min-height: 180px; }
-  .site .knowledgeCard { align-items: flex-start; flex-wrap: wrap; gap: 10px; padding: 15px; }
-  .site .cardIcon { flex: 0 0 54px; width: 54px; height: 54px; font-size: 25px; }
-  .site .knowledgeCardContent { flex-basis: calc(100% - 2px); }
-  .site .cardArrow { position: absolute; right: 14px; top: 18px; }
-  .site .knowledgeCard { position: relative; }
-  .site .knowledgeCard h3 { font-size: 17px; }
-  .site .knowledgeCard p { font-size: 12px; }
-  .site .calendarCard { padding: 14px; gap: 10px; }
-  .site .calendarArabic { display: none; }
-  .site .searchArea { width: calc(100% - 24px) !important; padding: 5px; }
-  .site .searchBox { min-height: 56px; padding: 5px 6px 5px 13px; gap: 8px; }
-  .site .searchBox button { min-height: 42px; padding: 0 17px; }
-  .site .searchArea.searchMode-bottom .liveSearchResults { max-height: 38vh; }
-  .site .aboutBox { padding: 25px 22px; }
 }
