@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Scheherazade+New:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
   --bg: #f7faf9;
@@ -15,6 +15,10 @@
 
   --border: rgba(61, 105, 102, 0.16);
   --shadow: 0 12px 35px rgba(38, 77, 74, 0.08);
+
+  --font-arabic-uthmani: "Amiri Quran", "Amiri", serif;
+  --font-arabic-indopak: "Scheherazade New", serif;
+  --font-urdu: "Noto Nastaliq Urdu", serif;
 }
 
 html.dark {
@@ -32,6 +36,67 @@ html.dark {
 
   --border: rgba(152, 197, 195, 0.18);
   --shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Dedicated Quran Reading Themes */
+.quran-theme-emerald {
+  --q-bg: #0b1a18;
+  --q-card: #122825;
+  --q-card-hover: #16322e;
+  --q-card-border: rgba(212, 175, 55, 0.22);
+  --q-text: #f0f7f5;
+  --q-arabic: #fffdf7;
+  --q-translation: #c2dcd8;
+  --q-accent: #d4af37;
+  --q-accent-soft: rgba(212, 175, 55, 0.14);
+  --q-highlight: rgba(212, 175, 55, 0.28);
+  --q-badge-bg: #1e3f3a;
+  --q-badge-text: #e8d085;
+}
+
+.quran-theme-sepia {
+  --q-bg: #fcf8ee;
+  --q-card: #f5eedc;
+  --q-card-hover: #ece2cb;
+  --q-card-border: rgba(150, 110, 60, 0.22);
+  --q-text: #382d24;
+  --q-arabic: #221b14;
+  --q-translation: #56473b;
+  --q-accent: #b07228;
+  --q-accent-soft: rgba(176, 114, 40, 0.14);
+  --q-highlight: rgba(218, 165, 32, 0.25);
+  --q-badge-bg: #e7dac1;
+  --q-badge-text: #784812;
+}
+
+.quran-theme-dark {
+  --q-bg: #090d12;
+  --q-card: #121820;
+  --q-card-hover: #18202b;
+  --q-card-border: rgba(120, 150, 180, 0.18);
+  --q-text: #e2e8f0;
+  --q-arabic: #f8fafc;
+  --q-translation: #94a3b8;
+  --q-accent: #38bdf8;
+  --q-accent-soft: rgba(56, 189, 248, 0.14);
+  --q-highlight: rgba(56, 189, 248, 0.22);
+  --q-badge-bg: #1e293b;
+  --q-badge-text: #7dd3fc;
+}
+
+.quran-theme-light {
+  --q-bg: #f8fafc;
+  --q-card: #ffffff;
+  --q-card-hover: #f1f5f9;
+  --q-card-border: rgba(148, 163, 184, 0.2);
+  --q-text: #0f172a;
+  --q-arabic: #020617;
+  --q-translation: #475569;
+  --q-accent: #0284c7;
+  --q-accent-soft: rgba(2, 132, 199, 0.1);
+  --q-highlight: rgba(2, 132, 199, 0.16);
+  --q-badge-bg: #e2e8f0;
+  --q-badge-text: #0369a1;
 }
 
 * {
