@@ -21,7 +21,8 @@ import {
   Share2,
   Check,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Copy
 } from "lucide-react";
 import { quranAyahs } from "@/data/quran/ayahs";
 import { ALL_SURAHS, JUZ_LIST, type SurahMeta, type JuzMeta } from "@/data/quran/surahs-meta";
@@ -304,16 +305,15 @@ export default function FullQuranClient() {
             </button>
 
             {/* JUZ PICKER BUTTON */}
-            <button
-              type="button"
-              className="quranSurahPickerBtn"
-              onClick={() => setJuzDrawerOpen(true)}
-              title="Select Juz (Para)"
-              style={{ display: "none", "@media (min-width: 640px)": { display: "flex" } }}
-            >
-              <Layers size={15} />
-              <span>Juz {currentSurahMeta.juzStart}</span>
-            </button>
+              <button
+  type="button"
+  className="quranSurahPickerBtn quranJuzPickerDesktop"
+  onClick={() => setJuzDrawerOpen(true)}
+  title="Select Juz (Para)"
+>
+  <Layers size={15} />
+  <span>Juz {currentSurahMeta.juzStart}</span>
+</button>
           </div>
 
           {/* VIEW MODE TOGGLE */}
