@@ -15,6 +15,7 @@ import {
   Menu,
   Sun,
   Moon,
+  Palette,
   Clock,
 } from "lucide-react";
 import { ALL_SURAHS } from "@/data/quran/surahs-meta";
@@ -141,11 +142,12 @@ export default function Home() {
   const [audioError, setAudioError] = useState<string>("");
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
 
-const [isDark, setIsDark] = useState(true);
+const [activeTheme, setActiveTheme] = useState<SiteTheme>("emerald");
+const [themeMenuOpen, setThemeMenuOpen] = useState(false);
 
 useEffect(() => {
   const syncTheme = (theme: SiteTheme) => {
-    setIsDark(theme === "emerald" || theme === "dark");
+    setActiveTheme(theme);
   };
 
   // Restore the shared theme when the homepage opens.
@@ -185,13 +187,18 @@ useEffect(() => {
   return unsubscribe;
 }, []);
 
-const toggleTheme = () => {
-  const nextTheme: SiteTheme = isDark ? "light" : "dark";
-
-  setIsDark(nextTheme === "dark");
-
-  setSiteTheme(nextTheme);
+const selectTheme = (theme: SiteTheme) => {
+  setActiveTheme(theme);
+  setSiteTheme(theme);
+  setThemeMenuOpen(false);
 };
+
+const themeOptions: { value: SiteTheme; label: string; description: string; swatch: string }[] = [
+  { value: "emerald", label: "Emerald", description: "Original green & gold", swatch: "#10b981" },
+  { value: "sepia", label: "Sepia", description: "Warm book-paper tones", swatch: "#b7864d" },
+  { value: "dark", label: "Dark", description: "Midnight charcoal", swatch: "#64748b" },
+  { value: "light", label: "Light", description: "Clean bright surfaces", swatch: "#e8f1ef" },
+];
 
   const activeTrack =
     BLESSED_AYAH_TRACKS[selectedAyahIndex] || BLESSED_AYAH_TRACKS[0];
@@ -420,15 +427,117 @@ const toggleTheme = () => {
               </div>
             )}
 
-            <button
-              type="button"
-              className="headerIconBtn"
-              onClick={toggleTheme}
-              title="Toggle Light / Dark Mode"
-              aria-label="Toggle light or dark mode"
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+            <div style={{ position: "relative" }}>
+              <button
+                type="button"
+                className="headerIconBtn"
+                onClick={() => setThemeMenuOpen((open) => !open)}
+                title={`Choose theme (current: ${activeTheme})`}
+                aria-label={`Choose website theme. Current theme: ${activeTheme}`}
+                aria-haspopup="menu"
+                aria-expanded={themeMenuOpen}
+              >
+                {activeTheme === "light" ? (
+                  <Sun size={18} />
+                ) : activeTheme === "dark" ? (
+                  <Moon size={18} />
+                ) : (
+                  <Palette size={18} />
+                )}
+              </button>
+
+              {themeMenuOpen && (
+                <div
+                  role="menu"
+                  aria-label="Website theme options"
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 10px)",
+                    right: 0,
+                    zIndex: 1200,
+                    width: "min(250px, calc(100vw - 32px))",
+                    padding: "8px",
+                    border: "1px solid var(--home-border)",
+                    borderRadius: "14px",
+                    background: "var(--home-surface)",
+                    color: "var(--home-text)",
+                    boxShadow: "0 16px 36px rgba(0,0,0,0.28)",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "7px 10px 9px",
+                      color: "var(--home-text-muted)",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Choose appearance
+                  </div>
+
+                  {themeOptions.map((option) => {
+                    const selected = activeTheme === option.value;
+
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={selected}
+                        onClick={() => selectTheme(option.value)}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          width: "100%",
+                          padding: "10px",
+                          border: selected
+                            ? "1px solid var(--home-gold)"
+                            : "1px solid transparent",
+                          borderRadius: "10px",
+                          background: selected
+                            ? "var(--home-gold-soft)"
+                            : "transparent",
+                          color: "var(--home-text)",
+                          textAlign: "left",
+                          cursor: "pointer",
+                          font: "inherit",
+                        }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          style={{
+                            display: "block",
+                            flex: "0 0 18px",
+                            width: "18px",
+                            height: "18px",
+                            borderRadius: "50%",
+                            background: option.swatch,
+                            border: "2px solid var(--home-border)",
+                            boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.12)",
+                          }}
+                        />
+                        <span style={{ display: "flex", flexDirection: "column", gap: "2px", flex: 1 }}>
+                          <span style={{ fontSize: "13px", fontWeight: 800 }}>
+                            {option.label}
+                          </span>
+                          <span style={{ fontSize: "11px", color: "var(--home-text-muted)" }}>
+                            {option.description}
+                          </span>
+                        </span>
+                        {selected && (
+                          <span aria-hidden="true" style={{ color: "var(--home-gold)", fontWeight: 900 }}>
+                            ✓
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
 
             <button
               type="button"
