@@ -1,6 +1,6 @@
 /* =========================================================
    MASLAK-E-ALA-HAZRAT — SUPREME HOMEPAGE DESIGN
-   Better than Quran.com: Spiritual, Luxurious, Modern
+   Original homepage layout preserved; four theme palettes.
    ========================================================= */
 
 .site {
@@ -23,6 +23,40 @@
   overflow-x: hidden;
 }
 
+/* Sepia: warm paper and brown ink */
+html[data-site-theme="sepia"] .site {
+  --home-bg: #f4ecd8;
+  --home-surface: #fff8e8;
+  --home-surface-soft: #eee1c7;
+  --home-surface-card: #fbf2df;
+  --home-text: #493727;
+  --home-text-muted: #78634f;
+  --home-gold: #9a6a2f;
+  --home-gold-light: #70491f;
+  --home-gold-soft: rgba(154, 106, 47, 0.13);
+  --home-emerald: #8b6848;
+  --home-border: rgba(120, 83, 42, 0.24);
+  --home-shadow: 0 16px 35px rgba(73, 55, 39, 0.10);
+}
+
+/* Dark: neutral dark surfaces with readable light text */
+html[data-site-theme="dark"] .site {
+  --home-bg: #090d12;
+  --home-surface: #121820;
+  --home-surface-soft: #18202b;
+  --home-surface-card: #151d27;
+  --home-text: #e8edf5;
+  --home-text-muted: #a4afc0;
+  --home-gold: #d4af37;
+  --home-gold-light: #f3df93;
+  --home-gold-soft: rgba(212, 175, 55, 0.13);
+  --home-emerald: #38bdf8;
+  --home-border: rgba(148, 163, 184, 0.20);
+  --home-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+/* Light: clean white surfaces and dark text */
+html[data-site-theme="light"] .site,
 html.light .site {
   --home-bg: #f5f9f8;
   --home-surface: #ffffff;
@@ -37,6 +71,7 @@ html.light .site {
   --home-border: rgba(176, 138, 40, 0.22);
   --home-shadow: 0 16px 35px rgba(14, 32, 29, 0.08);
 }
+
 
 /* ================= HEADER NAVIGATION ================= */
 
@@ -728,7 +763,7 @@ html.light .site {
 /* ================= FOOTER ================= */
 
 .supremeFooter {
-  background: color-mix(in srgb, var(--home-surface) 60%, black);
+  background: color-mix(in srgb, var(--home-surface) 88%, var(--home-bg));
   border-top: 1px solid var(--home-border);
   padding: 60px 20px 30px;
 }
@@ -1025,8 +1060,8 @@ html.light .site {
 /* ================= HEADER TOP TICKER ================= */
 
 .headerTopTicker {
-  background: rgba(0, 0, 0, 0.45);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  background: color-mix(in srgb, var(--home-surface) 88%, transparent);
+  border-bottom: 1px solid var(--home-border);
   padding: 6px 20px;
   font-size: 12px;
   display: flex;
