@@ -38,6 +38,72 @@ html.dark {
   --shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 }
 
+/* =========================================================
+   SITE-WIDE THEME TOKENS
+   Shared colors used by page-specific stylesheets.
+   ========================================================= */
+
+:root,
+html[data-site-theme="emerald"] {
+  --site-page-bg: #071311;
+  --site-surface: #0e201d;
+  --site-surface-soft: #142a26;
+  --site-card-bg: #102421;
+  --site-text: #f3f7f5;
+  --site-muted: #8ea39e;
+  --site-accent: #d4af37;
+  --site-accent-text: #f3df93;
+  --site-accent-soft-bg: rgba(212, 175, 55, 0.15);
+  --site-brand: #10b981;
+  --site-border: rgba(212, 175, 55, 0.22);
+  --site-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+html[data-site-theme="sepia"] {
+  --site-page-bg: #f4ecd8;
+  --site-surface: #fff8e8;
+  --site-surface-soft: #eee1c7;
+  --site-card-bg: #fbf2df;
+  --site-text: #493727;
+  --site-muted: #78634f;
+  --site-accent: #9a6a2f;
+  --site-accent-text: #70491f;
+  --site-accent-soft-bg: rgba(154, 106, 47, 0.13);
+  --site-brand: #8b6848;
+  --site-border: rgba(120, 83, 42, 0.24);
+  --site-shadow: 0 16px 35px rgba(73, 55, 39, 0.10);
+}
+
+html[data-site-theme="dark"] {
+  --site-page-bg: #090d12;
+  --site-surface: #121820;
+  --site-surface-soft: #18202b;
+  --site-card-bg: #151d27;
+  --site-text: #e8edf5;
+  --site-muted: #a4afc0;
+  --site-accent: #d4af37;
+  --site-accent-text: #f3df93;
+  --site-accent-soft-bg: rgba(212, 175, 55, 0.13);
+  --site-brand: #38bdf8;
+  --site-border: rgba(148, 163, 184, 0.20);
+  --site-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+html[data-site-theme="light"] {
+  --site-page-bg: #f5f9f8;
+  --site-surface: #ffffff;
+  --site-surface-soft: #edf5f3;
+  --site-card-bg: #ffffff;
+  --site-text: #0e201d;
+  --site-muted: #4e6561;
+  --site-accent: #b08a28;
+  --site-accent-text: #8c6a17;
+  --site-accent-soft-bg: rgba(176, 138, 40, 0.12);
+  --site-brand: #059669;
+  --site-border: rgba(176, 138, 40, 0.22);
+  --site-shadow: 0 16px 35px rgba(14, 32, 29, 0.08);
+}
+
 /* Dedicated Quran Reading Themes */
 .quran-theme-emerald {
   --q-bg: #0b1a18;
