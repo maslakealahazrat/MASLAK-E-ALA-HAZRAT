@@ -28,6 +28,12 @@ import {
   Compass
 } from "lucide-react";
 import type { SurahMeta } from "@/data/quran/surahs-meta";
+import {
+  getStoredSiteTheme,
+  listenForSiteThemeChanges,
+  setSiteTheme,
+  type SiteTheme,
+} from "@/components/theme-system";
 import "@/app/quran/quran-app.css";
 
 type AyahItem = {
@@ -113,8 +119,7 @@ export default function QuranSurahReader({
   // Load preferences from localStorage
   useEffect(() => {
     try {
-      const savedTheme = localStorage.getItem("quran-app-theme");
-      if (savedTheme === "emerald" || savedTheme === "sepia" || savedTheme === "dark" || savedTheme === "light") {
+      const savedTheme = getStoredSiteTheme();
         setTheme(savedTheme);
       }
       const savedFont = localStorage.getItem("quran-arabic-font");
@@ -142,13 +147,21 @@ export default function QuranSurahReader({
     }
   }, [surah.number]);
 
-  // Persist Theme & Settings
-  const handleThemeChange = (newTheme: "emerald" | "sepia" | "dark" | "light") => {
-    setTheme(newTheme);
-    try {
-      localStorage.setItem("quran-app-theme", newTheme);
-    } catch {}
+// Sync theme changes across the entire website
+useEffect(() => {
+  const syncTheme = (nextTheme: SiteTheme) => {
+    setTheme(nextTheme);
   };
+
+  setTheme(getStoredSiteTheme());
+
+  return listenForSiteThemeChanges(syncTheme);
+}, []);
+  
+  // Persist Theme & Settings
+const handleThemeChange = (newTheme: SiteTheme) => {
+  setSiteTheme(newTheme);
+};
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
