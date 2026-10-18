@@ -1,0 +1,169 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import { Heart, Sparkles, BookOpen, Music, Share2, Copy } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Hadaiq-e-Bakhshish — Devotional Poetry of Ala Hazrat",
+  description: "Explore Hadaiq-e-Bakhshish (حدائق بخشش), the monumental collection of Naat, Manqabat, Salam, and Hamd by Imam Ahmad Raza Khan Fazil-e-Barelvi.",
+  alternates: {
+    canonical: "/hadaiq-e-bakhshish",
+  },
+};
+
+const FAMOUS_KALAAM = [
+  {
+    title: "Mustafa Jane Rahmat Pe Lakho Salam",
+    arabic: "مصطفٰے جانِ رحمت پہ لاکھوں سلام",
+    category: "Salam",
+    couplet: "مصطفٰے جانِ رحمت پہ لاکھوں سلام\nشمعِ بزمِ ہدایت پہ لاکھوں سلام",
+    desc: "The universal anthem of love and salutations to the Holy Prophet ﷺ, recited worldwide by millions.",
+  },
+  {
+    title: "Kaabe Ke Badrud Duja Tumpe Karoron Durood",
+    arabic: "کعبے کے بدر الدجیٰ تم پہ کروڑوں درود",
+    category: "Naat",
+    couplet: "کعبے کے بدر الدجیٰ تم پہ کروڑوں درود\nطیبہ کے شمس الضحیٰ تم پہ کروڑوں درود",
+    desc: "A breathtaking poetic praise portraying the Beloved Prophet ﷺ as the full moon of the Ka'bah and morning sun of Taybah.",
+  },
+  {
+    title: "Subha Taiba Mein Hui Bat'ta Hai Bara Noor Ka",
+    arabic: "صبحِ طیبہ میں ہوئی بٹتا ہے باڑا نور کا",
+    category: "Naat",
+    couplet: "صبحِ طیبہ میں ہوئی بٹتا ہے باڑا نور کا\nصدقہ لینے نور کا آیا ہے تارا نور کا",
+    desc: "Devotional lines celebrating the eternal spiritual dawn of Madinah Munawwarah.",
+  },
+  {
+    title: "Wah Kya Jood-o-Karam Hai Shah-e-Batha Tera",
+    arabic: "واہ کیا جود و کرم ہے شہِ بطحا تیرا",
+    category: "Naat",
+    couplet: "واہ کیا جود و کرم ہے شہِ بطحا تیرا\nنہیں سنتا ہی نہیں مانگنے والا تیرا",
+    desc: "Celebrating the unbounded generosity and spiritual patronage of the Messenger of Allah ﷺ.",
+  },
+  {
+    title: "Tu Sham-e-Risalat Hai Aalam Tera Parwana",
+    arabic: "تو شمعِ رسالت ہے عالم تیرا پروانہ",
+    category: "Naat",
+    couplet: "تو شمعِ رسالت ہے عالم تیرا پروانہ\nتو ماہِ نبوت ہے اے جلوۂ جانانہ",
+    desc: "Illustrating the Beloved ﷺ as the radiant candle of prophethood with the entire universe fluttering around him.",
+  },
+  {
+    title: "Al-Amaan Qahar Hai Ae Ghaus Wo Teekha Tera",
+    arabic: "الاماں قہر ہے اے غوث وہ تیکھا تیرا",
+    category: "Manqabat",
+    couplet: "الاماں قہر ہے اے غوث وہ تیکھا تیرا\nمر کے بھی چین سے سوتا نہیں مارا تیرا",
+    desc: "Manqabat in sublime praise of Sayyiduna Shaykh Abdul Qadir Jilani (Ghaus-ul-Azam).",
+  },
+];
+
+export default function HadaiqEBakhshishPage() {
+  return (
+    <main className="quranContainer quran-theme-emerald">
+      <section className="surahHeroBanner">
+        <Link href="/" className="quranIconButton" style={{ display: "inline-flex", marginBottom: "16px" }}>
+          ← Home
+        </Link>
+
+        <div className="surahArabicTitleHero" dir="rtl" lang="ar">
+          حدائقِ بخشش
+        </div>
+
+        <h1 className="surahEnglishTitleHero" style={{ fontSize: "32px" }}>
+          Hadaiq-e-Bakhshish
+        </h1>
+
+        <p className="surahMeaningHero" style={{ maxWidth: "700px", margin: "0 auto 20px" }}>
+          The Gardens of Forgiveness — the timeless masterwork of spiritual adoration, Naat, Manqabat, Hamd, and Salam composed by Ala Hazrat Imam Ahmad Raza Khan.
+        </p>
+
+        <div className="surahBadgesHero">
+          <span className="surahBadgeItem">3 Comprehensive Parts</span>
+          <span className="surahBadgeItem">Ishq-e-Rasool ﷺ</span>
+          <span className="surahBadgeItem">Urdu &amp; Persian Poetics</span>
+          <span className="surahBadgeItem">Salam-e-Raza</span>
+        </div>
+      </section>
+
+      <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 16px" }}>
+        <div style={{ background: "var(--q-card)", border: "1px solid var(--q-card-border)", borderRadius: "18px", padding: "28px", marginBottom: "32px" }}>
+          <h2 style={{ color: "var(--q-accent)", fontSize: "22px", margin: "0 0 12px 0" }}>
+            The Gold Standard of Devotional Naat
+          </h2>
+          <p style={{ lineHeight: 1.8, color: "var(--q-translation)", margin: 0, fontSize: "15px" }}>
+            Hadaiq-e-Bakhshish is regarded across literary circles as the pinnacle of Urdu Naat poetry. Every couplet is crafted with strict adherence to Islamic monotheism and reverence for the Holy Prophet ﷺ, reflecting deep Quranic concepts, Hadith allusions, and classical Arabic balance without an ounce of exaggeration or disrespect.
+          </p>
+        </div>
+
+        <h3 style={{ fontSize: "20px", color: "var(--q-accent)", marginBottom: "18px", display: "flex", alignItems: "center", gap: "8px" }}>
+          <Sparkles size={20} />
+          <span>Immortal Devotional Kalaam</span>
+        </h3>
+
+        <div style={{ display: "grid", gap: "18px", marginBottom: "40px" }}>
+          {FAMOUS_KALAAM.map((k) => (
+            <div
+              key={k.title}
+              style={{
+                background: "var(--q-card)",
+                border: "1px solid var(--q-card-border)",
+                borderRadius: "16px",
+                padding: "24px",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                <span className="surahBadgeItem" style={{ margin: 0 }}>
+                  {k.category}
+                </span>
+                <span style={{ fontSize: "14px", color: "var(--q-accent)", fontWeight: 600 }}>
+                  Ala Hazrat
+                </span>
+              </div>
+
+              <h4 style={{ margin: "0 0 14px 0", fontSize: "18px", color: "var(--q-text)" }}>
+                {k.title}
+              </h4>
+
+              <div
+                style={{
+                  background: "var(--q-bg)",
+                  padding: "16px",
+                  borderRadius: "12px",
+                  borderLeft: "3px solid var(--q-accent)",
+                  fontFamily: "var(--font-urdu)",
+                  direction: "rtl",
+                  textAlign: "right",
+                  fontSize: "20px",
+                  lineHeight: 2.1,
+                  color: "var(--q-arabic)",
+                  whiteSpace: "pre-line",
+                  marginBottom: "14px",
+                }}
+              >
+                {k.couplet}
+              </div>
+
+              <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--q-translation)", margin: 0 }}>
+                {k.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: "center", padding: "30px", background: "var(--q-card)", borderRadius: "18px", border: "1px solid var(--q-accent)", marginBottom: "40px" }}>
+          <h3 style={{ color: "var(--q-accent)", margin: "0 0 10px 0" }}>Connect with the Holy Qur’an</h3>
+          <p style={{ color: "var(--q-translation)", fontSize: "14px", margin: "0 0 20px" }}>
+            Listen to soulful tilawat and explore Ala Hazrat’s Kanz-ul-Iman translation in our dedicated Quran app.
+          </p>
+          <div style={{ display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" }}>
+            <Link href="/quran" className="quranIconButton active" style={{ padding: "10px 24px" }}>
+              Launch Qur’an Majeed
+            </Link>
+            <Link href="/naat-manqabat" className="quranIconButton" style={{ padding: "10px 24px" }}>
+              Browse Naat &amp; Manqabat Portal
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
