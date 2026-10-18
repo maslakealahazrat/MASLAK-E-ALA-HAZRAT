@@ -26,6 +26,12 @@ import {
 } from "lucide-react";
 import { quranAyahs } from "@/data/quran/ayahs";
 import { ALL_SURAHS, JUZ_LIST, type SurahMeta, type JuzMeta } from "@/data/quran/surahs-meta";
+import {
+  getStoredSiteTheme,
+  listenForSiteThemeChanges,
+  setSiteTheme,
+  type SiteTheme,
+} from "@/components/theme-system";
 import "@/app/quran/quran-app.css";
 
 const PROGRESS_KEY = "maslak-quran-progress";
@@ -123,10 +129,8 @@ export default function FullQuranClient() {
   // Load preferences
   useEffect(() => {
     try {
-      const savedTheme = localStorage.getItem("quran-app-theme");
-      if (savedTheme === "emerald" || savedTheme === "sepia" || savedTheme === "dark" || savedTheme === "light") {
-        setTheme(savedTheme);
-      }
+      const savedTheme = getStoredSiteTheme();
+       setTheme(savedTheme);
       const savedProgress = localStorage.getItem(PROGRESS_KEY);
       if (savedProgress) {
         const p = JSON.parse(savedProgress);
@@ -135,6 +139,17 @@ export default function FullQuranClient() {
     } catch {}
   }, []);
 
+// Sync theme changes across the entire website
+  useEffect(() => {
+    const syncTheme = (nextTheme: SiteTheme) => {
+      setTheme(nextTheme);
+    };
+
+    setTheme(getStoredSiteTheme());
+
+    return listenForSiteThemeChanges(syncTheme);
+  }, []);
+  
   // Save Progress
   const saveProgress = (surahNum: number, ayahNum: number) => {
     try {
