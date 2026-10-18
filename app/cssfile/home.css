@@ -25,39 +25,39 @@
 
 /* Sepia: warm paper and brown ink */
 html[data-site-theme="sepia"] .site {
-  --home-bg: #f4ecd8;
-  --home-surface: #fff8e8;
-  --home-surface-soft: #eee1c7;
-  --home-surface-card: #fbf2df;
-  --home-text: #493727;
-  --home-text-muted: #78634f;
-  --home-gold: #9a6a2f;
-  --home-gold-light: #70491f;
-  --home-gold-soft: rgba(154, 106, 47, 0.13);
-  --home-emerald: #8b6848;
-  --home-border: rgba(120, 83, 42, 0.24);
-  --home-shadow: 0 16px 35px rgba(73, 55, 39, 0.10);
+  --home-bg: #e8d9bd;
+  --home-surface: #f7ecd7;
+  --home-surface-soft: #e7d3b2;
+  --home-surface-card: #f1e2c6;
+  --home-text: #3d2a1a;
+  --home-text-muted: #72563b;
+  --home-gold: #8c5424;
+  --home-gold-light: #6f3f18;
+  --home-gold-soft: rgba(140, 84, 36, 0.16);
+  --home-emerald: #a16b35;
+  --home-border: rgba(110, 73, 36, 0.30);
+  --home-shadow: 0 16px 35px rgba(61, 42, 26, 0.14);
 }
 
 /* Dark: neutral dark surfaces with readable light text */
 html[data-site-theme="dark"] .site {
-  --home-bg: #090d12;
-  --home-surface: #121820;
-  --home-surface-soft: #18202b;
-  --home-surface-card: #151d27;
-  --home-text: #e8edf5;
-  --home-text-muted: #a4afc0;
-  --home-gold: #d4af37;
-  --home-gold-light: #f3df93;
-  --home-gold-soft: rgba(212, 175, 55, 0.13);
-  --home-emerald: #38bdf8;
-  --home-border: rgba(148, 163, 184, 0.20);
-  --home-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  --home-bg: #080b11;
+  --home-surface: #111722;
+  --home-surface-soft: #1b2432;
+  --home-surface-card: #151e2b;
+  --home-text: #f1f5f9;
+  --home-text-muted: #a8b4c7;
+  --home-gold: #60a5fa;
+  --home-gold-light: #bfdbfe;
+  --home-gold-soft: rgba(96, 165, 250, 0.15);
+  --home-emerald: #60a5fa;
+  --home-border: rgba(148, 163, 184, 0.28);
+  --home-shadow: 0 20px 45px rgba(0, 0, 0, 0.48);
 }
 
 /* Light: clean white surfaces and dark text */
 html[data-site-theme="light"] .site,
-html.light .site {
+html.light:not([data-site-theme]) .site {
   --home-bg: #f5f9f8;
   --home-surface: #ffffff;
   --home-surface-soft: #edf5f3;
