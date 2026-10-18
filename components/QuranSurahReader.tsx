@@ -120,14 +120,16 @@ export default function QuranSurahReader({
   useEffect(() => {
     try {
       const savedTheme = getStoredSiteTheme();
-        setTheme(savedTheme);
-      }
+      setTheme(savedTheme);
+
       const savedFont = localStorage.getItem("quran-arabic-font");
       if (savedFont === "uthmani" || savedFont === "indopak") {
         setArabicFont(savedFont);
       }
+
       const savedArSize = localStorage.getItem("quran-ar-size");
       if (savedArSize) setArabicFontSize(Number(savedArSize));
+
       const savedTrSize = localStorage.getItem("quran-tr-size");
       if (savedTrSize) setTranslationFontSize(Number(savedTrSize));
 
@@ -135,11 +137,13 @@ export default function QuranSurahReader({
       if (savedBookmarks) {
         const parsed = JSON.parse(savedBookmarks);
         const set = new Set<number>();
+
         for (const item of parsed) {
           if (item.surahNumber === surah.number) {
             set.add(item.ayahNumber);
           }
         }
+
         setBookmarkedAyahs(set);
       }
     } catch {
