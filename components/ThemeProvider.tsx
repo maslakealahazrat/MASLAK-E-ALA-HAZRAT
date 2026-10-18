@@ -1,100 +1,73 @@
 "use client";
 
 import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
+createContext,
+useContext,
+useEffect,
+useState,
 } from "react";
 
-type Theme = "auto" | "light" | "dark";
+import {
+applySiteTheme,
+getStoredSiteTheme,
+listenForSiteThemeChanges,
+setSiteTheme,
+type SiteTheme,
+} from "@/components/theme-system";
 
 type ThemeContextType = {
-  theme: Theme;
-  changeTheme: (value: Theme) => void;
+theme: SiteTheme;
+changeTheme: (value: SiteTheme) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(
-  undefined
+undefined
 );
 
 export function ThemeProvider({
-  children,
+children,
 }: {
-  children: React.ReactNode;
+children: React.ReactNode;
 }) {
-  const [theme, setTheme] = useState<Theme>("auto");
+const [theme, setTheme] = useState<SiteTheme>("emerald");
 
-  useEffect(() => {
-    const savedTheme =
-      (localStorage.getItem("site-theme") as Theme) || "auto";
+useEffect(() => {
+const initialTheme = getStoredSiteTheme();
 
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
+setTheme(initialTheme);
+applySiteTheme(initialTheme);
 
-  useEffect(() => {
-    const media = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    );
+return listenForSiteThemeChanges((nextTheme) => {
+  setTheme(nextTheme);
+});
 
-    const handleChange = () => {
-      if (theme === "auto") {
-        applyTheme("auto");
-      }
-    };
+}, []);
 
-    media.addEventListener("change", handleChange);
+function changeTheme(value: SiteTheme) {
+setSiteTheme(value);
+setTheme(value);
+}
 
-    return () => {
-      media.removeEventListener("change", handleChange);
-    };
-  }, [theme]);
-
-  function applyTheme(value: Theme) {
-    const root = document.documentElement;
-
-    if (value === "dark") {
-      root.classList.add("dark");
-    } else if (value === "light") {
-      root.classList.remove("dark");
-    } else {
-      const dark =
-        window.matchMedia &&
-        window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-
-      root.classList.toggle("dark", dark);
-    }
-  }
-
-  function changeTheme(value: Theme) {
-    setTheme(value);
-    localStorage.setItem("site-theme", value);
-    applyTheme(value);
-  }
-
-  return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        changeTheme,
-      }}
-    >
-      {children}
-    </ThemeContext.Provider>
-  );
+return (
+<ThemeContext.Provider
+value={{
+theme,
+changeTheme,
+}}
+>
+{children}
+</ThemeContext.Provider>
+);
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext);
+const context = useContext(ThemeContext);
 
-  if (!context) {
-    throw new Error(
-      "useTheme must be used inside ThemeProvider"
-    );
-  }
+if (!context) {
+throw new Error(
+"useTheme must be used inside ThemeProvider"
+);
+}
 
-  return context;
+return context;
 }
