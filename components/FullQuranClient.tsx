@@ -854,12 +854,7 @@ export default function FullQuranClient() {
                     <button
                       key={t}
                       type="button"
-                      onClick={() => {
-                        setTheme(t);
-                        try {
-                          localStorage.setItem("quran-app-theme", t);
-                        } catch {}
-                      }}
+                      onClick={() => setSiteTheme(t)}
                       style={{
                         padding: "8px",
                         borderRadius: "8px",
