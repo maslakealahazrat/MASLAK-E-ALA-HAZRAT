@@ -103,6 +103,26 @@ export default function AlaHazratPage() {
 
         <AlaHazratWorks />
 
+        {/* ACADEMIC & BIOGRAPHICAL PORTALS */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "12px", marginTop: "24px" }}>
+          <Link href="/ala-hazrat/teachers" className="alaHazratFactCard" style={{ textDecoration: "none" }}>
+            <span>SCHOLARSHIP</span>
+            <strong>Asatizah &amp; Teachers →</strong>
+          </Link>
+          <Link href="/ala-hazrat/students" className="alaHazratFactCard" style={{ textDecoration: "none" }}>
+            <span>ACADEMIC LEGACY</span>
+            <strong>Students &amp; Khulafa →</strong>
+          </Link>
+          <Link href="/ala-hazrat/family" className="alaHazratFactCard" style={{ textDecoration: "none" }}>
+            <span>GENEALOGY</span>
+            <strong>Family &amp; Lineage →</strong>
+          </Link>
+          <Link href="/ala-hazrat/research" className="alaHazratFactCard" style={{ textDecoration: "none" }}>
+            <span>DOCUMENTATION</span>
+            <strong>Verified Research Facts →</strong>
+          </Link>
+        </div>
+
         <div className="alaHazratAllBooks">
           <Link
             href="/ala-hazrat/books"
