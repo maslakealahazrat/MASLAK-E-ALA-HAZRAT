@@ -18,6 +18,12 @@ import {
   Clock,
 } from "lucide-react";
 import { ALL_SURAHS } from "@/data/quran/surahs-meta";
+import {
+  getStoredSiteTheme,
+  listenForSiteThemeChanges,
+  setSiteTheme,
+  type SiteTheme,
+} from "@/components/theme-system";
 
 const POPULAR_SURAHS = [
   { number: 36, name: "Ya-Seen", arabic: "يس", title: "Heart of Qur’an", desc: "Forgiveness & peace" },
@@ -135,63 +141,57 @@ export default function Home() {
   const [audioError, setAudioError] = useState<string>("");
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
 
-  const [isDark, setIsDark] = useState(true);
+const [isDark, setIsDark] = useState(true);
 
-  useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem("site-theme");
+useEffect(() => {
+  const syncTheme = (theme: SiteTheme) => {
+    setIsDark(theme === "emerald" || theme === "dark");
+  };
 
-      if (savedTheme === "light") {
-        setIsDark(false);
-        document.documentElement.classList.add("light");
-        document.documentElement.classList.remove("dark");
-      } else {
-        setIsDark(true);
-        document.documentElement.classList.add("dark");
-        document.documentElement.classList.remove("light");
-      }
+  // Restore the shared theme when the homepage opens.
+  syncTheme(getStoredSiteTheme());
 
-      const savedProgress = localStorage.getItem(
-        "maslak-reading-progress"
-      );
+  // Keep the homepage in sync when another connected
+  // page or component changes the theme.
+  const unsubscribe = listenForSiteThemeChanges(syncTheme);
 
-      if (savedProgress) {
-        const progress = JSON.parse(savedProgress);
+  // Restore the existing reading progress.
+  try {
+    const savedProgress = localStorage.getItem(
+      "maslak-reading-progress"
+    );
 
-        if (progress.url) {
-          const match = progress.url.match(/\/quran\/(\d+)/);
+    if (savedProgress) {
+      const progress = JSON.parse(savedProgress);
 
-          if (match) {
-            setLastRead({
-              surahNumber: Number(match[1]),
-              title: progress.subtitle || `Surah ${match[1]}`,
-            });
-          }
+      if (progress.url) {
+        const match = progress.url.match(/\/quran\/(\d+)/);
+
+        if (match) {
+          setLastRead({
+            surahNumber: Number(match[1]),
+            title: progress.subtitle || `Surah ${match[1]}`,
+          });
         }
       }
-    } catch (error) {
-      console.warn("Unable to restore saved site preferences:", error);
     }
-  }, []);
+  } catch (error) {
+    console.warn(
+      "Unable to restore saved reading progress:",
+      error
+    );
+  }
 
-  const toggleTheme = () => {
-    const nextDark = !isDark;
-    setIsDark(nextDark);
+  return unsubscribe;
+}, []);
 
-    try {
-      if (nextDark) {
-        document.documentElement.classList.add("dark");
-        document.documentElement.classList.remove("light");
-        localStorage.setItem("site-theme", "dark");
-      } else {
-        document.documentElement.classList.add("light");
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("site-theme", "light");
-      }
-    } catch (error) {
-      console.warn("Unable to save theme preference:", error);
-    }
-  };
+const toggleTheme = () => {
+  const nextTheme: SiteTheme = isDark ? "light" : "dark";
+
+  setIsDark(nextTheme === "dark");
+
+  setSiteTheme(nextTheme);
+};
 
   const activeTrack =
     BLESSED_AYAH_TRACKS[selectedAyahIndex] || BLESSED_AYAH_TRACKS[0];
