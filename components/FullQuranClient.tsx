@@ -40,6 +40,11 @@ function pad3(num: number): string {
   return String(num).padStart(3, "0");
 }
 
+function toArabicDigits(num: number): string {
+  const digits = "٠١٢٣٤٥٦٧٨٩";
+  return String(num).split("").map((digit) => digits[Number(digit)]).join("");
+}
+
 function toArabicNumerals(num: number): string {
   const digits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
   return String(num).split("").map((d) => digits[parseInt(d, 10)]).join("");
@@ -97,9 +102,23 @@ export default function FullQuranClient() {
     return ALL_SURAHS.find((s) => s.number === selectedSurah) || ALL_SURAHS[0];
   }, [selectedSurah]);
 
+  const currentJuzMeta = useMemo(() => {
+    return JUZ_LIST.find((j) => j.juzNumber === selectedJuz) ?? JUZ_LIST[0];
+  }, [selectedJuz]);
+
+  // In Para mode, never show ayahs that belong before/after the selected Para
+  // within the currently selected Surah. This prevents Para 1 ayahs from leaking
+  // into the Para 2 title/reading section, for example.
   const currentSurahAyahs = useMemo(() => {
-    return quranAyahs.filter((a) => a.surahNumber === selectedSurah);
-  }, [selectedSurah]);
+    return quranAyahs.filter((ayah) => {
+      if (ayah.surahNumber !== selectedSurah) return false;
+      if (readingMode !== "juz") return true;
+
+      if (selectedSurah === currentJuzMeta.startSurah && ayah.ayahNumber < currentJuzMeta.startAyah) return false;
+      if (selectedSurah === currentJuzMeta.endSurah && ayah.ayahNumber > currentJuzMeta.endAyah) return false;
+      return true;
+    });
+  }, [selectedSurah, readingMode, currentJuzMeta]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -421,27 +440,43 @@ export default function FullQuranClient() {
         </div>
       )}
 
-      {/* SURAH HERO BANNER */}
+      {/* READING TITLE: show the selected Para title in Para mode, not the Surah title. */}
       <header className="surahHeroBanner">
-        <div className="surahArabicTitleHero" dir="rtl" lang="ar">
-          سورة {currentSurahMeta.nameArabic}
-        </div>
-
-        <h1 className="surahEnglishTitleHero">
-          {selectedSurah}. Surah {currentSurahMeta.nameEnglish}
-        </h1>
-
-        <p className="surahMeaningHero">
-          {currentSurahMeta.meaningEnglish} &bull; {currentSurahMeta.nameUrdu}
-        </p>
-
-        <div className="surahBadgesHero">
-          <span className="surahBadgeItem">{currentSurahMeta.type}</span>
-          <span className="surahBadgeItem">{currentSurahMeta.ayahCount} Ayahs</span>
-          <span className="surahBadgeItem">{currentSurahMeta.rukus} Rukus</span>
-          <span className="surahBadgeItem">Juz {currentSurahMeta.juzStart}</span>
-          <span className="surahBadgeItem">Revelation #{currentSurahMeta.revelationOrder}</span>
-        </div>
+        {readingMode === "juz" ? (
+          <>
+            <div className="surahArabicTitleHero" dir="rtl" lang="ar">
+              الجزء {toArabicDigits(selectedJuz)} — {currentJuzMeta.nameArabic}
+            </div>
+            <h1 className="surahEnglishTitleHero">
+              Para {selectedJuz} — {currentJuzMeta.nameEnglish}
+            </h1>
+            <p className="surahMeaningHero">{currentJuzMeta.nameUrdu} &bull; Para reading</p>
+            <div className="surahBadgesHero">
+              <span className="surahBadgeItem">Para {selectedJuz}</span>
+              <span className="surahBadgeItem">Start: {currentJuzMeta.startSurah}:{currentJuzMeta.startAyah}</span>
+              <span className="surahBadgeItem">End: {currentJuzMeta.endSurah}:{currentJuzMeta.endAyah}</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="surahArabicTitleHero" dir="rtl" lang="ar">
+              سورة {currentSurahMeta.nameArabic}
+            </div>
+            <h1 className="surahEnglishTitleHero">
+              {selectedSurah}. Surah {currentSurahMeta.nameEnglish}
+            </h1>
+            <p className="surahMeaningHero">
+              {currentSurahMeta.meaningEnglish} &bull; {currentSurahMeta.nameUrdu}
+            </p>
+            <div className="surahBadgesHero">
+              <span className="surahBadgeItem">{currentSurahMeta.type}</span>
+              <span className="surahBadgeItem">{currentSurahMeta.ayahCount} Ayahs</span>
+              <span className="surahBadgeItem">{currentSurahMeta.rukus} Rukus</span>
+              <span className="surahBadgeItem">Juz {currentSurahMeta.juzStart}</span>
+              <span className="surahBadgeItem">Revelation #{currentSurahMeta.revelationOrder}</span>
+            </div>
+          </>
+        )}
 
         {/* QUICK AUDIO BAR */}
         <div className="surahQuickActions">
