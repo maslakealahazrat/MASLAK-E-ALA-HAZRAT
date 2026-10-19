@@ -82,7 +82,7 @@ export default function QuranSurahReader({
   const [viewMode, setViewMode] = useState<"translation" | "mushaf" | "hifz">("translation");
 
   // Settings
-  const [theme, setTheme] = useState<"emerald" | "sepia" | "dark" | "light">("emerald");
+  const [theme, setTheme] = useState<"emerald" | "sepia" | "dark" | "light" | null>(null);
   const [arabicFont, setArabicFont] = useState<"uthmani" | "indopak">("uthmani");
   const [arabicFontSize, setArabicFontSize] = useState<number>(32);
   const [translationFontSize, setTranslationFontSize] = useState<number>(16);
@@ -403,7 +403,7 @@ const handleThemeChange = (newTheme: SiteTheme) => {
   const nextSurah = surah.number < 114 ? allSurahs.find((s) => s.number === surah.number + 1) : null;
 
   return (
-    <div className={`quranContainer quran-theme-${theme}`}>
+    <div className={`quranContainer${theme ? ` quran-theme-${theme}` : ""}`}>
       {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
