@@ -55,8 +55,11 @@ const RECITERS = [
 export default function FullQuranClient() {
   const [selectedSurah, setSelectedSurah] = useState<number>(1);
   const [selectedJuz, setSelectedJuz] = useState<number>(1);
+  const [readingMode, setReadingMode] = useState<"surah" | "juz" | null>(null);
   const [viewMode, setViewMode] = useState<"translation" | "mushaf">("translation");
-  const [theme, setTheme] = useState<"emerald" | "sepia" | "dark" | "light">("emerald");
+  // Keep the first client render theme-neutral: app/layout.tsx applies the saved theme
+  // to <html> before hydration, so an Emerald child class here would override it briefly.
+  const [theme, setTheme] = useState<SiteTheme | null>(null);
 
   // Typography
   const [arabicFontSize, setArabicFontSize] = useState<number>(32);
@@ -294,8 +297,48 @@ export default function FullQuranClient() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Ask the reader how they want to navigate before opening the reading interface.
+  if (!readingMode) {
+    return (
+      <div className={`quranContainer${theme ? ` quran-theme-${theme}` : ""}`}>
+        <main className="quranAyahsContainer" style={{ maxWidth: 760, margin: "0 auto", padding: "clamp(20px, 5vw, 48px) 16px" }}>
+          <div className="surahHeroBanner" style={{ textAlign: "center" }}>
+            <div className="surahArabicTitleHero" dir="rtl" lang="ar">القرآن الكريم</div>
+            <h1 className="surahEnglishTitleHero">Read the Full Qur’an</h1>
+            <p className="surahMeaningHero">Choose your preferred reading method to begin.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))", gap: 16, marginTop: 22 }}>
+            <button
+              type="button"
+              onClick={() => { setReadingMode("surah"); setSelectedSurah(1); setCurrentAyah(1); }}
+              style={{ textAlign: "left", padding: 22, borderRadius: 16, border: "1px solid var(--q-card-border)", background: "var(--q-card)", color: "var(--q-text)", cursor: "pointer" }}
+            >
+              <BookOpen size={26} style={{ marginBottom: 12, color: "var(--q-accent)" }} />
+              <strong style={{ display: "block", fontSize: 19, marginBottom: 8 }}>Surah-by-Surah</strong>
+              <span style={{ display: "block", opacity: .8, lineHeight: 1.6 }}>Start from a Surah and navigate through the Qur’an in Surah order.</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, fontWeight: 700 }}>Start reading <ArrowRight size={16} /></span>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setReadingMode("juz"); setSelectedJuz(1); setSelectedSurah(1); setCurrentAyah(1); }}
+              style={{ textAlign: "left", padding: 22, borderRadius: 16, border: "1px solid var(--q-card-border)", background: "var(--q-card)", color: "var(--q-text)", cursor: "pointer" }}
+            >
+              <Layers size={26} style={{ marginBottom: 12, color: "var(--q-accent)" }} />
+              <strong style={{ display: "block", fontSize: 19, marginBottom: 8 }}>Para-by-Para (Juz)</strong>
+              <span style={{ display: "block", opacity: .8, lineHeight: 1.6 }}>Choose any of the 30 Paras and begin at its correct starting ayah.</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 16, fontWeight: 700 }}>Choose a Para <ArrowRight size={16} /></span>
+            </button>
+          </div>
+          <div style={{ textAlign: "center", marginTop: 18 }}>
+            <Link href="/" className="quranIconButton" style={{ display: "inline-flex" }}><ChevronLeft size={16} /> Home</Link>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className={`quranContainer quran-theme-${theme}`}>
+    <div className={`quranContainer${theme ? ` quran-theme-${theme}` : ""}`}>
       <audio ref={audioRef} onEnded={handleAudioEnded} />
 
       {/* TOP FLOATING NAVIGATION BAR */}
@@ -307,28 +350,19 @@ export default function FullQuranClient() {
               <span className="hidden sm:inline">Home</span>
             </Link>
 
-            {/* SURAH PICKER BUTTON */}
-            <button
-              type="button"
-              className="quranSurahPickerBtn"
-              onClick={() => setSurahDrawerOpen(true)}
-              title="Select Surah"
-            >
-              <BookOpen size={16} />
-              <span>{selectedSurah}. {currentSurahMeta.nameEnglish}</span>
-              <span className="pickerArabic">{currentSurahMeta.nameArabic}</span>
-            </button>
-
-            {/* JUZ PICKER BUTTON */}
-              <button
-  type="button"
-  className="quranSurahPickerBtn quranJuzPickerDesktop"
-  onClick={() => setJuzDrawerOpen(true)}
-  title="Select Juz (Para)"
->
-  <Layers size={15} />
-  <span>Juz {currentSurahMeta.juzStart}</span>
-</button>
+            {/* Mode-specific navigation picker */}
+            {readingMode === "surah" ? (
+              <button type="button" className="quranSurahPickerBtn" onClick={() => setSurahDrawerOpen(true)} title="Select Surah">
+                <BookOpen size={16} />
+                <span>{selectedSurah}. {currentSurahMeta.nameEnglish}</span>
+                <span className="pickerArabic">{currentSurahMeta.nameArabic}</span>
+              </button>
+            ) : (
+              <button type="button" className="quranSurahPickerBtn" onClick={() => setJuzDrawerOpen(true)} title="Select Para (Juz)">
+                <Layers size={15} />
+                <span>Para {selectedJuz}</span>
+              </button>
+            )}
           </div>
 
           {/* VIEW MODE TOGGLE */}
