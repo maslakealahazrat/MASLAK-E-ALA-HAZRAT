@@ -82,7 +82,7 @@ export default function QuranSurahReader({
   const [viewMode, setViewMode] = useState<"translation" | "mushaf" | "hifz">("translation");
 
   // Settings
-  const [theme, setTheme] = useState<"emerald" | "sepia" | "dark" | "light" | null>(null);
+  const [theme, setTheme] = useState<"emerald" | "sepia" | "dark" | "light">("emerald");
   const [arabicFont, setArabicFont] = useState<"uthmani" | "indopak">("uthmani");
   const [arabicFontSize, setArabicFontSize] = useState<number>(32);
   const [translationFontSize, setTranslationFontSize] = useState<number>(16);
@@ -99,6 +99,7 @@ export default function QuranSurahReader({
   const [repeatMode, setRepeatMode] = useState<"none" | "1x" | "2x" | "loop">("none");
   const [repeatCounter, setRepeatCounter] = useState<number>(0);
   const [audioProgress, setAudioProgress] = useState<number>(0);
+  const [audioDockVisible, setAudioDockVisible] = useState<boolean>(true);
 
   // Modals
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
@@ -115,6 +116,37 @@ export default function QuranSurahReader({
   // Refs
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ayahRefs = useRef<Map<number, HTMLElement>>(new Map());
+  const lastScrollY = useRef<number>(0);
+
+  // Hide the floating audio dock while scrolling down; reveal it while scrolling up.
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+    let frame = 0;
+
+    const handleScroll = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        const delta = currentY - lastScrollY.current;
+
+        if (currentY < 24) {
+          setAudioDockVisible(true);
+        } else if (delta > 6) {
+          setAudioDockVisible(false);
+        } else if (delta < -6) {
+          setAudioDockVisible(true);
+        }
+
+        lastScrollY.current = currentY;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   // Load preferences from localStorage
   useEffect(() => {
@@ -371,7 +403,7 @@ const handleThemeChange = (newTheme: SiteTheme) => {
   const nextSurah = surah.number < 114 ? allSurahs.find((s) => s.number === surah.number + 1) : null;
 
   return (
-    <div className={`quranContainer${theme ? ` quran-theme-${theme}` : ""}`}>
+    <div className={`quranContainer quran-theme-${theme}`}>
       {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
@@ -845,7 +877,10 @@ const handleThemeChange = (newTheme: SiteTheme) => {
       </footer>
 
       {/* FLOATING AUDIO CONTROLLER DOCK (Visible when playing or selected) */}
-      <div className="quranAudioDock">
+      <div
+        className={`quranAudioDock${audioDockVisible ? "" : " quranAudioDock--hidden"}`}
+        aria-hidden={!audioDockVisible}
+      >
         <div className="audioDockContent">
           {/* TRACK INFO */}
           <div className="audioDockInfo">
