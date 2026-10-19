@@ -363,6 +363,15 @@ export default function FullQuranClient() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Navigate between Paras in Juz mode, without changing Surah mode.
+  const handleSelectAdjacentJuz = (direction: -1 | 1) => {
+    const nextJuz = selectedJuz + direction;
+
+    if (nextJuz < 1 || nextJuz > 30) return;
+
+    handleSelectJuz(nextJuz);
+  };
+  
   // Ask the reader how they want to navigate before opening the reading interface.
   if (!readingMode) {
     return (
@@ -701,9 +710,23 @@ export default function FullQuranClient() {
         )}
       </main>
 
-      {/* SURAH FOOTER PAGINATION */}
+            {/* FOOTER PAGINATION — SURAH OR PARA, DEPENDING ON READING MODE */}
       <footer className="surahFooterNav">
-        {selectedSurah > 1 ? (
+        {readingMode === "juz" ? (
+          selectedJuz > 1 ? (
+            <button
+              type="button"
+              className="quranIconButton"
+              onClick={() => handleSelectAdjacentJuz(-1)}
+              style={{ padding: "10px 18px" }}
+            >
+              <ChevronLeft size={16} />
+              <span>Previous Para ({selectedJuz - 1})</span>
+            </button>
+          ) : (
+            <div />
+          )
+        ) : selectedSurah > 1 ? (
           <button
             type="button"
             className="quranIconButton"
@@ -725,7 +748,21 @@ export default function FullQuranClient() {
           Back to Top ↑
         </button>
 
-        {selectedSurah < 114 ? (
+        {readingMode === "juz" ? (
+          selectedJuz < 30 ? (
+            <button
+              type="button"
+              className="quranIconButton"
+              onClick={() => handleSelectAdjacentJuz(1)}
+              style={{ padding: "10px 18px" }}
+            >
+              <span>Next Para ({selectedJuz + 1})</span>
+              <ChevronRight size={16} />
+            </button>
+          ) : (
+            <div />
+          )
+        ) : selectedSurah < 114 ? (
           <button
             type="button"
             className="quranIconButton"
