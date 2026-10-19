@@ -84,6 +84,7 @@ export default function FullQuranClient() {
   const [currentAyah, setCurrentAyah] = useState<number | null>(null);
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const [repeatMode, setRepeatMode] = useState<"none" | "1x" | "loop">("none");
+  const [audioDockVisible, setAudioDockVisible] = useState<boolean>(true);
 
   // Translations
   const [urduTranslations, setUrduTranslations] = useState<Record<number, string>>({});
@@ -97,6 +98,7 @@ export default function FullQuranClient() {
   // Refs
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ayahRefs = useRef<Map<number, HTMLElement>>(new Map());
+  const lastScrollY = useRef<number>(0);
 
   const currentSurahMeta = useMemo(() => {
     return ALL_SURAHS.find((s) => s.number === selectedSurah) || ALL_SURAHS[0];
@@ -124,6 +126,36 @@ export default function FullQuranClient() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 2200);
   };
+
+  // Hide the floating audio dock while scrolling down, and reveal it while scrolling up.
+  // A small movement threshold avoids flicker from tiny touch-scroll changes.
+  useEffect(() => {
+    lastScrollY.current = window.scrollY;
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        const currentY = Math.max(0, window.scrollY);
+        const delta = currentY - lastScrollY.current;
+
+        if (currentY < 24) {
+          setAudioDockVisible(true);
+        } else if (delta > 6) {
+          setAudioDockVisible(false);
+        } else if (delta < -6) {
+          setAudioDockVisible(true);
+        }
+
+        lastScrollY.current = currentY;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Fetch Kanz-ul-Iman and English translations for selected surah
   useEffect(() => {
@@ -694,7 +726,7 @@ export default function FullQuranClient() {
       </footer>
 
       {/* FLOATING BOTTOM AUDIO DOCK */}
-      <div className="quranAudioDock">
+      <div className={`quranAudioDock${audioDockVisible ? "" : " quranAudioDock--hidden"}`} aria-hidden={!audioDockVisible}>
         <div className="audioDockContent">
           {/* TRACK INFO */}
           <div className="audioDockInfo">
