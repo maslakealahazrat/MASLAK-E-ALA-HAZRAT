@@ -90,7 +90,7 @@ export default function QuranIndexClient() {
   }, [searchQuery]);
 
   return (
-    <div className="quranContainer quran-theme-emerald">
+    <div className="quranContainer">
       {/* HEADER / HERO */}
       <section style={{ maxWidth: "1280px", margin: "0 auto", padding: "40px 16px 20px", textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "6px 14px", borderRadius: "999px", background: "var(--q-badge-bg)", color: "var(--q-badge-text)", fontSize: "12px", fontWeight: 700, letterSpacing: "1px", marginBottom: "16px" }}>
