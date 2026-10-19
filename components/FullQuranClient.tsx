@@ -100,6 +100,21 @@ export default function FullQuranClient() {
   const ayahRefs = useRef<Map<number, HTMLElement>>(new Map());
   const lastScrollY = useRef<number>(0);
 
+  // Open the requested Para directly when a Juz card links here.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("mode") !== "juz") return;
+
+    const requestedJuz = Number(params.get("juz"));
+    const juz = JUZ_LIST.find((item) => item.juzNumber === requestedJuz);
+    if (!juz) return;
+
+    setReadingMode("juz");
+    setSelectedJuz(juz.juzNumber);
+    setSelectedSurah(juz.startSurah);
+    setCurrentAyah(juz.startAyah);
+  }, []);
+
   const currentSurahMeta = useMemo(() => {
     return ALL_SURAHS.find((s) => s.number === selectedSurah) || ALL_SURAHS[0];
   }, [selectedSurah]);
