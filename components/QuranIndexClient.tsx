@@ -297,7 +297,7 @@ export default function QuranIndexClient() {
           {filteredJuz.map((juz) => (
             <Link
               key={juz.juzNumber}
-              href={`/quran/${juz.startSurah}#ayah-${juz.startAyah}`}
+              href={`/quran/full?mode=juz&juz=${juz.juzNumber}`}
               className="juzIndexCard"
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
