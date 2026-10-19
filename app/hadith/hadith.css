@@ -1,0 +1,666 @@
+/* =========================================================
+   MASLAK-E-ALA-HAZRAT — HADITH PAGE
+   Page-specific styles only.
+   Theme variables are inherited from the existing site theme.
+   ========================================================= */
+
+.hadithPage {
+  --hadith-bg: var(--q-bg, #0b1a18);
+  --hadith-card: var(--q-card, #122825);
+  --hadith-card-hover: var(--q-card-hover, #16322e);
+  --hadith-border: var(--q-card-border, rgba(212, 175, 55, 0.22));
+  --hadith-text: var(--q-text, #f0f7f5);
+  --hadith-muted: var(--q-translation, #c2dcd8);
+  --hadith-accent: var(--q-accent, #d4af37);
+  --hadith-arabic: var(--q-arabic, #fffdf7);
+
+  min-height: 100vh;
+  padding: 24px 0 48px;
+  background: var(--hadith-bg);
+  color: var(--hadith-text);
+  overflow-wrap: anywhere;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.hadithPage *,
+.hadithPage *::before,
+.hadithPage *::after {
+  box-sizing: border-box;
+}
+
+.hadithPage button,
+.hadithPage input {
+  font: inherit;
+}
+
+.hadithPage button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hadithPage button:focus-visible,
+.hadithPage a:focus-visible,
+.hadithPage input:focus-visible {
+  outline: 2px solid var(--hadith-accent);
+  outline-offset: 3px;
+}
+
+/* Hero */
+
+.hadithHero {
+  width: min(1140px, calc(100% - 32px));
+  margin: 0 auto 32px;
+  padding: clamp(24px, 5vw, 48px) clamp(18px, 4vw, 40px);
+  text-align: center;
+  border: 1px solid var(--hadith-border);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      ellipse at top,
+      color-mix(in srgb, var(--hadith-accent) 12%, transparent),
+      transparent 68%
+    ),
+    var(--hadith-card);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.hadithHomeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  float: left;
+  padding: 9px 14px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 10px;
+  background: var(--hadith-bg);
+  color: var(--hadith-text);
+  text-decoration: none;
+  font-size: 14px;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.hadithHomeButton:hover {
+  background: var(--hadith-card-hover);
+  border-color: var(--hadith-accent);
+}
+
+.hadithHeroArabic {
+  clear: both;
+  padding-top: 24px;
+  margin-bottom: 10px;
+  color: var(--hadith-accent);
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  font-size: clamp(23px, 4vw, 34px);
+  line-height: 1.9;
+}
+
+.hadithHeroTitle {
+  margin: 8px 0 14px;
+  color: var(--hadith-text);
+  font-size: clamp(27px, 4.5vw, 38px);
+  line-height: 1.25;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.hadithHeroDescription {
+  max-width: 720px;
+  margin: 0 auto 22px;
+  color: var(--hadith-muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.hadithHeroBadges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.hadithHeroBadges span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 11px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--hadith-accent) 8%,
+    var(--hadith-card)
+  );
+  color: var(--hadith-text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Browser layout */
+
+.hadithBrowser {
+  width: min(1140px, calc(100% - 32px));
+  margin: 0 auto;
+  padding-bottom: 12px;
+}
+
+.hadithSearch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  margin-bottom: 28px;
+  padding: 12px 16px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 16px;
+  background: var(--hadith-card);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.hadithSearch input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 7px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--hadith-text);
+  font-size: 15px;
+}
+
+.hadithSearch input::placeholder {
+  color: var(--hadith-muted);
+  opacity: 0.8;
+}
+
+.hadithSearchClear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 36px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--hadith-muted);
+  cursor: pointer;
+}
+
+.hadithSearchClear:hover {
+  background: var(--hadith-card-hover);
+  color: var(--hadith-text);
+}
+
+.hadithSectionLabel {
+  margin-bottom: 9px;
+  color: var(--hadith-accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+
+.hadithCollectionScroller {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 2px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hadith-border) transparent;
+  overscroll-behavior-inline: contain;
+}
+
+.hadithCollectionButton {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: min(360px, 85vw);
+  padding: 12px 16px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 14px;
+  background: var(--hadith-card);
+  color: var(--hadith-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.hadithCollectionButton:hover {
+  background: var(--hadith-card-hover);
+  border-color: var(--hadith-accent);
+}
+
+.hadithCollectionButton.active {
+  border-color: var(--hadith-accent);
+  background: var(--hadith-accent);
+  color: #071311;
+}
+
+.hadithCollectionButton.active .hadithCollectionArabic {
+  color: #071311;
+}
+
+.hadithCollectionHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.hadithCollectionArabic {
+  color: var(--hadith-accent);
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  font-size: 16px;
+}
+
+.hadithCollectionMeta {
+  font-size: 11px;
+  opacity: 0.82;
+}
+
+.hadithBooksPanel {
+  margin: 18px 0 32px;
+  padding: clamp(15px, 3vw, 22px);
+  border: 1px solid var(--hadith-border);
+  border-radius: 18px;
+  background: var(--hadith-card);
+}
+
+.hadithBooksHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hadithBooksTitle {
+  margin: 4px 0 0;
+  color: var(--hadith-text);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.hadithMuted {
+  color: var(--hadith-muted);
+}
+
+.hadithBookDescription {
+  margin: 0 0 16px;
+  color: var(--hadith-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.hadithBookButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hadithButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 10px;
+  background: var(--hadith-card);
+  color: var(--hadith-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.hadithButton:hover {
+  border-color: var(--hadith-accent);
+  background: var(--hadith-card-hover);
+}
+
+.hadithButton.active {
+  border-color: var(--hadith-accent);
+  background: color-mix(
+    in srgb,
+    var(--hadith-accent) 16%,
+    var(--hadith-card)
+  );
+  color: var(--hadith-accent);
+}
+
+.hadithResultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hadithResultsTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--hadith-text);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.hadithResultsNote {
+  color: var(--hadith-muted);
+  font-size: 12px;
+}
+
+/* Hadith cards */
+
+.hadithList {
+  display: grid;
+  gap: 22px;
+}
+
+.hadithCard {
+  min-width: 0;
+  padding: clamp(16px, 3vw, 24px);
+  border: 1px solid var(--hadith-border);
+  border-radius: 18px;
+  background: var(--hadith-card);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.hadithCard:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--hadith-accent) 55%,
+    var(--hadith-border)
+  );
+}
+
+.hadithMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.hadithMetaGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hadithReferenceBadge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 8px;
+  background: var(--hadith-bg);
+  color: var(--hadith-text);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.hadithBookBadge,
+.hadithGradeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.hadithBookBadge {
+  background: color-mix(
+    in srgb,
+    var(--hadith-accent) 12%,
+    var(--hadith-card)
+  );
+  color: var(--hadith-accent);
+}
+
+.hadithGradeBadge {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+.hadithChapter {
+  margin-bottom: 16px;
+  padding: 9px 14px;
+  border-left: 3px solid var(--hadith-accent);
+  border-radius: 8px;
+  background: color-mix(
+    in srgb,
+    var(--hadith-accent) 6%,
+    var(--hadith-card)
+  );
+}
+
+.hadithChapterEnglish {
+  color: var(--hadith-accent);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.hadithChapterUrdu {
+  margin-top: 3px;
+  color: var(--hadith-muted);
+  font-family: var(--font-urdu, "Noto Nastaliq Urdu", serif);
+  direction: rtl;
+  text-align: right;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.hadithArabicText {
+  margin: 0 0 20px;
+  color: var(--hadith-arabic);
+  font-family: var(--font-arabic-uthmani, "Amiri Quran", serif);
+  direction: rtl;
+  text-align: right;
+  font-size: clamp(22px, 3.4vw, 28px);
+  line-height: 2.15;
+  overflow-wrap: anywhere;
+}
+
+.hadithTranslation {
+  margin-bottom: 12px;
+  padding: 15px 16px;
+  border-left: 3px solid var(--hadith-accent);
+  border-radius: 12px;
+  background: var(--hadith-bg);
+}
+
+.hadithTranslation:last-of-type {
+  margin-bottom: 14px;
+}
+
+.hadithTranslationLabel {
+  margin-bottom: 5px;
+  color: var(--hadith-accent);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.7;
+}
+
+.hadithUrduText {
+  margin: 0;
+  color: var(--hadith-muted);
+  font-family: var(--font-urdu, "Noto Nastaliq Urdu", serif);
+  direction: rtl;
+  text-align: right;
+  font-size: 18px;
+  line-height: 2.2;
+  overflow-wrap: anywhere;
+}
+
+.hadithEnglishText {
+  margin: 0;
+  color: var(--hadith-muted);
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.hadithFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--hadith-border);
+  color: var(--hadith-muted);
+  font-size: 12px;
+}
+
+.hadithFooter strong {
+  color: var(--hadith-text);
+}
+
+.hadithTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hadithTag {
+  padding: 3px 8px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 5px;
+  background: var(--hadith-bg);
+  color: var(--hadith-muted);
+  font-size: 11px;
+}
+
+.hadithEmptyState {
+  padding: 40px 20px;
+  border: 1px solid var(--hadith-border);
+  border-radius: 16px;
+  background: var(--hadith-card);
+  color: var(--hadith-muted);
+  text-align: center;
+}
+
+.hadithEmptyState h4 {
+  margin: 0 0 6px;
+  color: var(--hadith-text);
+}
+
+.hadithEmptyState p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Four theme palettes are inherited from the existing theme system.
+   No new theme state or duplicate localStorage is introduced. */
+
+@media (max-width: 640px) {
+  .hadithPage {
+    padding-top: 12px;
+  }
+
+  .hadithHero {
+    width: calc(100% - 20px);
+    margin-bottom: 22px;
+    padding: 20px 14px 24px;
+    border-radius: 17px;
+  }
+
+  .hadithHeroArabic {
+    padding-top: 20px;
+  }
+
+  .hadithHeroDescription {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .hadithHeroBadges {
+    gap: 6px;
+  }
+
+  .hadithHeroBadges span {
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+
+  .hadithBrowser {
+    width: calc(100% - 20px);
+  }
+
+  .hadithSearch {
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 9px 11px;
+    border-radius: 13px;
+  }
+
+  .hadithSearch input {
+    font-size: 14px;
+  }
+
+  .hadithBooksHeader,
+  .hadithResultsHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hadithResultsTitle {
+    font-size: 16px;
+  }
+
+  .hadithCard {
+    border-radius: 14px;
+  }
+
+  .hadithArabicText {
+    line-height: 2;
+  }
+
+  .hadithUrduText {
+    font-size: 17px;
+    line-height: 2.1;
+  }
+
+  .hadithFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hadithPage *,
+  .hadithPage *::before,
+  .hadithPage *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  }
