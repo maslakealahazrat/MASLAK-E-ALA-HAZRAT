@@ -425,11 +425,6 @@
   margin: 0 4px;
 }
 
-/* Keep footer navigation clear of the floating player when it is visible. */
-.surahFooterNav {
-  padding-bottom: 112px;
-}
-
 /* FLOATING AUDIO CONTROLLER DOCK */
 .quranAudioDock {
   position: fixed;
@@ -445,7 +440,7 @@
   padding: 12px 20px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  transition: transform 0.28s ease, opacity 0.22s ease, visibility 0.28s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.3s ease;
   will-change: transform, opacity;
 }
 
