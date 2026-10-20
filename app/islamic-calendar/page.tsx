@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function IslamicCalendarPage() {
   return (
-    <main className="quranContainer quran-theme-emerald">
+    <main className="quranContainer">
       <section className="surahHeroBanner">
         <Link href="/" className="quranIconButton" style={{ display: "inline-flex", marginBottom: "16px" }}>
           ← Home
