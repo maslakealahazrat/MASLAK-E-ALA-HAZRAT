@@ -136,7 +136,7 @@ export default function IslamicCalendarClient() {
       {/* TODAY'S HIJRI TICKER & CONVERTER TOOL */}
       <section
         style={{
-          background: "linear-gradient(135deg, var(--q-card) 0%, rgba(18,40,37,0.95) 100%)",
+          background: "linear-gradient(135deg, var(--q-card) 0%, var(--q-card-hover) 100%)",
           border: "1.5px solid var(--q-card-border)",
           borderRadius: "20px",
           padding: "24px",
