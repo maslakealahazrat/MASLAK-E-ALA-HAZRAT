@@ -313,7 +313,7 @@ export default function HadithBrowserClient() {
                     lineHeight: 2.1,
                     textAlign: "right",
                     direction: "rtl",
-                    color: "var(--q-arabic, #d4af37)",
+                    color: "var(--q-text, #f0f7f5)",
                     margin: "0 0 18px 0",
                   }}
                   lang="ar"
